@@ -8,15 +8,13 @@ public class Board {
     public final static int DIMENSION = 8;
     public final static int NUM_BOARDS = 12;
 
-    public final static String BLANK_STR = "OO";
-
     private static Map<BoardType, Long> bitBoards;
 
     public Board() {
-        initializeBoards();
+        initializeBitBoards();
     }
 
-    public static void initializeBoards() {
+    public static void initializeBitBoards() {
         bitBoards = new HashMap<BoardType, Long>();
         bitBoards.put(BoardType.WP, 0x000000000000ff00L);
         bitBoards.put(BoardType.WR, 0x0000000000000081L);
@@ -30,55 +28,101 @@ public class Board {
         bitBoards.put(BoardType.BB, 0x2400000000000000L);
         bitBoards.put(BoardType.BQ, 0x1000000000000000L);
         bitBoards.put(BoardType.BK, 0x0800000000000000L);
-
-    }
-
-    public static void initializeRandomBoards() {
-
     }
 
     public Map<BoardType, Long> getBitBoards() {
         return bitBoards;
     }
 
+    public long getBitBoard(BoardType type) {
+        return bitBoards.get(type);
+    }
+
+    /**
+     * Gets the board in a matrix representation
+     * 
+     * @return matrix representing the board
+     */
     public String[][] getBoardArray() {
         String[][] boardArray = new String[DIMENSION][DIMENSION];
 
-        // Bits to board
         for (BoardType type : BoardType.values()) {
-            long board = bitBoards.get(type);
-            long pos = 0x8000000000000000L; // Bit in first position
+            String[][] bitBoardArray = getBitBoardArray(type);
+            boardArray = mergeArrays(bitBoardArray, boardArray);
+        }
 
-            for (int i = 0; i < DIMENSION * DIMENSION; i++) {
-                if ((board & pos) == pos) {
-                    boardArray[i / DIMENSION][i % DIMENSION] = type.name();
-                }
-                pos = pos >>> 1;
+        return boardArray;
+    }
+
+    public String[][] getBitBoardArray(BoardType type) {
+        return getBitBoardArray(bitBoards.get(type), type.name());
+    }
+
+    public static String[][] getBitBoardArray(long bitBoard, String piece) {
+        String[][] boardArray = new String[DIMENSION][DIMENSION];
+        long pos = 0x8000000000000000L; // Bit in first position
+
+        for (int i = 0; i < DIMENSION * DIMENSION; i++) {
+            if ((bitBoard & pos) == pos) {
+                boardArray[i / DIMENSION][i % DIMENSION] = piece;
             }
+            pos = pos >>> 1;
+        }
 
+        return boardArray;
+    }
+
+    private String[][] mergeArrays(String[][] arr1, String[][] arr2) {
+        String[][] boardArray = new String[DIMENSION][DIMENSION];
+
+        for (int i = 0; i < DIMENSION; i++) {
+            for (int j = 0; j < DIMENSION; j++) {
+                if (arr1[i][j] == arr2[i][j]) {
+                    boardArray[i][j] = arr1[i][j];
+                } else if (arr1[i][j] == null) {
+                    boardArray[i][j] = arr2[i][j];
+                } else if (arr2[i][j] == null) {
+                    boardArray[i][j] = arr1[i][j];
+                } else {
+                    boardArray[i][j] = "XX";
+                }
+            }
         }
 
         return boardArray;
     }
 
     public void printBoard() {
-        String[][] boardArray = getBoardArray();
+        printBoard(getBoardArray());
+    }
 
-        // Print out the board
-        System.out.println("-------------------------");
+    private static void printBoard(String[][] boardArray) {
+        System.out.println(" -------------------------");
         for (int i = 0; i < DIMENSION; i++) {
-            System.out.print("|");
+
+            System.out.print((DIMENSION - i) + "|");
+
             for (int j = 0; j < DIMENSION; j++) {
+
                 if (boardArray[i][j] == null) {
-                    System.out.print(BLANK_STR);
+                    System.out.print("  ");
                 } else {
                     System.out.print(boardArray[i][j]);
                 }
+
                 System.out.print("|");
             }
+
             System.out.println();
-            System.out.println("-------------------------");
+            System.out.println(" -------------------------");
         }
+
+        System.out.println("  A  B  C  D  E  F  G  H  ");
+    }
+
+    public static void printBitBoard(long bitBoard, String piece) {
+        String[][] bitBoardArray = getBitBoardArray(bitBoard, piece);
+        printBoard(bitBoardArray);
     }
 
     private String longToHex(long n) {

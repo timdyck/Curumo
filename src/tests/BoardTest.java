@@ -8,17 +8,24 @@ import org.junit.Test;
 
 import board.Board;
 import board.BoardType;
+import board.Movement;
 
 public class BoardTest {
 
+    /**
+     * Ensure that each piece in the inital board is in the right place,
+     * simultaneously testing out board to array functionality.
+     */
+    /**
+     * 
+     */
     @Test
-    public void InitializeBoard() {
+    public void InitialBoard() {
         Board board = new Board();
         Map<BoardType, Long> bitBoards = board.getBitBoards();
 
         Assert.assertEquals(bitBoards.size(), Board.NUM_BOARDS);
 
-        // Check that all pieces are in their initial positions
         String[][] boardArray = board.getBoardArray();
         Assert.assertEquals(BoardType.BR.name(), boardArray[0][0]);
         Assert.assertEquals(BoardType.BR.name(), boardArray[0][7]);
@@ -48,11 +55,58 @@ public class BoardTest {
 
         for (int i = 2; i < Board.DIMENSION - 2; i++) {
             for (int j = 0; j < Board.DIMENSION; j++) {
-                Assert.assertEquals(null, boardArray[i][j]);
+                Assert.assertNull(boardArray[i][j]);
             }
         }
 
-        // board.printBoard();
+        board.printBoard();
     }
 
+    /**
+     * Ensure the initial bit boards for white pieces, black pieces, and empty
+     * pieces, are correct.
+     */
+    @Test
+    public void MovementConstants() {
+        Board board = new Board();
+        Movement movement = new Movement(board);
+
+        String blackPiece = "BP";
+        String[][] blackBoardArray = Board.getBitBoardArray(movement.BLACK_PIECES, blackPiece);
+        for (int i = 0; i < Board.DIMENSION; i++) {
+            Assert.assertEquals(blackPiece, blackBoardArray[0][i]);
+            Assert.assertEquals(blackPiece, blackBoardArray[1][i]);
+        }
+        for (int i = 2; i < Board.DIMENSION; i++) {
+            for (int j = 0; j < Board.DIMENSION; j++) {
+                Assert.assertNull(blackBoardArray[i][j]);
+            }
+        }
+
+        String whitePiece = "WP";
+        String[][] whiteBoardArray = Board.getBitBoardArray(movement.WHITE_PIECES, whitePiece);
+        for (int i = 0; i < Board.DIMENSION; i++) {
+            Assert.assertEquals(whitePiece, whiteBoardArray[Board.DIMENSION - 2][i]);
+            Assert.assertEquals(whitePiece, whiteBoardArray[Board.DIMENSION - 1][i]);
+        }
+        for (int i = 0; i < Board.DIMENSION - 2; i++) {
+            for (int j = 0; j < Board.DIMENSION; j++) {
+                Assert.assertNull(whiteBoardArray[i][j]);
+            }
+        }
+
+        String emptyPiece = "EE";
+        String[][] emptyBoardArray = Board.getBitBoardArray(movement.EMPTY, emptyPiece);
+        for (int i = 0; i < Board.DIMENSION; i++) {
+            Assert.assertNull(emptyPiece, emptyBoardArray[0][i]);
+            Assert.assertNull(emptyPiece, emptyBoardArray[1][i]);
+            Assert.assertNull(emptyPiece, emptyBoardArray[Board.DIMENSION - 2][i]);
+            Assert.assertNull(emptyPiece, emptyBoardArray[Board.DIMENSION - 1][i]);
+        }
+        for (int i = 2; i < Board.DIMENSION - 2; i++) {
+            for (int j = 0; j < Board.DIMENSION; j++) {
+                Assert.assertEquals(emptyPiece, emptyBoardArray[i][j]);
+            }
+        }
+    }
 }
