@@ -9,14 +9,14 @@ public class Board {
     public final static int NUM_SQUARES = DIMENSION * DIMENSION;
     public final static int NUM_BOARDS = 12;
 
-    private static Map<PieceType, Long> bitBoards;
+    private Map<PieceType, Long> bitBoards;
 
-    public Board() {
-        initializeBitBoards();
+    private Board(Map<PieceType, Long> bitBoards) {
+        this.bitBoards = bitBoards;
     }
 
-    public static void initializeBitBoards() {
-        bitBoards = new HashMap<PieceType, Long>();
+    public static Board StandardBoard() {
+        Map<PieceType, Long> bitBoards = new HashMap<PieceType, Long>();
         bitBoards.put(PieceType.WP, 0x000000000000ff00L);
         bitBoards.put(PieceType.WR, 0x0000000000000081L);
         bitBoards.put(PieceType.WN, 0x0000000000000042L);
@@ -29,6 +29,7 @@ public class Board {
         bitBoards.put(PieceType.BB, 0x2400000000000000L);
         bitBoards.put(PieceType.BQ, 0x1000000000000000L);
         bitBoards.put(PieceType.BK, 0x0800000000000000L);
+        return new Board(bitBoards);
     }
 
     public Map<PieceType, Long> getBitBoards() {
@@ -44,22 +45,22 @@ public class Board {
      * 
      * @return matrix representing the board
      */
-    public String[][] getBoardArray() {
+    public String[][] boardToArray() {
         String[][] boardArray = new String[DIMENSION][DIMENSION];
 
         for (PieceType type : PieceType.values()) {
-            String[][] bitBoardArray = getBitBoardArray(type);
+            String[][] bitBoardArray = bitBoardToArray(type);
             boardArray = mergeArrays(bitBoardArray, boardArray);
         }
 
         return boardArray;
     }
 
-    public String[][] getBitBoardArray(PieceType type) {
-        return getBitBoardArray(bitBoards.get(type), type.name());
+    public String[][] bitBoardToArray(PieceType type) {
+        return bitBoardToArray(bitBoards.get(type), type.name());
     }
 
-    public static String[][] getBitBoardArray(long bitBoard, String piece) {
+    public static String[][] bitBoardToArray(long bitBoard, String piece) {
         String[][] boardArray = new String[DIMENSION][DIMENSION];
         long pos = 0x8000000000000000L; // Bit in first position
 
@@ -93,8 +94,53 @@ public class Board {
         return boardArray;
     }
 
+    /**
+     * Converts 8x8 matrix representation to a Board.
+     * 
+     * Expects {@link PieceType} on the board
+     * 
+     * @param matrix
+     * @return Board
+     */
+    public static Board arrayToBoard(String[][] matrix) {
+        Map<PieceType, Long> bitBoards = new HashMap<PieceType, Long>();
+        bitBoards.put(PieceType.WP, 0L);
+        bitBoards.put(PieceType.WR, 0L);
+        bitBoards.put(PieceType.WN, 0L);
+        bitBoards.put(PieceType.WB, 0L);
+        bitBoards.put(PieceType.WQ, 0L);
+        bitBoards.put(PieceType.WK, 0L);
+        bitBoards.put(PieceType.BP, 0L);
+        bitBoards.put(PieceType.BR, 0L);
+        bitBoards.put(PieceType.BN, 0L);
+        bitBoards.put(PieceType.BB, 0L);
+        bitBoards.put(PieceType.BQ, 0L);
+        bitBoards.put(PieceType.BK, 0L);
+
+        long pos = 0x8000000000000000L;
+        for (int i = 0; i < DIMENSION; i++) {
+            for (int j = 0; j < DIMENSION; j++) {
+                String content = matrix[i][j];
+                PieceType piece;
+
+                try {
+                    piece = PieceType.valueOf(content);
+                    System.out.println(piece);
+                } catch (IllegalArgumentException e) {
+                    pos = pos >>> 1;
+                    continue;
+                }
+
+                bitBoards.put(piece, bitBoards.get(piece) | pos);
+                pos = pos >>> 1;
+            }
+        }
+
+        return new Board(bitBoards);
+    }
+
     public void printBoard() {
-        printBoard(getBoardArray());
+        printBoard(boardToArray());
     }
 
     private static void printBoard(String[][] boardArray) {
@@ -122,12 +168,33 @@ public class Board {
     }
 
     public static void printBitBoard(long bitBoard, String piece) {
-        String[][] bitBoardArray = getBitBoardArray(bitBoard, piece);
+        String[][] bitBoardArray = bitBoardToArray(bitBoard, piece);
         printBoard(bitBoardArray);
     }
 
-    private String longToHex(long n) {
-        return String.format("0x%8s", Long.toHexString(n)).replace(' ', '0');
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((bitBoards == null) ? 0 : bitBoards.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Board other = (Board) obj;
+        if (bitBoards == null) {
+            if (other.bitBoards != null)
+                return false;
+        } else if (!bitBoards.equals(other.bitBoards))
+            return false;
+        return true;
     }
 
 }
