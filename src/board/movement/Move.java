@@ -1,4 +1,6 @@
-package board;
+package board.movement;
+
+import board.PieceType;
 
 public class Move {
     PieceType type;
