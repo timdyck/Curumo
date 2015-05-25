@@ -6,35 +6,36 @@ import java.util.Map;
 public class Board {
 
     public final static int DIMENSION = 8;
+    public final static int NUM_SQUARES = DIMENSION * DIMENSION;
     public final static int NUM_BOARDS = 12;
 
-    private static Map<BoardType, Long> bitBoards;
+    private static Map<PieceType, Long> bitBoards;
 
     public Board() {
         initializeBitBoards();
     }
 
     public static void initializeBitBoards() {
-        bitBoards = new HashMap<BoardType, Long>();
-        bitBoards.put(BoardType.WP, 0x000000000000ff00L);
-        bitBoards.put(BoardType.WR, 0x0000000000000081L);
-        bitBoards.put(BoardType.WN, 0x0000000000000042L);
-        bitBoards.put(BoardType.WB, 0x0000000000000024L);
-        bitBoards.put(BoardType.WQ, 0x0000000000000010L);
-        bitBoards.put(BoardType.WK, 0x0000000000000008L);
-        bitBoards.put(BoardType.BP, 0x00ff000000000000L);
-        bitBoards.put(BoardType.BR, 0x8100000000000000L);
-        bitBoards.put(BoardType.BN, 0x4200000000000000L);
-        bitBoards.put(BoardType.BB, 0x2400000000000000L);
-        bitBoards.put(BoardType.BQ, 0x1000000000000000L);
-        bitBoards.put(BoardType.BK, 0x0800000000000000L);
+        bitBoards = new HashMap<PieceType, Long>();
+        bitBoards.put(PieceType.WP, 0x000000000000ff00L);
+        bitBoards.put(PieceType.WR, 0x0000000000000081L);
+        bitBoards.put(PieceType.WN, 0x0000000000000042L);
+        bitBoards.put(PieceType.WB, 0x0000000000000024L);
+        bitBoards.put(PieceType.WQ, 0x0000000000000010L);
+        bitBoards.put(PieceType.WK, 0x0000000000000008L);
+        bitBoards.put(PieceType.BP, 0x00ff000000000000L);
+        bitBoards.put(PieceType.BR, 0x8100000000000000L);
+        bitBoards.put(PieceType.BN, 0x4200000000000000L);
+        bitBoards.put(PieceType.BB, 0x2400000000000000L);
+        bitBoards.put(PieceType.BQ, 0x1000000000000000L);
+        bitBoards.put(PieceType.BK, 0x0800000000000000L);
     }
 
-    public Map<BoardType, Long> getBitBoards() {
+    public Map<PieceType, Long> getBitBoards() {
         return bitBoards;
     }
 
-    public long getBitBoard(BoardType type) {
+    public long getBitBoard(PieceType type) {
         return bitBoards.get(type);
     }
 
@@ -46,7 +47,7 @@ public class Board {
     public String[][] getBoardArray() {
         String[][] boardArray = new String[DIMENSION][DIMENSION];
 
-        for (BoardType type : BoardType.values()) {
+        for (PieceType type : PieceType.values()) {
             String[][] bitBoardArray = getBitBoardArray(type);
             boardArray = mergeArrays(bitBoardArray, boardArray);
         }
@@ -54,7 +55,7 @@ public class Board {
         return boardArray;
     }
 
-    public String[][] getBitBoardArray(BoardType type) {
+    public String[][] getBitBoardArray(PieceType type) {
         return getBitBoardArray(bitBoards.get(type), type.name());
     }
 
@@ -62,7 +63,7 @@ public class Board {
         String[][] boardArray = new String[DIMENSION][DIMENSION];
         long pos = 0x8000000000000000L; // Bit in first position
 
-        for (int i = 0; i < DIMENSION * DIMENSION; i++) {
+        for (int i = 0; i < NUM_SQUARES; i++) {
             if ((bitBoard & pos) == pos) {
                 boardArray[i / DIMENSION][i % DIMENSION] = piece;
             }
