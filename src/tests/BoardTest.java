@@ -111,7 +111,7 @@ public class BoardTest {
             }
         }
 
-        List<Move> moves = movement.getWhiteMoves();
+        List<Move> moves = movement.getWhiteMoves(Move.getFirstPreviousMove());
         for (Move move : moves) {
             move.printMove();
         }
