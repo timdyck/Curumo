@@ -125,7 +125,6 @@ public class Board {
 
                 try {
                     piece = PieceType.valueOf(content);
-                    System.out.println(piece);
                 } catch (IllegalArgumentException e) {
                     pos = pos >>> 1;
                     continue;

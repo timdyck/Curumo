@@ -82,4 +82,45 @@ public class Move {
         }
         System.out.println(printStr);
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (capture ? 1231 : 1237);
+        result = prime * result + col1;
+        result = prime * result + col2;
+        result = prime * result + ((promote == null) ? 0 : promote.hashCode());
+        result = prime * result + row1;
+        result = prime * result + row2;
+        result = prime * result + ((type == null) ? 0 : type.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Move other = (Move) obj;
+        if (capture != other.capture)
+            return false;
+        if (col1 != other.col1)
+            return false;
+        if (col2 != other.col2)
+            return false;
+        if (promote != other.promote)
+            return false;
+        if (row1 != other.row1)
+            return false;
+        if (row2 != other.row2)
+            return false;
+        if (type != other.type)
+            return false;
+        return true;
+    }
+
 }
