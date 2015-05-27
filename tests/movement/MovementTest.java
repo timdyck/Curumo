@@ -32,18 +32,17 @@ public class MovementTest {
         Board board = Board.arrayToBoard(boardMatrix);
         PawnMovement movement = new PawnMovement(board);
         List<Move> moves = movement.getWhiteMoves(Move.getFirstPreviousMove());
-        board.printBoard();
 
         List<Move> expectedMoves = new ArrayList<Move>();
-        expectedMoves.add(new Move(PieceType.WP, 2, 1, 3, 0, true));
-        expectedMoves.add(new Move(PieceType.WP, 2, 1, 3, 1));
-        expectedMoves.add(new Move(PieceType.WP, 2, 4, 3, 3, true));
-        expectedMoves.add(new Move(PieceType.WP, 2, 4, 3, 4));
-        expectedMoves.add(new Move(PieceType.WP, 3, 5, 4, 4, true));
-        expectedMoves.add(new Move(PieceType.WP, 3, 5, 4, 6, true));
-        expectedMoves.add(new Move(PieceType.WP, 3, 5, 4, 5));
-        expectedMoves.add(new Move(PieceType.WP, 1, 6, 2, 6));
-        expectedMoves.add(new Move(PieceType.WP, 1, 6, 3, 6));
+        expectedMoves.add(new Move(PieceType.WP, 1, 2, 0, 3, true));
+        expectedMoves.add(new Move(PieceType.WP, 1, 2, 1, 3));
+        expectedMoves.add(new Move(PieceType.WP, 4, 2, 3, 3, true));
+        expectedMoves.add(new Move(PieceType.WP, 4, 2, 4, 3));
+        expectedMoves.add(new Move(PieceType.WP, 5, 3, 4, 4, true));
+        expectedMoves.add(new Move(PieceType.WP, 5, 3, 6, 4, true));
+        expectedMoves.add(new Move(PieceType.WP, 5, 3, 5, 4));
+        expectedMoves.add(new Move(PieceType.WP, 6, 1, 6, 2));
+        expectedMoves.add(new Move(PieceType.WP, 6, 1, 6, 3));
 
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
 
