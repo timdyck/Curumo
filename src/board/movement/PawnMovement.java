@@ -80,9 +80,9 @@ public class PawnMovement extends Movement {
         }
 
         // En passant
-        if (!Move.isFirstMove(previousMove) && previousMove.type.equals(PieceType.BP) && previousMove.row1 == 6
-                && previousMove.row2 == 4 && previousMove.col1 == previousMove.col2) {
-            int col = previousMove.col1;
+        if (!Move.isFirstMove(previousMove) && previousMove.type.equals(PieceType.BP) && previousMove.y1 == 6
+                && previousMove.y2 == 4 && previousMove.x1 == previousMove.x2) {
+            int col = previousMove.x1;
 
             // Right capture
             long rightCapture = (currentPawns >> 1) & blackPieces & RANK_5 & ~FILE_A & FILE_MASKS[col];

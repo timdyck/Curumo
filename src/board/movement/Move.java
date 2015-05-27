@@ -5,52 +5,52 @@ import board.PieceType;
 public class Move {
     PieceType type;
 
-    int row1;
-    int col1;
-    int row2;
-    int col2;
+    int x1;
+    int y1;
+    int x2;
+    int y2;
 
     boolean capture = false;
     PieceType promote;
 
-    public Move(PieceType type, int row1, int col1, int row2, int col2) {
+    public Move(PieceType type, int x1, int y1, int x2, int y2) {
         this.type = type;
-        this.row1 = row1;
-        this.col1 = col1;
-        this.row2 = row2;
-        this.col2 = col2;
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
     }
 
-    public Move(PieceType type, int row1, int col1, int row2, int col2, boolean capture) {
+    public Move(PieceType type, int x1, int y1, int x2, int y2, boolean capture) {
         this.type = type;
-        this.row1 = row1;
-        this.col1 = col1;
-        this.row2 = row2;
-        this.col2 = col2;
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
 
         this.capture = capture;
     }
 
-    public Move(PieceType type, int row1, int col1, int row2, int col2, PieceType promote) {
+    public Move(PieceType type, int x1, int y1, int x2, int y2, PieceType promote) {
         assert (type.equals(PieceType.WP) || type.equals(PieceType.BP)) : "Can't promote a piece that is not a pawn!";
 
         this.type = type;
-        this.row1 = row1;
-        this.col1 = col1;
-        this.row2 = row2;
-        this.col2 = col2;
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
 
         this.promote = promote;
     }
 
-    public Move(PieceType type, int row1, int col1, int row2, int col2, boolean capture, PieceType promote) {
+    public Move(PieceType type, int x1, int y1, int x2, int y2, boolean capture, PieceType promote) {
         assert (type.equals(PieceType.WP) || type.equals(PieceType.BP)) : "Can't promote a piece that is not a pawn!";
 
         this.type = type;
-        this.row1 = row1;
-        this.col1 = col1;
-        this.row2 = row2;
-        this.col2 = col2;
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
 
         this.capture = capture;
         this.promote = promote;
@@ -68,11 +68,11 @@ public class Move {
      * @return whether or not this move is the first move of the game
      */
     public static boolean isFirstMove(Move move) {
-        return move.row1 == -1 && move.col1 == -1 && move.row2 == -1 && move.col2 == -1 && move.type.equals(PieceType.BB);
+        return move.x1 == -1 && move.y1 == -1 && move.x2 == -1 && move.y2 == -1 && move.type.equals(PieceType.BB);
     }
 
     public void printMove() {
-        String printStr = type.name() + " - (" + row1 + "," + col1 + ") to (" + row2 + "," + col2 + ")";
+        String printStr = type.name() + " - (" + x1 + "," + y1 + ") to (" + x2 + "," + y2 + ")";
         if (capture && promote != null) {
             printStr += " (capture and promote " + type.name() + " to " + promote.name() + "!)";
         } else if (capture) {
@@ -88,11 +88,11 @@ public class Move {
         final int prime = 31;
         int result = 1;
         result = prime * result + (capture ? 1231 : 1237);
-        result = prime * result + col1;
-        result = prime * result + col2;
+        result = prime * result + y1;
+        result = prime * result + y2;
         result = prime * result + ((promote == null) ? 0 : promote.hashCode());
-        result = prime * result + row1;
-        result = prime * result + row2;
+        result = prime * result + x1;
+        result = prime * result + x2;
         result = prime * result + ((type == null) ? 0 : type.hashCode());
         return result;
     }
@@ -108,15 +108,15 @@ public class Move {
         Move other = (Move) obj;
         if (capture != other.capture)
             return false;
-        if (col1 != other.col1)
+        if (y1 != other.y1)
             return false;
-        if (col2 != other.col2)
+        if (y2 != other.y2)
             return false;
         if (promote != other.promote)
             return false;
-        if (row1 != other.row1)
+        if (x1 != other.x1)
             return false;
-        if (row2 != other.row2)
+        if (x2 != other.x2)
             return false;
         if (type != other.type)
             return false;
