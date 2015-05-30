@@ -77,7 +77,7 @@ public class Movement {
         QueenMovement queenMovement = new QueenMovement(board);
         KingMovement kingMovement = new KingMovement(board);
 
-        possibleWhiteMoves.addAll(pawnMovement.getWhiteMoves(previousMove));
+        possibleWhiteMoves.addAll(pawnMovement.getWhiteMoves());
         possibleWhiteMoves.addAll(rookMovement.getWhiteMoves());
         possibleWhiteMoves.addAll(knightMovement.getWhiteMoves());
         possibleWhiteMoves.addAll(bishopMovement.getWhiteMoves());
