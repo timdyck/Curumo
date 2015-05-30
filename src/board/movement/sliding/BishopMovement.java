@@ -1,13 +1,14 @@
-package board.movement;
+package board.movement.sliding;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import board.Board;
+import board.movement.Move;
 
-public class QueenMovement extends Movement {
+public class BishopMovement extends SlidingMovement {
 
-    public QueenMovement(Board board) {
+    public BishopMovement(Board board) {
         super(board);
     }
 

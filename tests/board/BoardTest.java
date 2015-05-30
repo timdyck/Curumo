@@ -56,8 +56,6 @@ public class BoardTest {
                 Assert.assertNull(boardArray[i][j]);
             }
         }
-
-        board.printBoard();
     }
 
     @Test

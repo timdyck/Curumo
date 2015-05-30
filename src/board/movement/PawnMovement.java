@@ -20,8 +20,8 @@ public class PawnMovement extends Movement {
         // Right captures
         long captureRight = (currentPawns << 7) & blackPieces & ~FILE_A;
         for (int i = initialIndex(captureRight); i < finalIndex(captureRight); i++) {
-            int x = 7 - (i % 8);
-            int y = i / 8;
+            int x = getX(i);
+            int y = getY(i);
 
             if ((((captureRight & RANK_8) >> i) & 1) == 1) {
                 // Promotion
@@ -37,8 +37,8 @@ public class PawnMovement extends Movement {
         // Left captures
         long captureLeft = (currentPawns << 9) & blackPieces & ~FILE_H;
         for (int i = initialIndex(captureLeft); i < finalIndex(captureLeft); i++) {
-            int x = 7 - (i % 8);
-            int y = i / 8;
+            int x = getX(i);
+            int y = getY(i);
 
             if ((((captureLeft & RANK_8) >> i) & 1) == 1) {
                 // Promotion
@@ -54,8 +54,8 @@ public class PawnMovement extends Movement {
         // One forward
         long oneForward = (currentPawns << 8) & empty;
         for (int i = initialIndex(oneForward); i < finalIndex(oneForward); i++) {
-            int x = 7 - (i % 8);
-            int y = i / 8;
+            int x = getX(i);
+            int y = getY(i);
 
             if ((((oneForward & RANK_8) >> i) & 1) == 1) {
                 // Promotion
@@ -71,8 +71,8 @@ public class PawnMovement extends Movement {
         // Two forward
         long twoForward = (currentPawns << 16) & empty & (empty << 8) & RANK_4;
         for (int i = initialIndex(twoForward); i < finalIndex(twoForward); i++) {
-            int x = 7 - (i % 8);
-            int y = i / 8;
+            int x = getX(i);
+            int y = getY(i);
 
             if (((twoForward >> i) & 1) == 1) {
                 moves.add(new Move(type, x, y - 2, x, y));
@@ -88,8 +88,8 @@ public class PawnMovement extends Movement {
             long rightCapture = (currentPawns >> 1) & blackPieces & RANK_5 & ~FILE_A & FILE_MASKS[col];
             if (rightCapture != 0) {
                 int i = Long.numberOfTrailingZeros(rightCapture);
-                int x = 7 - (i % 8);
-                int y = i / 8;
+                int x = getX(i);
+                int y = getY(i);
                 moves.add(new Move(type, x - 1, y, x, y + 1, true));
             }
 
@@ -97,8 +97,8 @@ public class PawnMovement extends Movement {
             long leftCapture = (currentPawns << 1) & blackPieces & RANK_5 & ~FILE_H & FILE_MASKS[col];
             if (leftCapture != 0) {
                 int i = Long.numberOfTrailingZeros(leftCapture);
-                int x = 7 - (i % 8);
-                int y = i / 8;
+                int x = getX(i);
+                int y = getY(i);
                 moves.add(new Move(type, x + 1, y, x, y + 1, true));
             }
 

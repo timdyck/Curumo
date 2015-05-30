@@ -13,9 +13,9 @@ import board.movement.Move;
 import board.movement.PawnMovement;
 
 /**
- * Tests that verify potential piece move validity.
+ * Tests that verify potential pawn move validity.
  */
-public class MovementTest {
+public class PawnMovementTest {
 
     @Test
     public void WhitePawnMovementAndCapture() {
