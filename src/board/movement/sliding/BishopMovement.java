@@ -1,9 +1,9 @@
 package board.movement.sliding;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import board.Board;
+import board.PieceType;
 import board.movement.Move;
 
 public class BishopMovement extends SlidingMovement {
@@ -13,14 +13,11 @@ public class BishopMovement extends SlidingMovement {
     }
 
     public List<Move> getWhiteMoves() {
-        List<Move> moves = new ArrayList<Move>();
-
-        return moves;
+        return getMoves(PieceType.WB);
     }
 
     public List<Move> getBlackMoves() {
-        List<Move> moves = new ArrayList<Move>();
-
-        return moves;
+        return getMoves(PieceType.BB);
     }
+
 }

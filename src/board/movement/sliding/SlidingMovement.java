@@ -15,6 +15,42 @@ public class SlidingMovement extends Movement {
     }
 
     /**
+     * @param piece
+     * @return List of Moves depending on the type of sliding piece (rook,
+     *         bishop or queen)
+     */
+    protected List<Move> getMoves(PieceType piece) {
+        List<Move> moves = new ArrayList<Move>();
+        long currentRooks = board.getBitBoard(piece);
+
+        for (int i = initialIndex(currentRooks); i < finalIndex(currentRooks); i++) {
+            if (((currentRooks >> i) & 1) == 1) {
+                int x = getX(i);
+                int y = getY(i);
+
+                long possibleMovesBitBoard = 0L;
+                if (piece.equals(PieceType.WR) || piece.equals(PieceType.BR)) {
+                    // Vertical and horizontal for rooks
+                    possibleMovesBitBoard |= getLevelMovesBoard(x, y);
+                } else if (piece.equals(PieceType.WB) || piece.equals(PieceType.BB)) {
+                    // Diagonal and Anti-diagonal for bishops
+                    possibleMovesBitBoard |= getDiagonalMovesBoard(x, y);
+                } else if (piece.equals(PieceType.WQ) || piece.equals(PieceType.BQ)) {
+                    // Both for queen
+                    possibleMovesBitBoard |= getLevelMovesBoard(x, y);
+                    possibleMovesBitBoard |= getDiagonalMovesBoard(x, y);
+                } else {
+                    throw new IllegalStateException(piece.name() + " is not a sliding piece!");
+                }
+
+                moves.addAll(getSlideMoves(possibleMovesBitBoard, piece, x, y));
+            }
+        }
+
+        return moves;
+    }
+
+    /**
      * @param bitBoard
      * @param type
      *            {@link PieceType} of the piece we want to find the moves of
@@ -22,7 +58,7 @@ public class SlidingMovement extends Movement {
      *            position of white piece we want to find the moves of
      * @param y
      *            position of white piece we want to find the moves of
-     * @return list of all potential horizontal and vertical moves
+     * @return list of all potential sliding moves from the given bit board
      */
     protected List<Move> getSlideMoves(long possibleMovesBitBoard, PieceType type, int x, int y) {
         List<Move> moves = new ArrayList<Move>();
@@ -81,9 +117,9 @@ public class SlidingMovement extends Movement {
      * @param y
      * @return bit board of potential diagonal and anti-diagonal moves
      */
-    protected long getDiagonalMoves(int x, int y) {
+    protected long getDiagonalMovesBoard(int x, int y) {
         long bitBoardS = getBitBoard(x, y);
-        int s = (Board.DIMENSION * y) + (7 - x);
+        int s = (Board.DIMENSION * y) + x;
 
         long diagonalMask = DIAGONAL_MASKS[7 - (s / 8) + (s % 8)];
         long occupiedD = occupied & diagonalMask;
