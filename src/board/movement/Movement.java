@@ -32,6 +32,8 @@ public class Movement {
     /* @formatter:on */
 
     protected final long FILE_A = FILE_MASKS[0]; // First Column
+    protected final long FILE_B = FILE_MASKS[1];
+    protected final long FILE_G = FILE_MASKS[6];
     protected final long FILE_H = FILE_MASKS[7]; // Last Column
     protected final long RANK_1 = RANK_MASKS[0]; // Bottom Row
     protected final long RANK_4 = RANK_MASKS[3];
@@ -107,6 +109,50 @@ public class Movement {
         return possibleBlackMoves;
     }
 
+    /**
+     * @param bitBoard
+     * @param piece
+     *            {@link PieceType} of the piece we want to find the moves of
+     * @param x
+     *            position of white piece we want to find the moves of
+     * @param y
+     *            position of white piece we want to find the moves of
+     * @return list of all potential moves from the given bit board
+     */
+    protected List<Move> getMoves(long possibleMovesBitBoard, PieceType piece, int x, int y) {
+        List<Move> moves = new ArrayList<Move>();
+
+        // Remove moves that are not proper captures
+        if (piece.isWhitePiece()) {
+            possibleMovesBitBoard &= ~whitePieces;
+        } else if (piece.isBlackPiece()) {
+            possibleMovesBitBoard &= ~blackPieces;
+        }
+
+        long bitBoardS = getBitBoard(x, y);
+
+        for (int i = initialIndex(possibleMovesBitBoard); i < finalIndex(possibleMovesBitBoard); i++) {
+            if (((possibleMovesBitBoard >> i) & 1) == bitBoardS) {
+                // Observing the piece in question
+                continue;
+            }
+            if (((possibleMovesBitBoard >> i) & 1) == 1) {
+                int moveX = getX(i);
+                int moveY = getY(i);
+
+                long oppositeColorPieces = piece.isWhitePiece() ? blackPieces : whitePieces;
+                if (((oppositeColorPieces >> i) & 1) == 1) {
+                    // Capture
+                    moves.add(new Move(piece, x, y, moveX, moveY, true));
+                } else {
+                    moves.add(new Move(piece, x, y, moveX, moveY));
+                }
+            }
+        }
+
+        return moves;
+    }
+
     protected int initialIndex(long num) {
         return Long.numberOfTrailingZeros(num);
     }
@@ -121,6 +167,18 @@ public class Movement {
 
     protected int getY(int i) {
         return i / 8;
+    }
+
+    /**
+     * Bottom left=0, bottom right=7, top left=56, top right= 63
+     * 
+     * @param x
+     * @param y
+     * @return
+     */
+    protected long getBitBoard(int x, int y) {
+        int s = (Board.DIMENSION * y) + (7 - x);
+        return 1L << s;
     }
 
 }

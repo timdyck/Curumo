@@ -17,9 +17,9 @@ import board.movement.PawnMovement;
  */
 public class PawnMovementTest {
 
-    /*
+    /**************
      * WHITE MOVES
-     */
+     **************/
 
     @Test
     public void WhitePawnMovementAndCapture() {
@@ -141,9 +141,9 @@ public class PawnMovementTest {
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
     }
 
-    /*
+    /**************
      * BLACK MOVES
-     */
+     **************/
 
     @Test
     public void BlackPawnMovementAndCapture() {
