@@ -39,15 +39,31 @@ public class PieceMovement {
 
     protected Board board;
 
+    // Piece locations
     public long whitePieces;
     public long blackPieces;
     public long occupied;
     public long empty;
 
+    // Possible moves
     protected long possibleWhiteAttacksBitBoard = 0L;
     protected List<Move> whiteMoves;
     protected long possibleBlackAttacksBitBoard = 0L;
     protected List<Move> blackMoves;
+
+    // Castling flags and locations
+    public boolean WQCastle = true;
+    public final long WQCastleReq = 0x0000000000000088L;
+    public final long WQCastlePos = 0x0000000000000020L;
+    public boolean WKCastle = true;
+    public final long WKCastleReq = 0x000000000000000AL;
+    public final long WKCastlePos = 0x0000000000000002L;
+    public boolean BQCastle = true;
+    public final long BQCastleReq = 0x8800000000000000L;
+    public final long BQCastlePos = 0x2000000000000000L;
+    public boolean BKCastle = true;
+    public final long BKCastleReq = 0x0A00000000000000L;
+    public final long BKCastlePos = 0x0200000000000000L;
 
     public PieceMovement(Board board) {
         this.board = board;

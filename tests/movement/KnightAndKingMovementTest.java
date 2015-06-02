@@ -104,6 +104,79 @@ public class KnightAndKingMovementTest {
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
     }
 
+    @Test
+    public void Castling() {
+        /* @formatter:off */
+        String[][] boardMatrix = {{"BR", "  ", "  ", "  ", "BK", "  ", "  ", "BR"},
+                                  {"BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP"},
+                                  {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                  {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                  {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                  {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                  {"WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"},
+                                  {"WR", "  ", "  ", "  ", "WK", "  ", "  ", "WR"}};
+        /* @formatter:on */
+        Board board = Board.arrayToBoard(boardMatrix);
+        Movement movement = new Movement(board);
+        KingMovement kingMovement = new KingMovement(board, movement.getUnsafeForWhite(), movement.getUnsafeForBlack());
+
+        // White king
+        List<Move> moves = kingMovement.getWhiteMoves();
+        List<Move> expectedMoves = new ArrayList<Move>();
+
+        expectedMoves.add(new Move(PieceType.WK, 4, 0, 5, 0));
+        expectedMoves.add(new Move(PieceType.WK, 4, 0, 6, 0));
+        expectedMoves.add(new Move(PieceType.WK, 4, 0, 3, 0));
+        expectedMoves.add(new Move(PieceType.WK, 4, 0, 2, 0));
+
+        Assert.assertTrue(equalMoveList(moves, expectedMoves));
+
+        // Black knight
+        moves = kingMovement.getBlackMoves();
+        expectedMoves.clear();
+
+        expectedMoves.add(new Move(PieceType.BK, 4, 7, 5, 7));
+        expectedMoves.add(new Move(PieceType.BK, 4, 7, 6, 7));
+        expectedMoves.add(new Move(PieceType.BK, 4, 7, 3, 7));
+        expectedMoves.add(new Move(PieceType.BK, 4, 7, 2, 7));
+
+        Assert.assertTrue(equalMoveList(moves, expectedMoves));
+
+        /* @formatter:off */
+        String[][] boardMatrix2 = {{"BR", "  ", "BB", "  ", "BK", "  ", "  ", "BR"},
+                                   {"BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP"},
+                                   {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                   {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                   {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                   {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "BN"},
+                                   {"WP", "WP", "WP", "WP", "WP", "WP", "  ", "WP"},
+                                   {"WR", "  ", "  ", "  ", "WK", "  ", "  ", "WR"}};
+        /* @formatter:on */
+        board = Board.arrayToBoard(boardMatrix2);
+        movement = new Movement(board);
+        kingMovement = new KingMovement(board, movement.getUnsafeForWhite(), movement.getUnsafeForBlack());
+
+        // White king
+        moves = kingMovement.getWhiteMoves();
+        expectedMoves = new ArrayList<Move>();
+
+        expectedMoves.add(new Move(PieceType.WK, 4, 0, 5, 0));
+        expectedMoves.add(new Move(PieceType.WK, 4, 0, 3, 0));
+        expectedMoves.add(new Move(PieceType.WK, 4, 0, 2, 0));
+
+        Assert.assertTrue(equalMoveList(moves, expectedMoves));
+
+        // Black knight
+        moves = kingMovement.getBlackMoves();
+        expectedMoves.clear();
+
+        expectedMoves.add(new Move(PieceType.BK, 4, 7, 5, 7));
+        expectedMoves.add(new Move(PieceType.BK, 4, 7, 6, 7));
+        expectedMoves.add(new Move(PieceType.BK, 4, 7, 3, 7));
+
+        Assert.assertTrue(equalMoveList(moves, expectedMoves));
+    }
+
     private boolean equalMoveList(List<Move> moves, List<Move> expectedMoves) {
         Assert.assertEquals(moves.size(), expectedMoves.size());
 

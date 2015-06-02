@@ -28,10 +28,10 @@ public class KingMovement extends PieceMovement {
 
     public void initializeMoves(PieceType piece, long unsafeMoves) {
         List<Move> moves = new ArrayList<Move>();
-        long currentKnights = board.getBitBoard(piece);
+        long currentKings = board.getBitBoard(piece);
 
-        for (int i = initialIndex(currentKnights); i < finalIndex(currentKnights); i++) {
-            if (((currentKnights >> i) & 1) == 1) {
+        for (int i = initialIndex(currentKings); i < finalIndex(currentKings); i++) {
+            if (((currentKings >> i) & 1) == 1) {
                 long possibleMoves = i < CENTRE ? KING_RANGE >> (CENTRE - i) : KING_RANGE << (i - CENTRE);
 
                 long sameColorPieces = piece.isWhitePiece() ? whitePieces : blackPieces;
@@ -47,8 +47,36 @@ public class KingMovement extends PieceMovement {
                 // Eliminate moves putting king in check
                 possibleMoves &= ~unsafeMoves;
 
-                moves.addAll(getMoves(possibleMoves, piece, getX(i), getY(i)));
+                int x = getX(i);
+                int y = getY(i);
 
+                // Check for castling
+                long castleBoard = currentKings | ~occupied;
+                if (piece.isWhitePiece()) {
+                    castleBoard |= board.getBitBoard(PieceType.WR);
+
+                    if (WKCastle && ((WKCastleReq & castleBoard) == WKCastleReq) && ((WKCastlePos & ~unsafeMoves) == WKCastlePos)) {
+                        // White king castle
+                        possibleMoves |= WKCastlePos;
+                    }
+                    if (WQCastle && ((WQCastleReq & castleBoard) == WQCastleReq) && ((WQCastlePos & ~unsafeMoves) == WQCastlePos)) {
+                        // White queen castle
+                        possibleMoves |= WQCastlePos;
+                    }
+                } else if (piece.isBlackPiece()) {
+                    castleBoard |= board.getBitBoard(PieceType.BR);
+
+                    if (BKCastle && ((BKCastleReq & castleBoard) == BKCastleReq) && ((BKCastlePos & ~unsafeMoves) == BKCastlePos)) {
+                        // Black king castle
+                        possibleMoves |= BKCastlePos;
+                    }
+                    if (BQCastle && ((BQCastleReq & castleBoard) == BQCastleReq) && ((BQCastlePos & ~unsafeMoves) == BQCastlePos)) {
+                        // Black queen castle
+                        possibleMoves |= BQCastlePos;
+                    }
+                }
+
+                moves.addAll(getMoves(possibleMoves, piece, x, y));
                 setMoves(piece, moves, possibleMoves);
             }
         }
