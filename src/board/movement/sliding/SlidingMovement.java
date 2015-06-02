@@ -6,9 +6,9 @@ import java.util.List;
 import board.Board;
 import board.PieceType;
 import board.movement.Move;
-import board.movement.Movement;
+import board.movement.PieceMovement;
 
-public class SlidingMovement extends Movement {
+public class SlidingMovement extends PieceMovement {
 
     public SlidingMovement(Board board) {
         super(board);
@@ -19,9 +19,10 @@ public class SlidingMovement extends Movement {
      * @return List of Moves depending on the type of sliding piece (rook,
      *         bishop or queen)
      */
-    protected List<Move> getMoves(PieceType piece) {
+    protected void initializeMoves(PieceType piece) {
         List<Move> moves = new ArrayList<Move>();
         long currentBitBoard = board.getBitBoard(piece);
+        long allPossibleMovesBitBoard = 0L;
 
         for (int i = initialIndex(currentBitBoard); i < finalIndex(currentBitBoard); i++) {
             if (((currentBitBoard >> i) & 1) == 1) {
@@ -44,10 +45,11 @@ public class SlidingMovement extends Movement {
                 }
 
                 moves.addAll(getMoves(possibleMovesBitBoard, piece, x, y));
+                allPossibleMovesBitBoard |= possibleMovesBitBoard;
             }
         }
 
-        return moves;
+        setMoves(piece, moves, allPossibleMovesBitBoard);
     }
 
     /**

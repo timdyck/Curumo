@@ -6,7 +6,7 @@ import java.util.List;
 import board.Board;
 import board.PieceType;
 
-public class KnightMovement extends Movement {
+public class KnightMovement extends PieceMovement {
 
     private final long KNIGHT_RANGE = 0x0000000A1100110AL;
     private final int CENTRE = 18; // 18 Right shifts of KNIGHT_RANGE
@@ -14,19 +14,14 @@ public class KnightMovement extends Movement {
 
     public KnightMovement(Board board) {
         super(board);
+        initializeMoves(PieceType.WN);
+        initializeMoves(PieceType.BN);
     }
 
-    public List<Move> getWhiteMoves() {
-        return getMoves(PieceType.WN);
-    }
-
-    public List<Move> getBlackMoves() {
-        return getMoves(PieceType.BN);
-    }
-
-    public List<Move> getMoves(PieceType piece) {
+    private void initializeMoves(PieceType piece) {
         List<Move> moves = new ArrayList<Move>();
         long currentKnights = board.getBitBoard(piece);
+        long allPossibleMovesBitBoard = 0L;
 
         for (int i = initialIndex(currentKnights); i < finalIndex(currentKnights); i++) {
             if (((currentKnights >> i) & 1) == 1) {
@@ -35,17 +30,18 @@ public class KnightMovement extends Movement {
                 long sameColorPieces = piece.isWhitePiece() ? whitePieces : blackPieces;
                 possibleMoves &= ~sameColorPieces;
 
-                // Eliminate wrap around and wrong colour
-                if (i % 8 < 4) {
+                // Eliminate wrap around
+                if (getX(i) > 5) {
                     possibleMoves &= ~FILE_A & ~FILE_B;
-                } else {
+                } else if (getX(i) < 2) {
                     possibleMoves &= ~FILE_H & ~FILE_G;
                 }
 
                 moves.addAll(getMoves(possibleMoves, piece, getX(i), getY(i)));
+                allPossibleMovesBitBoard |= possibleMoves;
             }
         }
 
-        return moves;
+        setMoves(piece, moves, allPossibleMovesBitBoard);
     }
 }

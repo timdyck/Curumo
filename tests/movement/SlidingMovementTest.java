@@ -15,7 +15,7 @@ import board.movement.sliding.QueenMovement;
 import board.movement.sliding.RookMovement;
 
 /**
- * Tests that verify potential pawn move validity.
+ * Tests that verify potential sliding move validity.
  */
 public class SlidingMovementTest {
 

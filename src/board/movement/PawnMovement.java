@@ -6,22 +6,31 @@ import java.util.List;
 import board.Board;
 import board.PieceType;
 
-public class PawnMovement extends Movement {
+public class PawnMovement extends PieceMovement {
 
     public PawnMovement(Board board) {
         super(board);
+        initializeWhiteMoves();
+        initializeBlackMoves();
     }
 
-    public List<Move> getWhiteMoves() {
-        return getWhiteMoves(Move.getFirstPreviousMove());
+    public PawnMovement(Board board, Move previousMove) {
+        super(board);
+        initializeWhiteMoves(previousMove);
+        initializeBlackMoves(previousMove);
     }
 
-    public List<Move> getWhiteMoves(Move previousMove) {
+    public void initializeWhiteMoves() {
+        initializeWhiteMoves(Move.getFirstPreviousMove());
+    }
+
+    public void initializeWhiteMoves(Move previousMove) {
         List<Move> moves = new ArrayList<Move>();
         PieceType type = PieceType.WP;
         long currentPawns = board.getBitBoard(type);
 
         // Right captures
+        long possibleWhiteCaptures = (currentPawns << 7) & ~FILE_A;
         long captureRight = (currentPawns << 7) & blackPieces & ~FILE_A;
         for (int i = initialIndex(captureRight); i < finalIndex(captureRight); i++) {
             int x = getX(i);
@@ -39,6 +48,7 @@ public class PawnMovement extends Movement {
         }
 
         // Left captures
+        possibleWhiteCaptures |= (currentPawns << 9) & ~FILE_H;
         long captureLeft = (currentPawns << 9) & blackPieces & ~FILE_H;
         for (int i = initialIndex(captureLeft); i < finalIndex(captureLeft); i++) {
             int x = getX(i);
@@ -54,6 +64,9 @@ public class PawnMovement extends Movement {
                 moves.add(new Move(type, x + 1, y - 1, x, y, true));
             }
         }
+
+        // Set all possible attacks
+        this.possibleWhiteAttacksBitBoard = possibleWhiteCaptures;
 
         // One forward
         long oneForward = (currentPawns << 8) & empty;
@@ -108,19 +121,21 @@ public class PawnMovement extends Movement {
 
         }
 
-        return moves;
+        this.whiteMoves = moves;
+
     }
 
-    public List<Move> getBlackMoves() {
-        return getBlackMoves(Move.getFirstPreviousMove());
+    public void initializeBlackMoves() {
+        initializeBlackMoves(Move.getFirstPreviousMove());
     }
 
-    public List<Move> getBlackMoves(Move previousMove) {
+    public void initializeBlackMoves(Move previousMove) {
         List<Move> moves = new ArrayList<Move>();
         PieceType type = PieceType.BP;
         long currentPawns = board.getBitBoard(PieceType.BP);
 
         // Right captures
+        long possibleBlackCaptures = (currentPawns >> 7) & ~FILE_H;
         long captureRight = (currentPawns >> 7) & whitePieces & ~FILE_H;
         for (int i = initialIndex(captureRight); i < finalIndex(captureRight); i++) {
             int x = getX(i);
@@ -138,6 +153,7 @@ public class PawnMovement extends Movement {
         }
 
         // Left captures
+        possibleBlackCaptures |= (currentPawns >> 9) & ~FILE_A;
         long captureLeft = (currentPawns >> 9) & whitePieces & ~FILE_A;
         for (int i = initialIndex(captureLeft); i < finalIndex(captureLeft); i++) {
             int x = getX(i);
@@ -153,6 +169,9 @@ public class PawnMovement extends Movement {
                 moves.add(new Move(type, x - 1, y + 1, x, y, true));
             }
         }
+
+        // Set all possible attacks
+        this.possibleBlackAttacksBitBoard = possibleBlackCaptures;
 
         // One forward
         long oneForward = (currentPawns >> 8) & empty;
@@ -207,6 +226,6 @@ public class PawnMovement extends Movement {
 
         }
 
-        return moves;
+        this.blackMoves = moves;
     }
 }

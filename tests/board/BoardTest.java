@@ -6,7 +6,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import board.movement.Movement;
+import board.movement.PieceMovement;
 
 /**
  * Tests that verify board setup.
@@ -83,7 +83,7 @@ public class BoardTest {
     @Test
     public void InitialBoardMovementConstants() {
         Board board = Board.StandardBoard();
-        Movement movement = new Movement(board);
+        PieceMovement movement = new PieceMovement(board);
 
         String blackPiece = "BP";
         String[][] blackBoardArray = Board.bitBoardToArray(movement.blackPieces, blackPiece);

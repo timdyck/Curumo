@@ -1,4 +1,4 @@
-import movement.KnightMovementTest;
+import movement.KnightAndKingMovementTest;
 import movement.PawnMovementTest;
 import movement.SlidingMovementTest;
 
@@ -9,6 +9,6 @@ import org.junit.runners.Suite.SuiteClasses;
 import board.BoardTest;
 
 @RunWith(Suite.class)
-@SuiteClasses({ BoardTest.class, PawnMovementTest.class, SlidingMovementTest.class, KnightMovementTest.class })
+@SuiteClasses({ BoardTest.class, PawnMovementTest.class, SlidingMovementTest.class, KnightAndKingMovementTest.class })
 public class AllTests {
 }

@@ -65,7 +65,6 @@ public class PawnMovementTest {
                                   {"WR", "WN", "WB", "WQ", "WK", "WB", "WN", "WR"}};
         /* @formatter:on */
         Board board = Board.arrayToBoard(boardMatrix);
-        PawnMovement movement = new PawnMovement(board);
 
         List<Move> expectedMoves = new ArrayList<Move>();
         expectedMoves.add(new Move(PieceType.WP, 0, 2, 0, 3));
@@ -76,13 +75,17 @@ public class PawnMovementTest {
         expectedMoves.add(new Move(PieceType.WP, 6, 1, 6, 3));
 
         // One opportunity
-        List<Move> moves = movement.getWhiteMoves(new Move(PieceType.BP, 4, 6, 4, 4));
+        PawnMovement movement = new PawnMovement(board, new Move(PieceType.BP, 4, 6, 4, 4));
+        List<Move> moves = movement.getWhiteMoves();
+
         expectedMoves.add(new Move(PieceType.WP, 5, 4, 4, 5, true));
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
         expectedMoves.remove(new Move(PieceType.WP, 5, 4, 4, 5, true));
 
         // Two opportunities
-        moves = movement.getWhiteMoves(new Move(PieceType.BP, 6, 6, 6, 4));
+        movement = new PawnMovement(board, new Move(PieceType.BP, 6, 6, 6, 4));
+        moves = movement.getWhiteMoves();
+
         expectedMoves.add(new Move(PieceType.WP, 5, 4, 6, 5, true));
         expectedMoves.add(new Move(PieceType.WP, 7, 4, 6, 5, true));
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
@@ -90,13 +93,16 @@ public class PawnMovementTest {
         expectedMoves.remove(new Move(PieceType.WP, 7, 4, 6, 5, true));
 
         // No opportunites
-        moves = movement.getWhiteMoves(new Move(PieceType.BP, 0, 6, 0, 4));
+        movement = new PawnMovement(board, new Move(PieceType.BP, 0, 6, 0, 4));
+        moves = movement.getWhiteMoves();
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
 
-        moves = movement.getWhiteMoves(new Move(PieceType.BP, 1, 6, 1, 5));
+        movement = new PawnMovement(board, new Move(PieceType.BP, 1, 6, 1, 5));
+        moves = movement.getWhiteMoves();
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
 
-        moves = movement.getWhiteMoves(new Move(PieceType.BP, 3, 4, 3, 3));
+        movement = new PawnMovement(board, new Move(PieceType.BP, 3, 4, 3, 3));
+        moves = movement.getWhiteMoves();
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
     }
 
@@ -189,7 +195,6 @@ public class PawnMovementTest {
                                   {"WR", "WN", "WB", "WQ", "WK", "WB", "  ", "WR"}};
         /* @formatter:on */
         Board board = Board.arrayToBoard(boardMatrix);
-        PawnMovement movement = new PawnMovement(board);
 
         List<Move> expectedMoves = new ArrayList<Move>();
         expectedMoves.add(new Move(PieceType.BP, 1, 6, 1, 5));
@@ -200,13 +205,17 @@ public class PawnMovementTest {
         expectedMoves.add(new Move(PieceType.BP, 7, 5, 7, 4));
 
         // One opportunity
-        List<Move> moves = movement.getBlackMoves(new Move(PieceType.WP, 3, 1, 3, 3));
+        PawnMovement movement = new PawnMovement(board, new Move(PieceType.WP, 3, 1, 3, 3));
+        List<Move> moves = movement.getBlackMoves();
+
         expectedMoves.add(new Move(PieceType.BP, 2, 3, 3, 2, true));
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
         expectedMoves.remove(new Move(PieceType.BP, 2, 3, 3, 2, true));
 
         // Two opportunities
-        moves = movement.getBlackMoves(new Move(PieceType.WP, 1, 1, 1, 3));
+        movement = new PawnMovement(board, new Move(PieceType.WP, 1, 1, 1, 3));
+
+        moves = movement.getBlackMoves();
         expectedMoves.add(new Move(PieceType.BP, 0, 3, 1, 2, true));
         expectedMoves.add(new Move(PieceType.BP, 2, 3, 1, 2, true));
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
@@ -214,13 +223,16 @@ public class PawnMovementTest {
         expectedMoves.remove(new Move(PieceType.BP, 2, 3, 1, 2, true));
 
         // No opportunites
-        moves = movement.getBlackMoves(new Move(PieceType.WP, 7, 1, 7, 3));
+        movement = new PawnMovement(board, new Move(PieceType.WP, 7, 1, 7, 3));
+        moves = movement.getBlackMoves();
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
 
-        moves = movement.getBlackMoves(new Move(PieceType.WP, 6, 1, 6, 2));
+        movement = new PawnMovement(board, new Move(PieceType.WP, 6, 1, 6, 2));
+        moves = movement.getBlackMoves();
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
 
-        moves = movement.getBlackMoves(new Move(PieceType.WP, 4, 3, 4, 4));
+        movement = new PawnMovement(board, new Move(PieceType.WP, 4, 3, 4, 4));
+        moves = movement.getBlackMoves();
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
     }
 
