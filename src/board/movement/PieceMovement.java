@@ -37,7 +37,9 @@ public class PieceMovement {
     protected final long RANK_5 = RANK_MASKS[4];
     protected final long RANK_8 = RANK_MASKS[7]; // Top Row
 
+    // Store board and board matrix since matrix gives quick indexing
     protected Board board;
+    protected String[][] boardMatrix;
 
     // Piece locations
     public long whitePieces;
@@ -51,22 +53,9 @@ public class PieceMovement {
     protected long possibleBlackAttacksBitBoard = 0L;
     protected List<Move> blackMoves;
 
-    // Castling flags and locations
-    public boolean WQCastle = true;
-    public final long WQCastleReq = 0x0000000000000088L;
-    public final long WQCastlePos = 0x0000000000000020L;
-    public boolean WKCastle = true;
-    public final long WKCastleReq = 0x000000000000000AL;
-    public final long WKCastlePos = 0x0000000000000002L;
-    public boolean BQCastle = true;
-    public final long BQCastleReq = 0x8800000000000000L;
-    public final long BQCastlePos = 0x2000000000000000L;
-    public boolean BKCastle = true;
-    public final long BKCastleReq = 0x0A00000000000000L;
-    public final long BKCastlePos = 0x0200000000000000L;
-
     public PieceMovement(Board board) {
         this.board = board;
+        this.boardMatrix = board.boardToArray();
 
         /* @formatter:off */
         whitePieces =  board.getBitBoard(PieceType.WP) |
@@ -106,6 +95,11 @@ public class PieceMovement {
 
     public List<Move> getBlackMoves() {
         return blackMoves;
+    }
+
+    protected PieceType getPieceAt(int x, int y) {
+        String str = boardMatrix[7 - y][x];
+        return str == null ? null : PieceType.valueOf(boardMatrix[7 - y][x]);
     }
 
     protected void setMoves(PieceType piece, List<Move> moves, long possibleMoves) {
@@ -152,7 +146,7 @@ public class PieceMovement {
                 long oppositeColorPieces = piece.isWhitePiece() ? blackPieces : whitePieces;
                 if (((oppositeColorPieces >> i) & 1) == 1) {
                     // Capture
-                    moves.add(new Move(piece, x, y, moveX, moveY, true));
+                    moves.add(new Move(piece, x, y, moveX, moveY, MoveType.CAPTURE, getPieceAt(moveX, moveY)));
                 } else {
                     moves.add(new Move(piece, x, y, moveX, moveY));
                 }
@@ -183,7 +177,7 @@ public class PieceMovement {
      * 
      * @param x
      * @param y
-     * @return
+     * @return a bitboard with a 1 at position (x,y)
      */
     protected long getBitBoard(int x, int y) {
         int s = (Board.DIMENSION * y) + (7 - x);

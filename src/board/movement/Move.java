@@ -3,64 +3,154 @@ package board.movement;
 import board.PieceType;
 
 public class Move {
-    PieceType type;
+    private PieceType piece;
 
-    int x1;
-    int y1;
-    int x2;
-    int y2;
+    private int x1;
+    private int y1;
+    private int x2;
+    private int y2;
 
-    boolean capture = false;
-    PieceType promote;
+    private MoveType type;
+    private PieceType capturedPiece;
+    private PieceType promotionPiece;
 
-    public Move(PieceType type, int x1, int y1, int x2, int y2) {
-        this.type = type;
+    /**
+     * Use this constructor if the move type is {@link MoveType#TYPICAL}
+     * 
+     * @param piece
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @param type
+     */
+    public Move(PieceType piece, int x1, int y1, int x2, int y2) {
+        this.piece = piece;
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+        this.type = MoveType.TYPICAL;
     }
 
-    public Move(PieceType type, int x1, int y1, int x2, int y2, boolean capture) {
-        this.type = type;
+    /**
+     * Use this constructor if the move type is NOT {@link MoveType#CAPTURE} or
+     * NOT {@link MoveType#PROMOTION} or NOT
+     * {@link MoveType#CAPTURE_AND_PROMOTION}
+     * 
+     * @param piece
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @param type
+     */
+    public Move(PieceType piece, int x1, int y1, int x2, int y2, MoveType type) {
+        assert !type.equals(MoveType.CAPTURE) && !!type.equals(MoveType.PROMOTION)
+                && !type.equals(MoveType.CAPTURE_AND_PROMOTION) : "With this contruction, MoveType must not be CAPTURE or PROMOTION or CAPTURE_AND_PROMOTION!";
+
+        this.piece = piece;
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
-
-        this.capture = capture;
+        this.type = type;
     }
 
-    public Move(PieceType type, int x1, int y1, int x2, int y2, PieceType promote) {
-        assert (type.equals(PieceType.WP) || type.equals(PieceType.BP)) : "Can't promote a piece that is not a pawn!";
+    /**
+     * Use this constructor for move types {@link MoveType#CAPTURE} and
+     * {@link MoveType#PROMOTION}
+     * 
+     * @param piece
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @param type
+     * @param captureOrPromote
+     */
+    public Move(PieceType piece, int x1, int y1, int x2, int y2, MoveType type, PieceType captureOrPromote) {
+        assert type.equals(MoveType.CAPTURE) || type.equals(MoveType.PROMOTION) : "With this contruction, MoveType must be either CAPTURE or PROMOTION!";
 
-        this.type = type;
+        this.piece = piece;
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+        this.type = type;
 
-        this.promote = promote;
+        if (type.equals(MoveType.CAPTURE)) {
+            this.capturedPiece = captureOrPromote;
+        } else {
+            assert (piece.equals(PieceType.WP) || piece.equals(PieceType.BP)) : "Can't promote a piece that is not a pawn!";
+            this.promotionPiece = captureOrPromote;
+        }
     }
 
-    public Move(PieceType type, int x1, int y1, int x2, int y2, boolean capture, PieceType promote) {
-        assert (type.equals(PieceType.WP) || type.equals(PieceType.BP)) : "Can't promote a piece that is not a pawn!";
+    /**
+     * Use this constructor for move type {@link MoveType#CAPTURE_AND_PROMOTION}
+     * 
+     * @param piece
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @param type
+     * @param captured
+     * @param promotion
+     */
+    public Move(PieceType piece, int x1, int y1, int x2, int y2, MoveType type, PieceType captured, PieceType promotion) {
+        assert type.equals(MoveType.CAPTURE_AND_PROMOTION) : "With this contruction, MoveType must be either CAPTURE_AND_PROMOTION!";
+        assert (piece.equals(PieceType.WP) || piece.equals(PieceType.BP)) : "Can't promote a piece that is not a pawn!";
 
-        this.type = type;
+        this.piece = piece;
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+        this.type = type;
 
-        this.capture = capture;
-        this.promote = promote;
+        this.capturedPiece = captured;
+        this.promotionPiece = promotion;
+    }
+
+    public PieceType getPiece() {
+        return piece;
+    }
+
+    public int getX1() {
+        return x1;
+    }
+
+    public int getY1() {
+        return y1;
+    }
+
+    public int getX2() {
+        return x2;
+    }
+
+    public int getY2() {
+        return y2;
+    }
+
+    public MoveType getType() {
+        return type;
+    }
+
+    public PieceType getCapturedPiece() {
+        return capturedPiece;
+    }
+
+    public PieceType getPromotionPiece() {
+        return promotionPiece;
     }
 
     /**
      * @return representation for previous move when there was no previous move
      */
     public static Move getFirstPreviousMove() {
-        return new Move(PieceType.BB, -1, -1, -1, -1);
+        return new Move(PieceType.BB, -1, -1, -1, -1, MoveType.TYPICAL);
     }
 
     /**
@@ -68,32 +158,36 @@ public class Move {
      * @return whether or not this move is the first move of the game
      */
     public static boolean isFirstMove(Move move) {
-        return move.x1 == -1 && move.y1 == -1 && move.x2 == -1 && move.y2 == -1 && move.type.equals(PieceType.BB);
+        return move.x1 == -1 && move.y1 == -1 && move.x2 == -1 && move.y2 == -1 && move.piece.equals(PieceType.BB);
     }
 
-    public void printMove() {
-        String printStr = type.name() + " - (" + x1 + "," + y1 + ") to (" + x2 + "," + y2 + ")";
-        if (capture && promote != null) {
-            printStr += " (capture and promote " + type.name() + " to " + promote.name() + "!)";
-        } else if (capture) {
-            printStr += " (capture!)";
-        } else if (promote != null) {
-            printStr += " (promote " + type.name() + " to " + promote.name() + "!)";
+    @Override
+    public String toString() {
+        String printStr = piece.name() + " - (" + x1 + "," + y1 + ") to (" + x2 + "," + y2 + ")";
+        if (type.equals(MoveType.CAPTURE_AND_PROMOTION)) {
+            printStr += " (capture " + capturedPiece + " and promote " + piece + " to " + promotionPiece + "!)";
+        } else if (type.equals(MoveType.CAPTURE)) {
+            printStr += " (captured " + capturedPiece + "!)";
+        } else if (type.equals(MoveType.CAPTURE)) {
+            printStr += " (promote " + piece + " to " + promotionPiece + "!)";
+        } else {
+            printStr += " (" + type + ")";
         }
-        System.out.println(printStr);
+        return printStr;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (capture ? 1231 : 1237);
-        result = prime * result + y1;
-        result = prime * result + y2;
-        result = prime * result + ((promote == null) ? 0 : promote.hashCode());
+        result = prime * result + ((capturedPiece == null) ? 0 : capturedPiece.hashCode());
+        result = prime * result + ((piece == null) ? 0 : piece.hashCode());
+        result = prime * result + ((promotionPiece == null) ? 0 : promotionPiece.hashCode());
+        result = prime * result + ((type == null) ? 0 : type.hashCode());
         result = prime * result + x1;
         result = prime * result + x2;
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
+        result = prime * result + y1;
+        result = prime * result + y2;
         return result;
     }
 
@@ -106,19 +200,21 @@ public class Move {
         if (getClass() != obj.getClass())
             return false;
         Move other = (Move) obj;
-        if (capture != other.capture)
+        if (capturedPiece != other.capturedPiece)
             return false;
-        if (y1 != other.y1)
+        if (piece != other.piece)
             return false;
-        if (y2 != other.y2)
+        if (promotionPiece != other.promotionPiece)
             return false;
-        if (promote != other.promote)
+        if (type != other.type)
             return false;
         if (x1 != other.x1)
             return false;
         if (x2 != other.x2)
             return false;
-        if (type != other.type)
+        if (y1 != other.y1)
+            return false;
+        if (y2 != other.y2)
             return false;
         return true;
     }

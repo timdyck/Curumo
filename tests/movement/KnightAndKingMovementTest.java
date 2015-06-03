@@ -12,6 +12,7 @@ import board.PieceType;
 import board.movement.KingMovement;
 import board.movement.KnightMovement;
 import board.movement.Move;
+import board.movement.MoveType;
 import board.movement.Movement;
 
 /**
@@ -43,8 +44,8 @@ public class KnightAndKingMovementTest {
         expectedMoves.add(new Move(PieceType.WN, 5, 2, 4, 4));
         expectedMoves.add(new Move(PieceType.WN, 5, 2, 7, 3));
 
-        expectedMoves.add(new Move(PieceType.WN, 6, 4, 5, 6, true));
-        expectedMoves.add(new Move(PieceType.WN, 6, 4, 7, 6, true));
+        expectedMoves.add(new Move(PieceType.WN, 6, 4, 5, 6, MoveType.CAPTURE, PieceType.BP));
+        expectedMoves.add(new Move(PieceType.WN, 6, 4, 7, 6, MoveType.CAPTURE, PieceType.BP));
         expectedMoves.add(new Move(PieceType.WN, 6, 4, 4, 5));
         expectedMoves.add(new Move(PieceType.WN, 6, 4, 4, 3));
         expectedMoves.add(new Move(PieceType.WN, 6, 4, 7, 2));
@@ -57,7 +58,7 @@ public class KnightAndKingMovementTest {
 
         expectedMoves.add(new Move(PieceType.BN, 0, 2, 1, 0));
         expectedMoves.add(new Move(PieceType.BN, 0, 2, 1, 4));
-        expectedMoves.add(new Move(PieceType.BN, 0, 2, 2, 1, true));
+        expectedMoves.add(new Move(PieceType.BN, 0, 2, 2, 1, MoveType.CAPTURE, PieceType.WP));
         expectedMoves.add(new Move(PieceType.BN, 0, 2, 2, 3));
 
         expectedMoves.add(new Move(PieceType.BN, 3, 5, 1, 4));
@@ -89,7 +90,7 @@ public class KnightAndKingMovementTest {
         List<Move> expectedMoves = new ArrayList<Move>();
 
         expectedMoves.add(new Move(PieceType.WK, 2, 3, 2, 2));
-        expectedMoves.add(new Move(PieceType.WK, 2, 3, 1, 2, true));
+        expectedMoves.add(new Move(PieceType.WK, 2, 3, 1, 2, MoveType.CAPTURE, PieceType.BP));
 
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
 
@@ -99,7 +100,7 @@ public class KnightAndKingMovementTest {
 
         expectedMoves.add(new Move(PieceType.BK, 4, 3, 5, 4));
         expectedMoves.add(new Move(PieceType.BK, 4, 3, 5, 3));
-        expectedMoves.add(new Move(PieceType.BK, 4, 3, 4, 4, true));
+        expectedMoves.add(new Move(PieceType.BK, 4, 3, 4, 4, MoveType.CAPTURE, PieceType.WP));
 
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
     }
@@ -124,10 +125,14 @@ public class KnightAndKingMovementTest {
         List<Move> moves = kingMovement.getWhiteMoves();
         List<Move> expectedMoves = new ArrayList<Move>();
 
+        for (Move move : moves) {
+            System.out.println(move);
+        }
+
         expectedMoves.add(new Move(PieceType.WK, 4, 0, 5, 0));
-        expectedMoves.add(new Move(PieceType.WK, 4, 0, 6, 0));
+        expectedMoves.add(new Move(PieceType.WK, 4, 0, 6, 0, MoveType.CASTLE));
         expectedMoves.add(new Move(PieceType.WK, 4, 0, 3, 0));
-        expectedMoves.add(new Move(PieceType.WK, 4, 0, 2, 0));
+        expectedMoves.add(new Move(PieceType.WK, 4, 0, 2, 0, MoveType.CASTLE));
 
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
 
@@ -136,9 +141,9 @@ public class KnightAndKingMovementTest {
         expectedMoves.clear();
 
         expectedMoves.add(new Move(PieceType.BK, 4, 7, 5, 7));
-        expectedMoves.add(new Move(PieceType.BK, 4, 7, 6, 7));
+        expectedMoves.add(new Move(PieceType.BK, 4, 7, 6, 7, MoveType.CASTLE));
         expectedMoves.add(new Move(PieceType.BK, 4, 7, 3, 7));
-        expectedMoves.add(new Move(PieceType.BK, 4, 7, 2, 7));
+        expectedMoves.add(new Move(PieceType.BK, 4, 7, 2, 7, MoveType.CASTLE));
 
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
 
@@ -162,7 +167,7 @@ public class KnightAndKingMovementTest {
 
         expectedMoves.add(new Move(PieceType.WK, 4, 0, 5, 0));
         expectedMoves.add(new Move(PieceType.WK, 4, 0, 3, 0));
-        expectedMoves.add(new Move(PieceType.WK, 4, 0, 2, 0));
+        expectedMoves.add(new Move(PieceType.WK, 4, 0, 2, 0, MoveType.CASTLE));
 
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
 
@@ -172,7 +177,7 @@ public class KnightAndKingMovementTest {
 
         expectedMoves.add(new Move(PieceType.BK, 4, 7, 5, 7));
         expectedMoves.add(new Move(PieceType.BK, 4, 7, 6, 7));
-        expectedMoves.add(new Move(PieceType.BK, 4, 7, 3, 7));
+        expectedMoves.add(new Move(PieceType.BK, 4, 7, 3, 7, MoveType.CASTLE));
 
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
     }
@@ -183,7 +188,7 @@ public class KnightAndKingMovementTest {
         for (Move move : expectedMoves) {
             if (!moves.contains(move)) {
                 System.out.println("Can't find this move:");
-                move.printMove();
+                System.out.println(move);
                 return false;
             }
         }

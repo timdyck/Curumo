@@ -36,14 +36,16 @@ public class PawnMovement extends PieceMovement {
             int x = getX(i);
             int y = getY(i);
 
+            PieceType capturedPiece = getPieceAt(x, y);
+
             if ((((captureRight & RANK_8) >> i) & 1) == 1) {
                 // Promotion
-                moves.add(new Move(type, x - 1, y - 1, x, y, true, PieceType.WN));
-                moves.add(new Move(type, x - 1, y - 1, x, y, true, PieceType.WB));
-                moves.add(new Move(type, x - 1, y - 1, x, y, true, PieceType.WR));
-                moves.add(new Move(type, x - 1, y - 1, x, y, true, PieceType.WQ));
+                moves.add(new Move(type, x - 1, y - 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.WN));
+                moves.add(new Move(type, x - 1, y - 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.WB));
+                moves.add(new Move(type, x - 1, y - 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.WR));
+                moves.add(new Move(type, x - 1, y - 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.WQ));
             } else if (((captureRight >> i) & 1) == 1) {
-                moves.add(new Move(type, x - 1, y - 1, x, y, true));
+                moves.add(new Move(type, x - 1, y - 1, x, y, MoveType.CAPTURE, capturedPiece));
             }
         }
 
@@ -54,14 +56,16 @@ public class PawnMovement extends PieceMovement {
             int x = getX(i);
             int y = getY(i);
 
+            PieceType capturedPiece = getPieceAt(x, y);
+
             if ((((captureLeft & RANK_8) >> i) & 1) == 1) {
                 // Promotion
-                moves.add(new Move(type, x + 1, y - 1, x, y, true, PieceType.WN));
-                moves.add(new Move(type, x + 1, y - 1, x, y, true, PieceType.WB));
-                moves.add(new Move(type, x + 1, y - 1, x, y, true, PieceType.WR));
-                moves.add(new Move(type, x + 1, y - 1, x, y, true, PieceType.WQ));
+                moves.add(new Move(type, x + 1, y - 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.WN));
+                moves.add(new Move(type, x + 1, y - 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.WB));
+                moves.add(new Move(type, x + 1, y - 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.WR));
+                moves.add(new Move(type, x + 1, y - 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.WQ));
             } else if (((captureLeft >> i) & 1) == 1) {
-                moves.add(new Move(type, x + 1, y - 1, x, y, true));
+                moves.add(new Move(type, x + 1, y - 1, x, y, MoveType.CAPTURE, capturedPiece));
             }
         }
 
@@ -76,10 +80,10 @@ public class PawnMovement extends PieceMovement {
 
             if ((((oneForward & RANK_8) >> i) & 1) == 1) {
                 // Promotion
-                moves.add(new Move(type, x, y - 1, x, y, PieceType.WN));
-                moves.add(new Move(type, x, y - 1, x, y, PieceType.WB));
-                moves.add(new Move(type, x, y - 1, x, y, PieceType.WR));
-                moves.add(new Move(type, x, y - 1, x, y, PieceType.WQ));
+                moves.add(new Move(type, x, y - 1, x, y, MoveType.PROMOTION, PieceType.WN));
+                moves.add(new Move(type, x, y - 1, x, y, MoveType.PROMOTION, PieceType.WB));
+                moves.add(new Move(type, x, y - 1, x, y, MoveType.PROMOTION, PieceType.WR));
+                moves.add(new Move(type, x, y - 1, x, y, MoveType.PROMOTION, PieceType.WQ));
             } else if (((oneForward >> i) & 1) == 1) {
                 moves.add(new Move(type, x, y - 1, x, y));
             }
@@ -97,9 +101,9 @@ public class PawnMovement extends PieceMovement {
         }
 
         // En passant
-        if (!Move.isFirstMove(previousMove) && previousMove.type.equals(PieceType.BP) && previousMove.y1 == 6
-                && previousMove.y2 == 4 && previousMove.x1 == previousMove.x2) {
-            int col = previousMove.x1;
+        if (!Move.isFirstMove(previousMove) && previousMove.getPiece().equals(PieceType.BP) && previousMove.getY1() == 6
+                && previousMove.getY2() == 4 && previousMove.getX1() == previousMove.getX2()) {
+            int col = previousMove.getX1();
 
             // Right capture
             long rightCapture = (currentPawns >> 1) & blackPieces & RANK_5 & ~FILE_A & FILE_MASKS[col];
@@ -107,7 +111,7 @@ public class PawnMovement extends PieceMovement {
                 int i = Long.numberOfTrailingZeros(rightCapture);
                 int x = getX(i);
                 int y = getY(i);
-                moves.add(new Move(type, x - 1, y, x, y + 1, true));
+                moves.add(new Move(type, x - 1, y, x, y + 1, MoveType.EN_PASSANT));
             }
 
             // Left capture
@@ -116,7 +120,7 @@ public class PawnMovement extends PieceMovement {
                 int i = Long.numberOfTrailingZeros(leftCapture);
                 int x = getX(i);
                 int y = getY(i);
-                moves.add(new Move(type, x + 1, y, x, y + 1, true));
+                moves.add(new Move(type, x + 1, y, x, y + 1, MoveType.EN_PASSANT));
             }
 
         }
@@ -141,14 +145,16 @@ public class PawnMovement extends PieceMovement {
             int x = getX(i);
             int y = getY(i);
 
+            PieceType capturedPiece = getPieceAt(x, y);
+
             if ((((captureRight & RANK_1) >> i) & 1) == 1) {
                 // Promotion
-                moves.add(new Move(type, x + 1, y + 1, x, y, true, PieceType.BN));
-                moves.add(new Move(type, x + 1, y + 1, x, y, true, PieceType.BB));
-                moves.add(new Move(type, x + 1, y + 1, x, y, true, PieceType.BR));
-                moves.add(new Move(type, x + 1, y + 1, x, y, true, PieceType.BQ));
+                moves.add(new Move(type, x + 1, y + 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.BN));
+                moves.add(new Move(type, x + 1, y + 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.BB));
+                moves.add(new Move(type, x + 1, y + 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.BR));
+                moves.add(new Move(type, x + 1, y + 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.BQ));
             } else if (((captureRight >> i) & 1) == 1) {
-                moves.add(new Move(type, x + 1, y + 1, x, y, true));
+                moves.add(new Move(type, x + 1, y + 1, x, y, MoveType.CAPTURE, capturedPiece));
             }
         }
 
@@ -159,14 +165,16 @@ public class PawnMovement extends PieceMovement {
             int x = getX(i);
             int y = getY(i);
 
+            PieceType capturedPiece = getPieceAt(x, y);
+
             if ((((captureLeft & RANK_1) >> i) & 1) == 1) {
                 // Promotion
-                moves.add(new Move(type, x - 1, y + 1, x, y, true, PieceType.BN));
-                moves.add(new Move(type, x - 1, y + 1, x, y, true, PieceType.BB));
-                moves.add(new Move(type, x - 1, y + 1, x, y, true, PieceType.BR));
-                moves.add(new Move(type, x - 1, y + 1, x, y, true, PieceType.BQ));
+                moves.add(new Move(type, x - 1, y + 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.BN));
+                moves.add(new Move(type, x - 1, y + 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.BB));
+                moves.add(new Move(type, x - 1, y + 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.BR));
+                moves.add(new Move(type, x - 1, y + 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.BQ));
             } else if (((captureLeft >> i) & 1) == 1) {
-                moves.add(new Move(type, x - 1, y + 1, x, y, true));
+                moves.add(new Move(type, x - 1, y + 1, x, y, MoveType.CAPTURE, capturedPiece));
             }
         }
 
@@ -181,10 +189,10 @@ public class PawnMovement extends PieceMovement {
 
             if ((((oneForward & RANK_1) >> i) & 1) == 1) {
                 // Promotion
-                moves.add(new Move(type, x, y + 1, x, y, PieceType.BN));
-                moves.add(new Move(type, x, y + 1, x, y, PieceType.BB));
-                moves.add(new Move(type, x, y + 1, x, y, PieceType.BR));
-                moves.add(new Move(type, x, y + 1, x, y, PieceType.BQ));
+                moves.add(new Move(type, x, y + 1, x, y, MoveType.PROMOTION, PieceType.BN));
+                moves.add(new Move(type, x, y + 1, x, y, MoveType.PROMOTION, PieceType.BB));
+                moves.add(new Move(type, x, y + 1, x, y, MoveType.PROMOTION, PieceType.BR));
+                moves.add(new Move(type, x, y + 1, x, y, MoveType.PROMOTION, PieceType.BQ));
             } else if (((oneForward >> i) & 1) == 1) {
                 moves.add(new Move(type, x, y + 1, x, y));
             }
@@ -202,9 +210,9 @@ public class PawnMovement extends PieceMovement {
         }
 
         // En passant
-        if (!Move.isFirstMove(previousMove) && previousMove.type.equals(PieceType.WP) && previousMove.y1 == 1
-                && previousMove.y2 == 3 && previousMove.x1 == previousMove.x2) {
-            int col = previousMove.x1;
+        if (!Move.isFirstMove(previousMove) && previousMove.getPiece().equals(PieceType.WP) && previousMove.getY1() == 1
+                && previousMove.getY2() == 3 && previousMove.getX1() == previousMove.getX2()) {
+            int col = previousMove.getX1();
 
             // Right capture
             long rightCapture = (currentPawns << 1) & whitePieces & RANK_4 & ~FILE_H & FILE_MASKS[col];
@@ -212,7 +220,7 @@ public class PawnMovement extends PieceMovement {
                 int i = Long.numberOfTrailingZeros(rightCapture);
                 int x = getX(i);
                 int y = getY(i);
-                moves.add(new Move(type, x + 1, y, x, y - 1, true));
+                moves.add(new Move(type, x + 1, y, x, y - 1, MoveType.EN_PASSANT));
             }
 
             // Left capture
@@ -221,7 +229,7 @@ public class PawnMovement extends PieceMovement {
                 int i = Long.numberOfTrailingZeros(leftCapture);
                 int x = getX(i);
                 int y = getY(i);
-                moves.add(new Move(type, x - 1, y, x, y - 1, true));
+                moves.add(new Move(type, x - 1, y, x, y - 1, MoveType.EN_PASSANT));
             }
 
         }

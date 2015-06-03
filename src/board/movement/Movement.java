@@ -18,18 +18,22 @@ public class Movement {
     private KingMovement kingMovement;
 
     public Movement(Board board) {
-        this.pawnMovement = new PawnMovement(board);
-        this.rookMovement = new RookMovement(board);
-        this.knightMovement = new KnightMovement(board);
-        this.bishopMovement = new BishopMovement(board);
-        this.queenMovement = new QueenMovement(board);
-        this.kingMovement = new KingMovement(board);
-
-        // Now that king is initialized, update for unsafe moves
-        kingMovement.updateUnsafeMoves(getUnsafeForWhite(), getUnsafeForBlack());
+        updateBoard(board);
     }
 
-    public List<Move> getAllWhiteMoves(Move previousMove) {
+    public void updateBoard(Board newBoard) {
+        this.pawnMovement = new PawnMovement(newBoard);
+        this.rookMovement = new RookMovement(newBoard);
+        this.knightMovement = new KnightMovement(newBoard);
+        this.bishopMovement = new BishopMovement(newBoard);
+        this.queenMovement = new QueenMovement(newBoard);
+        this.kingMovement = new KingMovement(newBoard);
+
+        // Now that king is initialized, update for unsafe moves
+        this.kingMovement.updateUnsafeMoves(getUnsafeForWhite(), getUnsafeForBlack());
+    }
+
+    public List<Move> getAllWhiteMoves() {
         List<Move> possibleWhiteMoves = new ArrayList<Move>();
 
         possibleWhiteMoves.addAll(pawnMovement.getWhiteMoves());
@@ -42,7 +46,7 @@ public class Movement {
         return possibleWhiteMoves;
     }
 
-    public List<Move> getAllBlackMoves(Move previousMove) {
+    public List<Move> getAllBlackMoves() {
         List<Move> possibleBlackMoves = new ArrayList<Move>();
 
         possibleBlackMoves.addAll(pawnMovement.getBlackMoves());
@@ -63,6 +67,7 @@ public class Movement {
         unsafeMoves |= bishopMovement.getBlackPossibleMoves();
         unsafeMoves |= queenMovement.getBlackPossibleMoves();
         unsafeMoves |= kingMovement.getBlackPossibleMoves();
+
         return unsafeMoves;
     }
 
@@ -75,6 +80,15 @@ public class Movement {
         unsafeMoves |= bishopMovement.getWhitePossibleMoves();
         unsafeMoves |= queenMovement.getWhitePossibleMoves();
         unsafeMoves |= kingMovement.getWhitePossibleMoves();
+
         return unsafeMoves;
+    }
+
+    public boolean isLegalMove(Move move) {
+        if (move.getPiece().isWhitePiece()) {
+            return getAllWhiteMoves().contains(move);
+        } else {
+            return getAllBlackMoves().contains(move);
+        }
     }
 }

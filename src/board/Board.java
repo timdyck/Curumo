@@ -3,6 +3,9 @@ package board;
 import java.util.HashMap;
 import java.util.Map;
 
+import board.movement.Move;
+import board.movement.MoveType;
+
 public class Board {
 
     public final static int DIMENSION = 8;
@@ -38,6 +41,48 @@ public class Board {
 
     public long getBitBoard(PieceType type) {
         return bitBoards.get(type);
+    }
+
+    public void setBitBoard(PieceType piece, long newBitBoard) {
+        bitBoards.put(piece, newBitBoard);
+    }
+
+    /**
+     * Updates the board after the given move is executed.
+     * 
+     * @param move
+     */
+    public void updateBoard(Move move) {
+        PieceType piece = move.getPiece();
+        long pieceBitBoard = getBitBoard(piece);
+
+        long fromBitBoard = getBitBoard(move.getX1(), move.getY1());
+        long toBitBoard = getBitBoard(move.getX2(), move.getY2());
+
+        // Remove piece from old position
+        pieceBitBoard &= ~fromBitBoard;
+
+        if (move.getType().equals(MoveType.CAPTURE)) {
+
+        } else if (move.getType().equals(MoveType.PROMOTION)) {
+            PieceType newPiece = move.getPromotionPiece();
+            long newPieceBitBoard = getBitBoard(newPiece);
+            newPieceBitBoard |= toBitBoard;
+
+            setBitBoard(piece, pieceBitBoard);
+            setBitBoard(newPiece, newPieceBitBoard);
+            return;
+        } else if (move.getType().equals(MoveType.CAPTURE_AND_PROMOTION)) {
+
+        } else if (move.getType().equals(MoveType.EN_PASSANT)) {
+
+        } else if (move.getType().equals(MoveType.CASTLE)) {
+
+        }
+
+        // Move piece to new location if no capture/promote/castle
+        pieceBitBoard |= toBitBoard;
+        setBitBoard(piece, pieceBitBoard);
     }
 
     /**
@@ -169,6 +214,18 @@ public class Board {
     public static void printBitBoard(long bitBoard, String piece) {
         String[][] bitBoardArray = bitBoardToArray(bitBoard, piece);
         printBoard(bitBoardArray);
+    }
+
+    /**
+     * Bottom left=0, bottom right=7, top left=56, top right= 63
+     * 
+     * @param x
+     * @param y
+     * @return a bitboard with a 1 at position (x,y)
+     */
+    private long getBitBoard(int x, int y) {
+        int s = (Board.DIMENSION * y) + (DIMENSION - 1 - x);
+        return 1L << s;
     }
 
     @Override

@@ -1,5 +1,8 @@
 package board;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum PieceType {
     WP, WR, WN, WB, WQ, WK, BP, BR, BN, BB, BQ, BK;
 
@@ -21,5 +24,31 @@ public enum PieceType {
 
     public boolean isBlackPiece() {
         return getColour().equals(Colour.BLACK);
+    }
+
+    public static List<PieceType> getWhitePieceTypes() {
+        List<PieceType> pieces = new ArrayList<PieceType>();
+
+        pieces.add(WP);
+        pieces.add(WR);
+        pieces.add(WN);
+        pieces.add(WB);
+        pieces.add(WQ);
+        pieces.add(WK);
+
+        return pieces;
+    }
+
+    public static List<PieceType> getBlackPieceTypes() {
+        List<PieceType> pieces = new ArrayList<PieceType>();
+
+        pieces.add(BP);
+        pieces.add(BR);
+        pieces.add(BN);
+        pieces.add(BB);
+        pieces.add(BQ);
+        pieces.add(BK);
+
+        return pieces;
     }
 }
