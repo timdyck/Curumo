@@ -147,6 +147,9 @@ public class PieceMovement {
                 if (((oppositeColorPieces >> i) & 1) == 1) {
                     // Capture
                     moves.add(new Move(piece, x, y, moveX, moveY, MoveType.CAPTURE, getPieceAt(moveX, moveY)));
+                } else if ((piece.equals(PieceType.WK) || piece.equals(PieceType.BK)) && Math.abs(x - moveX) == 2) {
+                    // Castle
+                    moves.add(new Move(piece, x, y, moveX, moveY, MoveType.CASTLE));
                 } else {
                     moves.add(new Move(piece, x, y, moveX, moveY));
                 }

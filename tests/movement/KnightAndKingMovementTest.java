@@ -125,10 +125,6 @@ public class KnightAndKingMovementTest {
         List<Move> moves = kingMovement.getWhiteMoves();
         List<Move> expectedMoves = new ArrayList<Move>();
 
-        for (Move move : moves) {
-            System.out.println(move);
-        }
-
         expectedMoves.add(new Move(PieceType.WK, 4, 0, 5, 0));
         expectedMoves.add(new Move(PieceType.WK, 4, 0, 6, 0, MoveType.CASTLE));
         expectedMoves.add(new Move(PieceType.WK, 4, 0, 3, 0));
@@ -176,8 +172,8 @@ public class KnightAndKingMovementTest {
         expectedMoves.clear();
 
         expectedMoves.add(new Move(PieceType.BK, 4, 7, 5, 7));
-        expectedMoves.add(new Move(PieceType.BK, 4, 7, 6, 7));
-        expectedMoves.add(new Move(PieceType.BK, 4, 7, 3, 7, MoveType.CASTLE));
+        expectedMoves.add(new Move(PieceType.BK, 4, 7, 6, 7, MoveType.CASTLE));
+        expectedMoves.add(new Move(PieceType.BK, 4, 7, 3, 7));
 
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
     }
