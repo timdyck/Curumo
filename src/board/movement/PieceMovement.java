@@ -39,7 +39,6 @@ public class PieceMovement {
 
     // Store board and board matrix since matrix gives quick indexing
     protected Board board;
-    protected String[][] boardMatrix;
 
     // Piece locations
     public long whitePieces;
@@ -55,7 +54,6 @@ public class PieceMovement {
 
     public PieceMovement(Board board) {
         this.board = board;
-        this.boardMatrix = board.boardToArray();
 
         /* @formatter:off */
         whitePieces =  board.getBitBoard(PieceType.WP) |
@@ -98,8 +96,15 @@ public class PieceMovement {
     }
 
     protected PieceType getPieceAt(int x, int y) {
-        String str = boardMatrix[7 - y][x];
-        return str == null ? null : PieceType.valueOf(boardMatrix[7 - y][x]);
+        for (PieceType type : PieceType.values()) {
+            long bitBoard = board.getBitBoard(type);
+            long spot = getBitBoard(x, y);
+
+            if ((bitBoard & spot) == spot) {
+                return type;
+            }
+        }
+        return null;
     }
 
     protected void setMoves(PieceType piece, List<Move> moves, long possibleMoves) {

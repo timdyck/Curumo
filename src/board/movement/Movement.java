@@ -18,11 +18,15 @@ public class Movement {
     private KingMovement kingMovement;
 
     public Movement(Board board) {
-        updateBoard(board);
+        updateBoard(board, Move.getFirstPreviousMove());
     }
 
-    public void updateBoard(Board newBoard) {
-        this.pawnMovement = new PawnMovement(newBoard);
+    public Movement(Board board, Move previousMove) {
+        updateBoard(board, previousMove);
+    }
+
+    public void updateBoard(Board newBoard, Move previousMove) {
+        this.pawnMovement = new PawnMovement(newBoard, previousMove);
         this.rookMovement = new RookMovement(newBoard);
         this.knightMovement = new KnightMovement(newBoard);
         this.bishopMovement = new BishopMovement(newBoard);

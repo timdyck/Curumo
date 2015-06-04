@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import board.Board;
+import board.BoardUtilities;
 import board.PieceType;
 
 public class KingMovement extends PieceMovement {
@@ -15,29 +16,35 @@ public class KingMovement extends PieceMovement {
     private final long DEFAULT_UNSAFE_MOVES = 0x0L;
 
     // Castling flags and locations
-    public boolean WQCastle = true;
-    public final long WQCastleReq = 0x0000000000000088L;
-    public final long WQCastlePos = 0x0000000000000020L;
-    public boolean WKCastle = true;
-    public final long WKCastleReq = 0x000000000000000AL;
-    public final long WKCastlePos = 0x0000000000000002L;
-    public boolean BQCastle = true;
-    public final long BQCastleReq = 0x8800000000000000L;
-    public final long BQCastlePos = 0x2000000000000000L;
-    public boolean BKCastle = true;
-    public final long BKCastleReq = 0x0A00000000000000L;
-    public final long BKCastlePos = 0x0200000000000000L;
+    private boolean WQCastle = true;
+    private final long WQCastleReq = 0x0000000000000088L;
+    private final long WQCastlePos = 0x0000000000000020L;
+    private final long WQRookPos = 0x0000000000000080L;
+    private boolean WKCastle = true;
+    private final long WKCastleReq = 0x000000000000000AL;
+    private final long WKCastlePos = 0x0000000000000002L;
+    private final long WKRookPos = 0x0000000000000001L;
+    private boolean BQCastle = true;
+    private final long BQCastleReq = 0x8800000000000000L;
+    private final long BQCastlePos = 0x2000000000000000L;
+    private final long BQRookPos = 0x8000000000000000L;
+    private boolean BKCastle = true;
+    private final long BKCastleReq = 0x0A00000000000000L;
+    private final long BKCastlePos = 0x0200000000000000L;
+    private final long BKRookPos = 0x0100000000000000L;
 
     public KingMovement(Board board) {
         super(board);
         initializeMoves(PieceType.WK, DEFAULT_UNSAFE_MOVES);
         initializeMoves(PieceType.BK, DEFAULT_UNSAFE_MOVES);
+        updateCastleFlags();
     }
 
     public KingMovement(Board board, long unsafeForWhite, long unsafeForBlack) {
         super(board);
         initializeMoves(PieceType.WK, unsafeForWhite);
         initializeMoves(PieceType.BK, unsafeForBlack);
+        updateCastleFlags();
     }
 
     public void initializeMoves(PieceType piece, long unsafeMoves) {
@@ -96,8 +103,68 @@ public class KingMovement extends PieceMovement {
         }
     }
 
+    public void updateCastleFlags() {
+        if (this.WKCastle || this.WQCastle) {
+            // Check if king has moved
+            if (board.getBitBoard(PieceType.WK) != BoardUtilities.WK_INITIAL) {
+                this.WKCastle = false;
+                this.WQCastle = false;
+            }
+
+            // Check if either rook has moved
+            long rookBoard = board.getBitBoard(PieceType.WR);
+            if ((rookBoard & WKRookPos) != WKRookPos) {
+                WKCastle = false;
+            } else if ((rookBoard & WQRookPos) != WQRookPos) {
+                WQCastle = false;
+            }
+        }
+
+        if (this.BKCastle || this.BQCastle) {
+            // Check if king has moved
+            if (board.getBitBoard(PieceType.BK) != BoardUtilities.BK_INITIAL) {
+                this.BKCastle = false;
+                this.BQCastle = false;
+            }
+
+            // Check if either rook has moved
+            long rookBoard = board.getBitBoard(PieceType.BR);
+            if ((rookBoard & BKRookPos) != BKRookPos) {
+                BKCastle = false;
+            } else if ((rookBoard & BQRookPos) != BQRookPos) {
+                BQCastle = false;
+            }
+        }
+    }
+
     public void updateUnsafeMoves(long unsafeForWhite, long unsafeForBlack) {
         initializeMoves(PieceType.WK, DEFAULT_UNSAFE_MOVES);
         initializeMoves(PieceType.BK, DEFAULT_UNSAFE_MOVES);
+    }
+
+    public void invalidateWhiteCastling() {
+        this.WKCastle = false;
+        this.WQCastle = false;
+    }
+
+    public void invalidateWhiteKingCastling() {
+        this.WKCastle = false;
+    }
+
+    public void invalidateWhiteQueenCastling() {
+        this.WKCastle = false;
+    }
+
+    public void invalidateBlackCastling() {
+        this.BKCastle = false;
+        this.BQCastle = false;
+    }
+
+    public void invalidateBlackKingCastling() {
+        this.BKCastle = false;
+    }
+
+    public void invalidateBlackQueenCastling() {
+        this.BKCastle = false;
     }
 }
