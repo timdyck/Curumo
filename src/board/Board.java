@@ -55,33 +55,93 @@ public class Board {
     public void updateBoard(Move move) {
         PieceType piece = move.getPiece();
         long pieceBitBoard = getBitBoard(piece);
-
         long fromBitBoard = getBitBoard(move.getX1(), move.getY1());
         long toBitBoard = getBitBoard(move.getX2(), move.getY2());
 
         // Remove piece from old position
         pieceBitBoard &= ~fromBitBoard;
 
-        if (move.getType().equals(MoveType.CAPTURE)) {
+        if (move.getType().equals(MoveType.TYPICAL)) {
+            // Move piece to new location
+            pieceBitBoard |= toBitBoard;
+        } else if (move.getType().equals(MoveType.CAPTURE)) {
+            // Remove taken piece
+            PieceType newPiece = move.getCapturedPiece();
+            long newPieceBitBoard = getBitBoard(newPiece);
+            newPieceBitBoard &= ~toBitBoard;
+            setBitBoard(newPiece, newPieceBitBoard);
 
+            // Move piece to new location
+            pieceBitBoard |= toBitBoard;
         } else if (move.getType().equals(MoveType.PROMOTION)) {
+            // Add new piece
             PieceType newPiece = move.getPromotionPiece();
             long newPieceBitBoard = getBitBoard(newPiece);
             newPieceBitBoard |= toBitBoard;
-
-            setBitBoard(piece, pieceBitBoard);
             setBitBoard(newPiece, newPieceBitBoard);
-            return;
         } else if (move.getType().equals(MoveType.CAPTURE_AND_PROMOTION)) {
+            // Remove taken piece
+            PieceType capturedPiece = move.getCapturedPiece();
+            long capturedPieceBitBoard = getBitBoard(capturedPiece);
+            capturedPieceBitBoard &= ~toBitBoard;
+            setBitBoard(capturedPiece, capturedPieceBitBoard);
 
+            // Add new piece
+            PieceType promotionPiece = move.getPromotionPiece();
+            long promotionPieceBitBoard = getBitBoard(promotionPiece);
+            promotionPieceBitBoard |= toBitBoard;
+            setBitBoard(promotionPiece, promotionPieceBitBoard);
         } else if (move.getType().equals(MoveType.EN_PASSANT)) {
+            PieceType capturedPiece;
+            if (move.getPiece().isWhitePiece()) {
+                capturedPiece = PieceType.BP;
+            } else {
+                capturedPiece = PieceType.WP;
+            }
 
+            // Remove taken piece
+            long capturedPieceBitBoard = getBitBoard(capturedPiece);
+            long capturedPieceLocation = getBitBoard(move.getX2(), move.getY1());
+            capturedPieceBitBoard &= ~capturedPieceLocation;
+            setBitBoard(capturedPiece, capturedPieceBitBoard);
+
+            // Move piece to new location
+            pieceBitBoard |= toBitBoard;
         } else if (move.getType().equals(MoveType.CASTLE)) {
+            PieceType castledRook;
+            long rookOldLocation;
+            long rookNewLocation;
 
+            // Get appropriate rook
+            if (move.getPiece().isWhitePiece()) {
+                castledRook = PieceType.BR;
+            } else {
+                castledRook = PieceType.WR;
+            }
+
+            // Get rook start and end positions
+            if (move.getX2() - move.getX1() > 0) {
+                // King-side Castle
+                rookOldLocation = getBitBoard(move.getX1() + 3, move.getY1());
+                rookNewLocation = getBitBoard(move.getX1() + 1, move.getY1());
+            } else {
+                // Queen-side Castle
+                rookOldLocation = getBitBoard(move.getX1() - 4, move.getY1());
+                rookNewLocation = getBitBoard(move.getX1() - 1, move.getY1());
+            }
+
+            // Move rook to new location
+            long rookBitBoard = getBitBoard(castledRook);
+            rookBitBoard |= ~rookNewLocation;
+
+            // Remove rook's old position
+            rookBitBoard &= ~rookOldLocation;
+            setBitBoard(castledRook, rookBitBoard);
+
+            // Move king to new location
+            pieceBitBoard |= toBitBoard;
         }
 
-        // Move piece to new location if no capture/promote/castle
-        pieceBitBoard |= toBitBoard;
         setBitBoard(piece, pieceBitBoard);
     }
 

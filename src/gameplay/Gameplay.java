@@ -7,10 +7,15 @@ import board.movement.Movement;
 public class Gameplay {
 
     private Board board;
-    Movement movement;
+    private Movement movement;
 
     public Gameplay() {
         this.board = Board.StandardBoard();
+        this.movement = new Movement(board);
+    }
+
+    public Gameplay(Board board) {
+        this.board = board;
         this.movement = new Movement(board);
     }
 
@@ -27,6 +32,14 @@ public class Gameplay {
 
         board.updateBoard(move);
         movement.updateBoard(board);
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public Movement getMovement() {
+        return movement;
     }
 
 }

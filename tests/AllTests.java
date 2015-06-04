@@ -7,8 +7,10 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import board.BoardTest;
+import board.BoardUpdateTest;
 
 @RunWith(Suite.class)
-@SuiteClasses({ BoardTest.class, PawnMovementTest.class, SlidingMovementTest.class, KnightAndKingMovementTest.class })
+@SuiteClasses({ BoardTest.class, PawnMovementTest.class, SlidingMovementTest.class, KnightAndKingMovementTest.class,
+        BoardUpdateTest.class })
 public class AllTests {
 }
