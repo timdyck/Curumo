@@ -8,7 +8,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import board.Board;
-import board.BoardUtilities;
+import board.BoardUtils;
 import board.PieceType;
 import board.movement.Move;
 import board.movement.MoveType;
@@ -33,7 +33,7 @@ public class SlidingMovementTest {
                                   {"  ", "WP", "WP", "  ", "WP", "  ", "WP", "WP"},
                                   {"  ", "WN", "WB", "WQ", "WK", "WB", "WN", "  "}};
         /* @formatter:on */
-        Board board = BoardUtilities.arrayToBoard(boardMatrix);
+        Board board = BoardUtils.arrayToBoard(boardMatrix);
         RookMovement movement = new RookMovement(board);
 
         // White rooks
@@ -96,7 +96,7 @@ public class SlidingMovementTest {
                                   {"WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"},
                                   {"WR", "WN", "  ", "WQ", "WK", "  ", "WN", "WR"}};
         /* @formatter:on */
-        Board board = BoardUtilities.arrayToBoard(boardMatrix);
+        Board board = BoardUtils.arrayToBoard(boardMatrix);
         BishopMovement movement = new BishopMovement(board);
 
         // White bishops
@@ -152,7 +152,7 @@ public class SlidingMovementTest {
                                   {"WP", "WP", "WP", "  ", "WP", "WP", "WP", "WP"},
                                   {"WR", "WN", "WB", "  ", "WK", "WB", "WN", "WR"}};
         /* @formatter:on */
-        Board board = BoardUtilities.arrayToBoard(boardMatrix);
+        Board board = BoardUtils.arrayToBoard(boardMatrix);
         QueenMovement movement = new QueenMovement(board);
 
         // White queen

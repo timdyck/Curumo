@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import board.Board;
-import board.BoardUtilities;
+import board.BoardUtils;
 import board.PieceType;
 
 public class KingMovement extends PieceMovement {
@@ -106,7 +106,7 @@ public class KingMovement extends PieceMovement {
     public void updateCastleFlags() {
         if (this.WKCastle || this.WQCastle) {
             // Check if king has moved
-            if (board.getBitBoard(PieceType.WK) != BoardUtilities.WK_INITIAL) {
+            if (board.getBitBoard(PieceType.WK) != BoardUtils.WK_INITIAL) {
                 this.WKCastle = false;
                 this.WQCastle = false;
             }
@@ -122,7 +122,7 @@ public class KingMovement extends PieceMovement {
 
         if (this.BKCastle || this.BQCastle) {
             // Check if king has moved
-            if (board.getBitBoard(PieceType.BK) != BoardUtilities.BK_INITIAL) {
+            if (board.getBitBoard(PieceType.BK) != BoardUtils.BK_INITIAL) {
                 this.BKCastle = false;
                 this.BQCastle = false;
             }

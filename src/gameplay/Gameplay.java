@@ -1,32 +1,36 @@
 package gameplay;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import board.Board;
-import board.BoardUtilities;
+import board.BoardUtils;
 import board.movement.Move;
 import board.movement.Movement;
 
 public class Gameplay {
 
     private Board board;
-    private Move previousMove;
+    private List<Move> previousMoves;
     private Movement movement;
 
     public Gameplay() {
         this.board = Board.StandardBoard();
-        this.previousMove = Move.getFirstPreviousMove();
+        this.previousMoves = new ArrayList<Move>();
         this.movement = new Movement(board);
     }
 
     public Gameplay(Board board) {
         this.board = board;
-        this.previousMove = Move.getFirstPreviousMove();
-        this.movement = new Movement(board, this.previousMove);
+        this.previousMoves = new ArrayList<Move>();
+        this.movement = new Movement(board, this.previousMoves);
     }
 
     public Gameplay(Board board, Move previousMove) {
         this.board = board;
-        this.previousMove = previousMove;
-        this.movement = new Movement(board, previousMove);
+        this.previousMoves = new ArrayList<Move>();
+        this.previousMoves.add(previousMove);
+        this.movement = new Movement(board, previousMoves);
     }
 
     /**
@@ -36,14 +40,31 @@ public class Gameplay {
      */
     public void executeMove(Move move) {
         if (!movement.isLegalMove(move)) {
-            BoardUtilities.printBoard(board);
+            BoardUtils.printBoard(board);
             throw new IllegalArgumentException(move + " is not a legal move!");
         }
 
-        board.updateBoard(move);
-        movement.updateBoard(board, previousMove);
+        board.updateBoardAfterMove(move);
+        previousMoves.add(move);
+        movement.updateBoard(board, previousMoves);
+    }
 
-        previousMove = move;
+    /**
+     * Executes the given move, updating the board and movement members.
+     * 
+     * @param move
+     */
+    public void undoMove() {
+        if (previousMoves.isEmpty()) {
+            BoardUtils.printBoard(board);
+            throw new IllegalArgumentException("No moves to undo!");
+        }
+
+        Move previousMove = previousMoves.get(previousMoves.size() - 1);
+
+        board.updateBoardAfterMoveUndo(previousMove);
+        previousMoves.add(previousMove);
+        movement.updateBoard(board, previousMoves);
     }
 
     public Board getBoard() {

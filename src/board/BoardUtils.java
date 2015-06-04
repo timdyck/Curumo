@@ -3,7 +3,7 @@ package board;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BoardUtilities {
+public class BoardUtils {
 
     public static final long WP_INITIAL = 0x000000000000ff00L;
     public static final long WR_INITIAL = 0x0000000000000081L;

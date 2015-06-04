@@ -31,7 +31,7 @@ public class BoardUpdateTest {
                                   {"WP", "  ", "WP", "WP", "  ", "WP", "WP", "WP"},
                                   {"WR", "WN", "WB", "WQ", "WK", "WB", "  ", "WR"}};
         /* @formatter:on */
-        Board expectedBoard = BoardUtilities.arrayToBoard(boardMatrix);
+        Board expectedBoard = BoardUtils.arrayToBoard(boardMatrix);
         Assert.assertEquals(game.getBoard(), expectedBoard);
     }
 
@@ -47,7 +47,7 @@ public class BoardUpdateTest {
                                   {"WP", "WP", "WP", "  ", "  ", "WP", "WP", "WP"},
                                   {"  ", "WN", "  ", "WQ", "WK", "WB", "  ", "WR"}};
         /* @formatter:on */
-        Board initialBoard = BoardUtilities.arrayToBoard(boardMatrix);
+        Board initialBoard = BoardUtils.arrayToBoard(boardMatrix);
         Gameplay game = new Gameplay(initialBoard);
 
         game.executeMove(new Move(PieceType.BP, 4, 4, 3, 3, MoveType.CAPTURE, PieceType.WP));
@@ -72,7 +72,7 @@ public class BoardUpdateTest {
                                           {"WP", "WP", "WP", "  ", "  ", "WP", "WP", "WP"},
                                           {"  ", "WN", "  ", "  ", "WK", "WB", "  ", "WR"}};
         /* @formatter:on */
-        Board expectedBoard = BoardUtilities.arrayToBoard(expectedBoardMatrix);
+        Board expectedBoard = BoardUtils.arrayToBoard(expectedBoardMatrix);
         Assert.assertEquals(game.getBoard(), expectedBoard);
     }
 
@@ -88,7 +88,7 @@ public class BoardUpdateTest {
                                   {"BP", "BP", "BP", "WP", "WP", "WP", "WP", "WP"},
                                   {"WR", "WN", "  ", "WQ", "WK", "WB", "WN", "WR"}};
         /* @formatter:on */
-        Board initialBoard = BoardUtilities.arrayToBoard(boardMatrix);
+        Board initialBoard = BoardUtils.arrayToBoard(boardMatrix);
         Gameplay game = new Gameplay(initialBoard);
 
         game.executeMove(new Move(PieceType.BP, 2, 1, 2, 0, MoveType.PROMOTION, PieceType.BQ));
@@ -107,7 +107,7 @@ public class BoardUpdateTest {
                                           {"  ", "  ", "  ", "WP", "WP", "WP", "WP", "WP"},
                                           {"BB", "BR", "BQ", "WQ", "WK", "WB", "WN", "WR"}};
         /* @formatter:on */
-        Board expectedBoard = BoardUtilities.arrayToBoard(expectedBoardMatrix);
+        Board expectedBoard = BoardUtils.arrayToBoard(expectedBoardMatrix);
         Assert.assertEquals(game.getBoard(), expectedBoard);
     }
 
@@ -125,7 +125,7 @@ public class BoardUpdateTest {
         /* @formatter:on */
 
         // King-side castling
-        Gameplay game = new Gameplay(BoardUtilities.arrayToBoard(boardMatrix));
+        Gameplay game = new Gameplay(BoardUtils.arrayToBoard(boardMatrix));
         game.executeMove(new Move(PieceType.WK, 4, 0, 6, 0, MoveType.CASTLE));
         game.executeMove(new Move(PieceType.BK, 4, 7, 6, 7, MoveType.CASTLE));
 
@@ -139,11 +139,11 @@ public class BoardUpdateTest {
                                           {"WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"},
                                           {"WR", "  ", "  ", "  ", "  ", "WR", "WK", "  "}};
         /* @formatter:on */
-        Board expectedBoard = BoardUtilities.arrayToBoard(expectedBoardMatrix);
+        Board expectedBoard = BoardUtils.arrayToBoard(expectedBoardMatrix);
         Assert.assertEquals(game.getBoard(), expectedBoard);
 
         // Queen-side castling
-        game = new Gameplay(BoardUtilities.arrayToBoard(boardMatrix));
+        game = new Gameplay(BoardUtils.arrayToBoard(boardMatrix));
         game.executeMove(new Move(PieceType.WK, 4, 0, 2, 0, MoveType.CASTLE));
         game.executeMove(new Move(PieceType.BK, 4, 7, 2, 7, MoveType.CASTLE));
 
@@ -157,7 +157,7 @@ public class BoardUpdateTest {
                                            {"WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"},
                                            {"  ", "  ", "WK", "WR", "  ", "  ", "  ", "WR"}};
         /* @formatter:on */
-        expectedBoard = BoardUtilities.arrayToBoard(expectedBoardMatrix2);
+        expectedBoard = BoardUtils.arrayToBoard(expectedBoardMatrix2);
         Assert.assertEquals(game.getBoard(), expectedBoard);
     }
 
@@ -175,7 +175,7 @@ public class BoardUpdateTest {
         /* @formatter:on */
 
         // White right capture
-        Gameplay game = new Gameplay(BoardUtilities.arrayToBoard(boardMatrix), new Move(PieceType.BP, 2, 6, 2, 4));
+        Gameplay game = new Gameplay(BoardUtils.arrayToBoard(boardMatrix), new Move(PieceType.BP, 2, 6, 2, 4));
         game.executeMove(new Move(PieceType.WP, 1, 4, 2, 5, MoveType.EN_PASSANT));
 
         /* @formatter:off */
@@ -188,11 +188,11 @@ public class BoardUpdateTest {
                                           {"WP", "  ", "WP", "  ", "WP", "WP", "WP", "WP"},
                                           {"WR", "WN", "WB", "WQ", "WK", "WB", "WN", "WR"}};
         /* @formatter:on */
-        Board expectedBoard = BoardUtilities.arrayToBoard(expectedBoardMatrix1);
+        Board expectedBoard = BoardUtils.arrayToBoard(expectedBoardMatrix1);
         Assert.assertEquals(game.getBoard(), expectedBoard);
 
         // White left capture
-        game = new Gameplay(BoardUtilities.arrayToBoard(boardMatrix), new Move(PieceType.BP, 2, 6, 2, 4));
+        game = new Gameplay(BoardUtils.arrayToBoard(boardMatrix), new Move(PieceType.BP, 2, 6, 2, 4));
         game.executeMove(new Move(PieceType.WP, 3, 4, 2, 5, MoveType.EN_PASSANT));
 
         /* @formatter:off */
@@ -205,7 +205,7 @@ public class BoardUpdateTest {
                                           {"WP", "  ", "WP", "  ", "WP", "WP", "WP", "WP"},
                                           {"WR", "WN", "WB", "WQ", "WK", "WB", "WN", "WR"}};
         /* @formatter:on */
-        expectedBoard = BoardUtilities.arrayToBoard(expectedBoardMatrix2);
+        expectedBoard = BoardUtils.arrayToBoard(expectedBoardMatrix2);
         Assert.assertEquals(game.getBoard(), expectedBoard);
 
         /* @formatter:off */
@@ -220,7 +220,7 @@ public class BoardUpdateTest {
         /* @formatter:on */
 
         // Black right capture
-        game = new Gameplay(BoardUtilities.arrayToBoard(boardMatrix2), new Move(PieceType.WP, 6, 1, 6, 3));
+        game = new Gameplay(BoardUtils.arrayToBoard(boardMatrix2), new Move(PieceType.WP, 6, 1, 6, 3));
         game.executeMove(new Move(PieceType.BP, 7, 3, 6, 2, MoveType.EN_PASSANT));
 
         /* @formatter:off */
@@ -233,11 +233,11 @@ public class BoardUpdateTest {
                                            {"WP", "WP", "WP", "WP", "WP", "WP", "  ", "WP"},
                                            {"WR", "WN", "WB", "WQ", "WK", "WB", "WN", "WR"}};
         /* @formatter:on */
-        expectedBoard = BoardUtilities.arrayToBoard(expectedBoardMatrix3);
+        expectedBoard = BoardUtils.arrayToBoard(expectedBoardMatrix3);
         Assert.assertEquals(game.getBoard(), expectedBoard);
 
         // black left capture
-        game = new Gameplay(BoardUtilities.arrayToBoard(boardMatrix2), new Move(PieceType.WP, 6, 1, 6, 3));
+        game = new Gameplay(BoardUtils.arrayToBoard(boardMatrix2), new Move(PieceType.WP, 6, 1, 6, 3));
         game.executeMove(new Move(PieceType.BP, 5, 3, 6, 2, MoveType.EN_PASSANT));
 
         /* @formatter:off */
@@ -250,7 +250,7 @@ public class BoardUpdateTest {
                                            {"WP", "WP", "WP", "WP", "WP", "WP", "  ", "WP"},
                                            {"WR", "WN", "WB", "WQ", "WK", "WB", "WN", "WR"}};
         /* @formatter:on */
-        expectedBoard = BoardUtilities.arrayToBoard(expectedBoardMatrix4);
+        expectedBoard = BoardUtils.arrayToBoard(expectedBoardMatrix4);
         Assert.assertEquals(game.getBoard(), expectedBoard);
     }
 }

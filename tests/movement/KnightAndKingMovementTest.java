@@ -8,7 +8,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import board.Board;
-import board.BoardUtilities;
+import board.BoardUtils;
 import board.PieceType;
 import board.movement.KingMovement;
 import board.movement.KnightMovement;
@@ -33,7 +33,7 @@ public class KnightAndKingMovementTest {
                                   {"WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"},
                                   {"WR", "  ", "WB", "WQ", "WK", "WB", "  ", "WR"}};
         /* @formatter:on */
-        Board board = BoardUtilities.arrayToBoard(boardMatrix);
+        Board board = BoardUtils.arrayToBoard(boardMatrix);
         KnightMovement movement = new KnightMovement(board);
 
         // White knights
@@ -82,7 +82,7 @@ public class KnightAndKingMovementTest {
                                   {"WP", "WP", "WP", "WP", "  ", "WP", "  ", "WP"},
                                   {"WR", "WN", "WB", "WQ", "  ", "  ", "  ", "WR"}};
         /* @formatter:on */
-        Board board = BoardUtilities.arrayToBoard(boardMatrix);
+        Board board = BoardUtils.arrayToBoard(boardMatrix);
         Movement movement = new Movement(board);
         KingMovement kingMovement = new KingMovement(board, movement.getUnsafeForWhite(), movement.getUnsafeForBlack());
 
@@ -118,7 +118,7 @@ public class KnightAndKingMovementTest {
                                   {"WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"},
                                   {"WR", "  ", "  ", "  ", "WK", "  ", "  ", "WR"}};
         /* @formatter:on */
-        Board board = BoardUtilities.arrayToBoard(boardMatrix);
+        Board board = BoardUtils.arrayToBoard(boardMatrix);
         Movement movement = new Movement(board);
         KingMovement kingMovement = new KingMovement(board, movement.getUnsafeForWhite(), movement.getUnsafeForBlack());
 
@@ -154,7 +154,7 @@ public class KnightAndKingMovementTest {
                                    {"WP", "WP", "WP", "WP", "WP", "WP", "  ", "WP"},
                                    {"WR", "  ", "  ", "  ", "WK", "  ", "  ", "WR"}};
         /* @formatter:on */
-        board = BoardUtilities.arrayToBoard(boardMatrix2);
+        board = BoardUtils.arrayToBoard(boardMatrix2);
         movement = new Movement(board);
         kingMovement = new KingMovement(board, movement.getUnsafeForWhite(), movement.getUnsafeForBlack());
 

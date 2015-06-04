@@ -8,7 +8,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import board.Board;
-import board.BoardUtilities;
+import board.BoardUtils;
 import board.PieceType;
 import board.movement.Move;
 import board.movement.MoveType;
@@ -35,7 +35,7 @@ public class PawnMovementTest {
                                   {"  ", "  ", "WP", "  ", "  ", "  ", "WP", "  "},
                                   {"WR", "WN", "WB", "WQ", "WK", "WB", "WN", "WR"}};
         /* @formatter:on */
-        Board board = BoardUtilities.arrayToBoard(boardMatrix);
+        Board board = BoardUtils.arrayToBoard(boardMatrix);
         PawnMovement movement = new PawnMovement(board);
         List<Move> moves = movement.getWhiteMoves();
 
@@ -66,7 +66,7 @@ public class PawnMovementTest {
                                   {"  ", "  ", "  ", "  ", "  ", "  ", "WP", "  "},
                                   {"WR", "WN", "WB", "WQ", "WK", "WB", "WN", "WR"}};
         /* @formatter:on */
-        Board board = BoardUtilities.arrayToBoard(boardMatrix);
+        Board board = BoardUtils.arrayToBoard(boardMatrix);
 
         List<Move> expectedMoves = new ArrayList<Move>();
         expectedMoves.add(new Move(PieceType.WP, 0, 2, 0, 3));
@@ -120,7 +120,7 @@ public class PawnMovementTest {
                                   {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
                                   {"WR", "WN", "WB", "WQ", "WK", "WB", "WN", "WR"}};
         /* @formatter:on */
-        Board board = BoardUtilities.arrayToBoard(boardMatrix);
+        Board board = BoardUtils.arrayToBoard(boardMatrix);
         PawnMovement movement = new PawnMovement(board);
         List<Move> moves = movement.getWhiteMoves();
 
@@ -165,7 +165,7 @@ public class PawnMovementTest {
                                   {"  ", "  ", "WP", "  ", "  ", "  ", "WP", "  "},
                                   {"WR", "WN", "WB", "WQ", "WK", "WB", "WN", "WR"}};
         /* @formatter:on */
-        Board board = BoardUtilities.arrayToBoard(boardMatrix);
+        Board board = BoardUtils.arrayToBoard(boardMatrix);
         PawnMovement movement = new PawnMovement(board);
         List<Move> moves = movement.getBlackMoves();
 
@@ -196,7 +196,7 @@ public class PawnMovementTest {
                                   {"  ", "  ", "WP", "  ", "  ", "WP", "  ", "  "},
                                   {"WR", "WN", "WB", "WQ", "WK", "WB", "  ", "WR"}};
         /* @formatter:on */
-        Board board = BoardUtilities.arrayToBoard(boardMatrix);
+        Board board = BoardUtils.arrayToBoard(boardMatrix);
 
         List<Move> expectedMoves = new ArrayList<Move>();
         expectedMoves.add(new Move(PieceType.BP, 1, 6, 1, 5));
@@ -250,7 +250,7 @@ public class PawnMovementTest {
                                   {"BP", "  ", "WP", "  ", "  ", "WP", "BP", "BP"},
                                   {"  ", "WN", "WB", "WQ", "WK", "WB", "  ", "WR"}};
         /* @formatter:on */
-        Board board = BoardUtilities.arrayToBoard(boardMatrix);
+        Board board = BoardUtils.arrayToBoard(boardMatrix);
         PawnMovement movement = new PawnMovement(board);
         List<Move> moves = movement.getBlackMoves();
 

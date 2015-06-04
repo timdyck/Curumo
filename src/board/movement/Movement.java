@@ -18,15 +18,19 @@ public class Movement {
     private KingMovement kingMovement;
 
     public Movement(Board board) {
-        updateBoard(board, Move.getFirstPreviousMove());
+        updateBoard(board, new ArrayList<Move>());
     }
 
-    public Movement(Board board, Move previousMove) {
-        updateBoard(board, previousMove);
+    public Movement(Board board, List<Move> previousMoves) {
+        updateBoard(board, previousMoves);
     }
 
-    public void updateBoard(Board newBoard, Move previousMove) {
-        this.pawnMovement = new PawnMovement(newBoard, previousMove);
+    public void updateBoard(Board newBoard, List<Move> previousMoves) {
+        if (previousMoves.isEmpty()) {
+            this.pawnMovement = new PawnMovement(newBoard, Move.getFirstPreviousMove());
+        } else {
+            this.pawnMovement = new PawnMovement(newBoard, previousMoves.get(previousMoves.size() - 1));
+        }
         this.rookMovement = new RookMovement(newBoard);
         this.knightMovement = new KnightMovement(newBoard);
         this.bishopMovement = new BishopMovement(newBoard);
