@@ -114,9 +114,9 @@ public class Board {
 
             // Get appropriate rook
             if (move.getPiece().isWhitePiece()) {
-                castledRook = PieceType.BR;
-            } else {
                 castledRook = PieceType.WR;
+            } else {
+                castledRook = PieceType.BR;
             }
 
             // Get rook start and end positions
@@ -132,7 +132,7 @@ public class Board {
 
             // Move rook to new location
             long rookBitBoard = getBitBoard(castledRook);
-            rookBitBoard |= ~rookNewLocation;
+            rookBitBoard |= rookNewLocation;
 
             // Remove rook's old position
             rookBitBoard &= ~rookOldLocation;

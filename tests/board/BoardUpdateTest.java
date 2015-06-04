@@ -37,7 +37,6 @@ public class BoardUpdateTest {
 
     @Test
     public void Captures() {
-
         /* @formatter:off */
         String[][] boardMatrix = {{"BR", "  ", "BB", "BQ", "BK", "  ", "BN", "  "},
                                   {"BP", "BP", "  ", "  ", "  ", "BP", "BP", "BP"},
@@ -74,6 +73,91 @@ public class BoardUpdateTest {
                                           {"  ", "WN", "  ", "  ", "WK", "WB", "  ", "WR"}};
         /* @formatter:on */
         Board expectedBoard = Board.arrayToBoard(expectedBoardMatrix);
+        Assert.assertEquals(game.getBoard(), expectedBoard);
+    }
+
+    @Test
+    public void Promotion() {
+        /* @formatter:off */
+        String[][] boardMatrix = {{"BR", "BN", "BB", "BQ", "BK", "BB", "  ", "  "},
+                                  {"BP", "BP", "BP", "BP", "BP", "  ", "WP", "WP"},
+                                  {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                  {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                  {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                  {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                  {"BP", "BP", "BP", "WP", "WP", "WP", "WP", "WP"},
+                                  {"WR", "WN", "  ", "WQ", "WK", "WB", "WN", "WR"}};
+        /* @formatter:on */
+        Board initialBoard = Board.arrayToBoard(boardMatrix);
+        Gameplay game = new Gameplay(initialBoard);
+
+        game.executeMove(new Move(PieceType.BP, 2, 1, 2, 0, MoveType.PROMOTION, PieceType.BQ));
+        game.executeMove(new Move(PieceType.WP, 7, 6, 7, 7, MoveType.PROMOTION, PieceType.WQ));
+        game.executeMove(new Move(PieceType.BP, 1, 1, 0, 0, MoveType.CAPTURE_AND_PROMOTION, PieceType.WR, PieceType.BB));
+        game.executeMove(new Move(PieceType.WP, 6, 6, 5, 7, MoveType.CAPTURE_AND_PROMOTION, PieceType.BB, PieceType.WN));
+        game.executeMove(new Move(PieceType.BP, 0, 1, 1, 0, MoveType.CAPTURE_AND_PROMOTION, PieceType.WN, PieceType.BR));
+
+        /* @formatter:off */
+        String[][] expectedBoardMatrix = {{"BR", "BN", "BB", "BQ", "BK", "WN", "  ", "WQ"},
+                                          {"BP", "BP", "BP", "BP", "BP", "  ", "  ", "  "},
+                                          {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                          {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                          {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                          {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                          {"  ", "  ", "  ", "WP", "WP", "WP", "WP", "WP"},
+                                          {"BB", "BR", "BQ", "WQ", "WK", "WB", "WN", "WR"}};
+        /* @formatter:on */
+        Board expectedBoard = Board.arrayToBoard(expectedBoardMatrix);
+        Assert.assertEquals(game.getBoard(), expectedBoard);
+    }
+
+    @Test
+    public void Castling() {
+        /* @formatter:off */
+        String[][] boardMatrix = {{"BR", "  ", "  ", "  ", "BK", "  ", "  ", "BR"},
+                                  {"BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP"},
+                                  {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                  {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                  {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                  {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                  {"WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"},
+                                  {"WR", "  ", "  ", "  ", "WK", "  ", "  ", "WR"}};
+        /* @formatter:on */
+
+        // King-side castling
+        Gameplay game = new Gameplay(Board.arrayToBoard(boardMatrix));
+        game.executeMove(new Move(PieceType.WK, 4, 0, 6, 0, MoveType.CASTLE));
+        game.executeMove(new Move(PieceType.BK, 4, 7, 6, 7, MoveType.CASTLE));
+
+        /* @formatter:off */
+        String[][] expectedBoardMatrix = {{"BR", "  ", "  ", "  ", "  ", "BR", "BK", "  "},
+                                          {"BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP"},
+                                          {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                          {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                          {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                          {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                          {"WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"},
+                                          {"WR", "  ", "  ", "  ", "  ", "WR", "WK", "  "}};
+        /* @formatter:on */
+        Board expectedBoard = Board.arrayToBoard(expectedBoardMatrix);
+        Assert.assertEquals(game.getBoard(), expectedBoard);
+
+        // Queen-side castling
+        game = new Gameplay(Board.arrayToBoard(boardMatrix));
+        game.executeMove(new Move(PieceType.WK, 4, 0, 2, 0, MoveType.CASTLE));
+        game.executeMove(new Move(PieceType.BK, 4, 7, 2, 7, MoveType.CASTLE));
+
+        /* @formatter:off */
+        String[][] expectedBoardMatrix2 = {{"  ", "  ", "BK", "BR", "  ", "  ", "  ", "BR"},
+                                           {"BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP"},
+                                           {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                           {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                           {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                           {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                                           {"WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"},
+                                           {"  ", "  ", "WK", "WR", "  ", "  ", "  ", "WR"}};
+        /* @formatter:on */
+        expectedBoard = Board.arrayToBoard(expectedBoardMatrix2);
         Assert.assertEquals(game.getBoard(), expectedBoard);
     }
 }
