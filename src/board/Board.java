@@ -17,6 +17,16 @@ public class Board {
         this.bitBoards = bitBoards;
     }
 
+    /**
+     * Copy constructor
+     * 
+     * @param board
+     */
+    public Board(Board board) {
+        this.bitBoards = new HashMap<PieceType, Long>();
+        this.bitBoards.putAll(board.getBitBoards());
+    }
+
     public static Board StandardBoard() {
         Map<PieceType, Long> bitBoards = new HashMap<PieceType, Long>();
         bitBoards.put(PieceType.WP, BoardUtils.WP_INITIAL);

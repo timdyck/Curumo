@@ -8,6 +8,10 @@ public enum PieceType {
 
     public enum Colour {
         WHITE, BLACK;
+
+        public Colour getOppositeColour() {
+            return this.equals(BLACK) ? WHITE : BLACK;
+        }
     }
 
     public Colour getColour() {

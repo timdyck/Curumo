@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import board.Board;
+import board.PieceType;
 import board.movement.sliding.BishopMovement;
 import board.movement.sliding.QueenMovement;
 import board.movement.sliding.RookMovement;
@@ -18,14 +19,14 @@ public class Movement {
     private KingMovement kingMovement;
 
     public Movement(Board board) {
-        updateBoard(board, new ArrayList<Move>());
+        initializeMovement(board, new ArrayList<Move>());
     }
 
     public Movement(Board board, List<Move> previousMoves) {
-        updateBoard(board, previousMoves);
+        initializeMovement(board, previousMoves);
     }
 
-    public void updateBoard(Board newBoard, List<Move> previousMoves) {
+    public void initializeMovement(Board newBoard, List<Move> previousMoves) {
         if (previousMoves.isEmpty()) {
             this.pawnMovement = new PawnMovement(newBoard, Move.getFirstPreviousMove());
         } else {
@@ -41,7 +42,15 @@ public class Movement {
         this.kingMovement.updateUnsafeMoves(getUnsafeForWhite(), getUnsafeForBlack());
     }
 
-    public List<Move> getAllWhiteMoves() {
+    public List<Move> getAllMoves(PieceType.Colour turn) {
+        if (turn.equals(PieceType.Colour.WHITE)) {
+            return getAllWhiteMoves();
+        } else {
+            return getAllBlackMoves();
+        }
+    }
+
+    private List<Move> getAllWhiteMoves() {
         List<Move> possibleWhiteMoves = new ArrayList<Move>();
 
         possibleWhiteMoves.addAll(pawnMovement.getWhiteMoves());
@@ -54,7 +63,7 @@ public class Movement {
         return possibleWhiteMoves;
     }
 
-    public List<Move> getAllBlackMoves() {
+    private List<Move> getAllBlackMoves() {
         List<Move> possibleBlackMoves = new ArrayList<Move>();
 
         possibleBlackMoves.addAll(pawnMovement.getBlackMoves());
