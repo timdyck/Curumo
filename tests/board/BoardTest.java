@@ -124,4 +124,22 @@ public class BoardTest {
         }
 
     }
+
+    @Test
+    public void fromFenString() {
+        /* @formatter:off */
+        String[][] boardMatrix = {{"BR", "  ", "BB", "BQ", "BK", "BB", "BN", "BR"},
+                                  {"BP", "BP", "BP", "BP", "  ", "BP", "BP", "BP"},
+                                  {"  ", "  ", "BN", "  ", "  ", "  ", "  ", "  "},
+                                  {"  ", "WB", "  ", "  ", "BP", "  ", "  ", "  "},
+                                  {"  ", "  ", "  ", "  ", "WP", "  ", "  ", "  "},
+                                  {"  ", "  ", "  ", "  ", "  ", "WN", "  ", "  "},
+                                  {"WP", "WP", "WP", "WP", "  ", "WP", "WP", "WP"},
+                                  {"WR", "WN", "WB", "WQ", "WK", "  ", "  ", "WR"}};
+        /* @formatter:on */
+
+        Board board = BoardUtils.arrayToBoard(boardMatrix);
+        Board fromFen = FEN.fromFenString("r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R");
+        Assert.assertEquals(board, fromFen);
+    }
 }

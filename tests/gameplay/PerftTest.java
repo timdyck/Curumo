@@ -1,9 +1,11 @@
-package perft;
+package gameplay;
 
 import gameplay.Gameplay;
 import junit.framework.Assert;
 
 import org.junit.Test;
+
+import perft.Perft;
 
 public class PerftTest {
 
