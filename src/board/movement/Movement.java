@@ -11,6 +11,8 @@ import board.movement.sliding.RookMovement;
 
 public class Movement {
 
+    private Board board;
+
     private PawnMovement pawnMovement;
     private RookMovement rookMovement;
     private KnightMovement knightMovement;
@@ -26,7 +28,15 @@ public class Movement {
         initializeMovement(board, previousMoves);
     }
 
+    public Movement(Board board, Move previousMove) {
+        List<Move> previousMoves = new ArrayList<Move>();
+        previousMoves.add(previousMove);
+        initializeMovement(board, previousMoves);
+    }
+
     public void initializeMovement(Board newBoard, List<Move> previousMoves) {
+        this.board = newBoard;
+
         if (previousMoves.isEmpty()) {
             this.pawnMovement = new PawnMovement(newBoard, Move.getFirstPreviousMove());
         } else {
@@ -101,11 +111,13 @@ public class Movement {
         return unsafeMoves;
     }
 
-    public boolean isLegalMove(Move move) {
-        if (move.getPiece().isWhitePiece()) {
-            return getAllWhiteMoves().contains(move);
+    public boolean isKingInCheck(PieceType.Colour kingColour) {
+        if (kingColour.equals(PieceType.Colour.WHITE)) {
+            long kingBitBoard = board.getBitBoard(PieceType.WK);
+            return (kingBitBoard & getUnsafeForWhite()) == kingBitBoard;
         } else {
-            return getAllBlackMoves().contains(move);
+            long kingBitBoard = board.getBitBoard(PieceType.BK);
+            return (kingBitBoard & getUnsafeForBlack()) == kingBitBoard;
         }
     }
 

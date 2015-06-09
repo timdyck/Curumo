@@ -14,7 +14,8 @@ public class Perft {
 
     /**
      * Recursive method to get the number of leaf nodes in the possible moves
-     * tree for the current game.
+     * tree for the current game. Prints out the number of leaf nodes off each
+     * initial move.
      * 
      * @param game
      * @param currentDepth
@@ -31,7 +32,7 @@ public class Perft {
                     + "? Good one.");
         }
 
-        List<Move> possibleMoves = game.getMovement().getAllMoves(game.getTurn());
+        List<Move> possibleMoves = game.getSafeMoves(game.getTurn());
         if (currentDepth == maxDepth) {
             for (Move move : possibleMoves) {
                 if (currentDepth == 1) {

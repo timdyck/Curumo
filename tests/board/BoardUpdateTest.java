@@ -48,7 +48,7 @@ public class BoardUpdateTest {
                                   {"  ", "WN", "  ", "WQ", "WK", "WB", "  ", "WR"}};
         /* @formatter:on */
         Board initialBoard = BoardUtils.arrayToBoard(boardMatrix);
-        Gameplay game = new Gameplay(initialBoard);
+        Gameplay game = new Gameplay(initialBoard, PieceType.Colour.BLACK);
 
         game.executeMove(new Move(PieceType.BP, 4, 4, 3, 3, MoveType.CAPTURE, PieceType.WP));
         game.executeMove(new Move(PieceType.WP, 4, 2, 3, 3, MoveType.CAPTURE, PieceType.BP));
@@ -89,7 +89,7 @@ public class BoardUpdateTest {
                                   {"WR", "WN", "  ", "WQ", "WK", "WB", "WN", "WR"}};
         /* @formatter:on */
         Board initialBoard = BoardUtils.arrayToBoard(boardMatrix);
-        Gameplay game = new Gameplay(initialBoard);
+        Gameplay game = new Gameplay(initialBoard, PieceType.Colour.BLACK);
 
         game.executeMove(new Move(PieceType.BP, 2, 1, 2, 0, MoveType.PROMOTION, PieceType.BQ));
         game.executeMove(new Move(PieceType.WP, 7, 6, 7, 7, MoveType.PROMOTION, PieceType.WQ));
@@ -125,7 +125,7 @@ public class BoardUpdateTest {
         /* @formatter:on */
 
         // King-side castling
-        Gameplay game = new Gameplay(BoardUtils.arrayToBoard(boardMatrix));
+        Gameplay game = new Gameplay(BoardUtils.arrayToBoard(boardMatrix), PieceType.Colour.WHITE);
         game.executeMove(new Move(PieceType.WK, 4, 0, 6, 0, MoveType.CASTLE));
         game.executeMove(new Move(PieceType.BK, 4, 7, 6, 7, MoveType.CASTLE));
 
@@ -143,7 +143,7 @@ public class BoardUpdateTest {
         Assert.assertEquals(game.getBoard(), expectedBoard);
 
         // Queen-side castling
-        game = new Gameplay(BoardUtils.arrayToBoard(boardMatrix));
+        game = new Gameplay(BoardUtils.arrayToBoard(boardMatrix), PieceType.Colour.WHITE);
         game.executeMove(new Move(PieceType.WK, 4, 0, 2, 0, MoveType.CASTLE));
         game.executeMove(new Move(PieceType.BK, 4, 7, 2, 7, MoveType.CASTLE));
 

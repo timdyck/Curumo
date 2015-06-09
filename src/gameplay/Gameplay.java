@@ -25,12 +25,12 @@ public class Gameplay {
         this.turn = PieceType.Colour.WHITE;
     }
 
-    public Gameplay(Board board) {
+    public Gameplay(Board board, PieceType.Colour turn) {
         this.board = board;
         this.previousMoves = new ArrayList<Move>();
         this.movement = new Movement(board, this.previousMoves);
 
-        this.turn = PieceType.Colour.WHITE;
+        this.turn = turn;
     }
 
     public Gameplay(Board board, Move previousMove) {
@@ -65,15 +65,18 @@ public class Gameplay {
      * @param move
      */
     public void executeMove(Move move) {
+        // Check if right color is moving
         if (!turn.equals(move.getPiece().getColour())) {
             throw new IllegalArgumentException(move + " is not a legal move, as it is " + turn.name() + "'s turn!");
         }
 
-        if (!movement.isLegalMove(move)) {
+        // Ensure valid move
+        if (!isLegalMove(move)) {
             BoardUtils.printBoard(board);
             throw new IllegalArgumentException(move + " is not a legal move!");
         }
 
+        // Update board and compute new movement options
         board.updateBoardAfterMove(move);
         previousMoves.add(move);
         movement.initializeMovement(board, previousMoves);
@@ -99,6 +102,64 @@ public class Gameplay {
         movement.initializeMovement(board, previousMoves);
 
         turn = turn.getOppositeColour();
+    }
+
+    public boolean isLegalMove(Move move) {
+        if (move.getPiece().isWhitePiece()) {
+            return getSafeWhiteMoves().contains(move);
+        } else {
+            return getSafeBlackMoves().contains(move);
+        }
+    }
+
+    /**
+     * @return list of moves that won't put the white king in check
+     */
+    public List<Move> getSafeWhiteMoves() {
+        List<Move> safeMoves = new ArrayList<Move>();
+        List<Move> potentialMoves = movement.getAllMoves(PieceType.Colour.WHITE);
+
+        for (Move potentialMove : potentialMoves) {
+            Board newBoard = new Board(board);
+            newBoard.updateBoardAfterMove(potentialMove);
+            Movement newMovement = new Movement(newBoard, potentialMove);
+
+            long kingBitBoard = newBoard.getBitBoard(PieceType.WK);
+            if ((newMovement.getUnsafeForWhite() & kingBitBoard) != kingBitBoard) {
+                safeMoves.add(potentialMove);
+            }
+        }
+
+        return safeMoves;
+    }
+
+    /**
+     * @return list of moves that won't put the black king in check
+     */
+    public List<Move> getSafeBlackMoves() {
+        List<Move> safeMoves = new ArrayList<Move>();
+        List<Move> potentialMoves = movement.getAllMoves(PieceType.Colour.BLACK);
+
+        for (Move potentialMove : potentialMoves) {
+            Board newBoard = new Board(board);
+            newBoard.updateBoardAfterMove(potentialMove);
+            Movement newMovement = new Movement(newBoard, potentialMove);
+
+            long kingBitBoard = newBoard.getBitBoard(PieceType.BK);
+            if ((newMovement.getUnsafeForBlack() & kingBitBoard) != kingBitBoard) {
+                safeMoves.add(potentialMove);
+            }
+        }
+
+        return safeMoves;
+    }
+
+    public List<Move> getSafeMoves(PieceType.Colour turn) {
+        if (turn.equals(PieceType.Colour.WHITE)) {
+            return getSafeWhiteMoves();
+        } else {
+            return getSafeBlackMoves();
+        }
     }
 
     public Board getBoard() {

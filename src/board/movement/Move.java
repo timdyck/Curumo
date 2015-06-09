@@ -46,8 +46,7 @@ public class Move {
      * @param type
      */
     public Move(PieceType piece, int x1, int y1, int x2, int y2, MoveType type) {
-        assert !type.equals(MoveType.CAPTURE) && !!type.equals(MoveType.PROMOTION)
-                && !type.equals(MoveType.CAPTURE_AND_PROMOTION) : "With this contruction, MoveType must not be CAPTURE or PROMOTION or CAPTURE_AND_PROMOTION!";
+        assert !type.equals(MoveType.CAPTURE) && !type.equals(MoveType.PROMOTION) && !type.equals(MoveType.CAPTURE_AND_PROMOTION) : "With this contruction, MoveType must not be CAPTURE or PROMOTION or CAPTURE_AND_PROMOTION!";
 
         this.piece = piece;
         this.x1 = x1;
