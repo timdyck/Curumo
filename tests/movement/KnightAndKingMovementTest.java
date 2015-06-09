@@ -152,7 +152,7 @@ public class KnightAndKingMovementTest {
                                    {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
                                    {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "BN"},
                                    {"WP", "WP", "WP", "WP", "WP", "WP", "  ", "WP"},
-                                   {"WR", "  ", "  ", "  ", "WK", "  ", "  ", "WR"}};
+                                   {"WR", "  ", "  ", "  ", "WK", "WB", "  ", "WR"}};
         /* @formatter:on */
         board = BoardUtils.arrayToBoard(boardMatrix2);
         movement = new Movement(board);
@@ -162,7 +162,6 @@ public class KnightAndKingMovementTest {
         moves = kingMovement.getWhiteMoves();
         expectedMoves = new ArrayList<Move>();
 
-        expectedMoves.add(new Move(PieceType.WK, 4, 0, 5, 0));
         expectedMoves.add(new Move(PieceType.WK, 4, 0, 3, 0));
         expectedMoves.add(new Move(PieceType.WK, 4, 0, 2, 0, MoveType.CASTLE));
 

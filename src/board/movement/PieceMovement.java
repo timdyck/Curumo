@@ -137,13 +137,11 @@ public class PieceMovement {
             possibleMovesBitBoard &= ~blackPieces;
         }
 
+        // Remove piece itself
         long bitBoardS = getBitBoard(x, y);
+        possibleMovesBitBoard &= ~bitBoardS;
 
         for (int i = initialIndex(possibleMovesBitBoard); i < finalIndex(possibleMovesBitBoard); i++) {
-            if (((possibleMovesBitBoard >> i) & 1) == bitBoardS) {
-                // Observing the piece in question
-                continue;
-            }
             if (((possibleMovesBitBoard >> i) & 1) == 1) {
                 int moveX = getX(i);
                 int moveY = getY(i);

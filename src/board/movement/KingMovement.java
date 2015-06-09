@@ -17,19 +17,22 @@ public class KingMovement extends PieceMovement {
 
     // Castling flags and locations
     private boolean WQCastle = true;
-    private final long WQCastleReq = 0x0000000000000088L;
+    private final long WQCastleReq = 0x00000000000000f8L;
     private final long WQCastlePos = 0x0000000000000020L;
     private final long WQRookPos = 0x0000000000000080L;
+
     private boolean WKCastle = true;
-    private final long WKCastleReq = 0x000000000000000AL;
+    private final long WKCastleReq = 0x000000000000000fL;
     private final long WKCastlePos = 0x0000000000000002L;
     private final long WKRookPos = 0x0000000000000001L;
+
     private boolean BQCastle = true;
-    private final long BQCastleReq = 0x8800000000000000L;
+    private final long BQCastleReq = 0xf800000000000000L;
     private final long BQCastlePos = 0x2000000000000000L;
     private final long BQRookPos = 0x8000000000000000L;
+
     private boolean BKCastle = true;
-    private final long BKCastleReq = 0x0A00000000000000L;
+    private final long BKCastleReq = 0x0f00000000000000L;
     private final long BKCastlePos = 0x0200000000000000L;
     private final long BKRookPos = 0x0100000000000000L;
 

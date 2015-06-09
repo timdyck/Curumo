@@ -108,4 +108,28 @@ public class Movement {
             return getAllBlackMoves().contains(move);
         }
     }
+
+    public PawnMovement getPawnMovement() {
+        return pawnMovement;
+    }
+
+    public RookMovement getRookMovement() {
+        return rookMovement;
+    }
+
+    public KnightMovement getKnightMovement() {
+        return knightMovement;
+    }
+
+    public BishopMovement getBishopMovement() {
+        return bishopMovement;
+    }
+
+    public QueenMovement getQueenMovement() {
+        return queenMovement;
+    }
+
+    public KingMovement getKingMovement() {
+        return kingMovement;
+    }
 }
