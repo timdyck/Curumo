@@ -2,7 +2,10 @@ package uci;
 
 import gameplay.Gameplay;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 
 import board.BoardUtils;
@@ -15,12 +18,12 @@ import board.movement.Move;
  */
 public class UCI {
 
-    private Gameplay game;
+    private static Gameplay game;
 
-    public static String ENGINE_NAME = "Curumo v1";
+    public static String ENGINE_NAME = "Curumo 1.0";
     public static String AUTHOR_NAME = "Tim Dyck";
 
-    public void executeUCI() {
+    public static void main(String args[]) {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -37,7 +40,7 @@ public class UCI {
                 uciNewGame();
             } else if (input.startsWith("position")) {
                 setPosition(input.substring(input.indexOf(" ") + 1));
-            } else if (input.equals("go")) {
+            } else if (input.startsWith("go")) {
                 go(input.substring(input.indexOf(" ") + 1));
             } else if (input.equals("print")) {
                 print(input.substring(input.indexOf(" ") + 1));
@@ -50,26 +53,26 @@ public class UCI {
         scanner.close();
     }
 
-    private void identifyEngine() {
+    private static void identifyEngine() {
         System.out.println("id name " + ENGINE_NAME);
         System.out.println("id author " + AUTHOR_NAME);
         System.out.println("uciok");
     }
 
-    private void isReady() {
+    private static void isReady() {
         System.out.println("readyok");
     }
 
-    private void setOption(String input) {
+    private static void setOption(String input) {
         // Set options
     }
 
-    private void uciNewGame() {
-        game = null;
+    private static void uciNewGame() {
+        game = new Gameplay();
     }
 
-    private void setPosition(String input) {
-        if (input.contains("startpos")) {
+    private static void setPosition(String input) {
+        if (input.contains("startpos") && game == null) {
             game = new Gameplay();
         } else if (input.contains("fen")) {
             // TODO: Need to make FEN method return a game!
@@ -84,23 +87,29 @@ public class UCI {
         }
     }
 
-    private void makeMoves(String... moveStrs) {
+    private static void makeMoves(String... moveStrs) {
         for (String moveStr : moveStrs) {
             Map<String, Move> movesMap = game.getMovesMap();
 
             if (!movesMap.containsKey(moveStr)) {
-                throw new IllegalStateException("Move " + moveStr + " is not possible! Debug your engine bro.");
+                throw new IllegalStateException("Move " + moveStr + " is not possible!? Debug your engine bro.");
             }
 
             game.executeMove(movesMap.get(moveStr));
         }
     }
 
-    private void go(String substring) {
-        // Search for the best moves
+    private static void go(String substring) {
+        // TODO: Make this not pick a random move!
+        Map<String, Move> movesMap = game.getMovesMap();
+        int randIndex = new Random().nextInt(movesMap.size());
+
+        List<String> keys = new ArrayList<String>(movesMap.keySet());
+        System.out.println("bestmove " + keys.get(randIndex));
+
     }
 
-    private void print(String substring) {
+    private static void print(String substring) {
         BoardUtils.printBoard(game.getBoard());
     }
 

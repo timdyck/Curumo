@@ -164,7 +164,18 @@ public class Move {
      * @return move in the UCI from, i.e. x1=4 y1=1 x2=4 y1=3 gives e2e4
      */
     public String toUciForm() {
-        return String.valueOf((char) (x1 + 'a')) + (y1 + 1) + String.valueOf((char) (x2 + 'a')) + (y2 + 1);
+        String uciForm = String.valueOf((char) (x1 + 'a')) + (y1 + 1) + String.valueOf((char) (x2 + 'a')) + (y2 + 1);
+
+        // Append piece type if promotion
+        if (type.equals(MoveType.PROMOTION) || type.equals(MoveType.CAPTURE_AND_PROMOTION)) {
+            if (promotionPiece.equals(PieceType.WN) || promotionPiece.equals(PieceType.BN)) {
+                uciForm += 'k';
+            } else {
+                uciForm += promotionPiece.name().substring(1).toLowerCase();
+            }
+        }
+
+        return uciForm;
     }
 
     @Override

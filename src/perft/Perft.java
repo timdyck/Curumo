@@ -32,7 +32,7 @@ public class Perft {
                     + "? Good one.");
         }
 
-        List<Move> possibleMoves = game.getSafeMoves(game.getTurn());
+        List<Move> possibleMoves = game.getSafeMoves();
         if (currentDepth == maxDepth) {
             for (Move move : possibleMoves) {
                 if (currentDepth == 1) {

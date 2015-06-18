@@ -150,7 +150,8 @@ public class Gameplay {
         return safeMoves;
     }
 
-    public List<Move> getSafeMoves(PieceType.Colour turn) {
+    public List<Move> getSafeMoves() {
+        // TODO: Yuck. So inefficient. Must be a better way. Find it.
         if (turn.equals(PieceType.Colour.WHITE)) {
             return getSafeWhiteMoves();
         } else {
@@ -163,7 +164,7 @@ public class Gameplay {
      */
     public Map<String, Move> getMovesMap() {
         Map<String, Move> movesMap = new HashMap<String, Move>();
-        for (Move move : movement.getAllMoves(turn)) {
+        for (Move move : getSafeMoves()) {
             movesMap.put(move.toUciForm(), move);
         }
         return movesMap;

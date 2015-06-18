@@ -13,5 +13,5 @@ import board.BoardUpdateTest;
 @RunWith(Suite.class)
 @SuiteClasses({ BoardTest.class, PawnMovementTest.class, SlidingMovementTest.class, KnightAndKingMovementTest.class,
         BoardUpdateTest.class, GameplayTest.class })
-public class AllTests {
+public class RegressionTests {
 }
