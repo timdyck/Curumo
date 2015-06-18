@@ -117,6 +117,11 @@ public class BoardUtils {
     }
 
     public static void printBoard(Board board) {
+        if (board == null) {
+            System.out.println("Board not set");
+            return;
+        }
+
         printBoard(boardToArray(board));
     }
 

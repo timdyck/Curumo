@@ -1,7 +1,9 @@
 package gameplay;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import board.Board;
 import board.BoardUtils;
@@ -68,12 +70,6 @@ public class Gameplay {
         // Check if right color is moving
         if (!turn.equals(move.getPiece().getColour())) {
             throw new IllegalArgumentException(move + " is not a legal move, as it is " + turn.name() + "'s turn!");
-        }
-
-        // Ensure valid move
-        if (!isLegalMove(move)) {
-            BoardUtils.printBoard(board);
-            throw new IllegalArgumentException(move + " is not a legal move!");
         }
 
         // Update board and compute new movement options
@@ -160,6 +156,17 @@ public class Gameplay {
         } else {
             return getSafeBlackMoves();
         }
+    }
+
+    /**
+     * @return map of UCI string move to {@link Move}
+     */
+    public Map<String, Move> getMovesMap() {
+        Map<String, Move> movesMap = new HashMap<String, Move>();
+        for (Move move : movement.getAllMoves(turn)) {
+            movesMap.put(move.toUciForm(), move);
+        }
+        return movesMap;
     }
 
     public Board getBoard() {

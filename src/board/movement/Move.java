@@ -160,6 +160,13 @@ public class Move {
         return move.x1 == -1 && move.y1 == -1 && move.x2 == -1 && move.y2 == -1 && move.piece.equals(PieceType.BB);
     }
 
+    /**
+     * @return move in the UCI from, i.e. x1=4 y1=1 x2=4 y1=3 gives e2e4
+     */
+    public String toUciForm() {
+        return String.valueOf((char) (x1 + 'a')) + (y1 + 1) + String.valueOf((char) (x2 + 'a')) + (y2 + 1);
+    }
+
     @Override
     public String toString() {
         String printStr = piece.name() + " - (" + x1 + "," + y1 + ") to (" + x2 + "," + y2 + ")";

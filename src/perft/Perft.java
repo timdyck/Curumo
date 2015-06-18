@@ -36,7 +36,7 @@ public class Perft {
         if (currentDepth == maxDepth) {
             for (Move move : possibleMoves) {
                 if (currentDepth == 1) {
-                    System.out.println(getMoveStr(move) + " 1");
+                    System.out.println(move.toUciForm() + " 1");
                 }
             }
 
@@ -52,15 +52,10 @@ public class Perft {
             leafNodesCount += leafCount;
 
             if (currentDepth == 1) {
-                System.out.println(getMoveStr(move) + " " + leafCount);
+                System.out.println(move.toUciForm() + " " + leafCount);
             }
         }
 
         return leafNodesCount;
-    }
-
-    private static String getMoveStr(Move move) {
-        return String.valueOf((char) (move.getX1() + 'a')) + (move.getY1() + 1) + String.valueOf((char) (move.getX2() + 'a'))
-                + (move.getY2() + 1);
     }
 }

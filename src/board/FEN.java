@@ -102,29 +102,52 @@ public class FEN {
             index++;
         }
 
-        /*
-         * // Handle turn colour PieceType.Colour turn =
-         * fenString.charAt(index++) == 'w' ? PieceType.Colour.WHITE :
-         * PieceType.Colour.BLACK; index += 2;
-         * 
-         * // Handle castling flags boolean WKCastle = false; boolean WQCastle =
-         * false; boolean BKCastle = false; boolean BQCastle = false;
-         * 
-         * while (fenString.charAt(index) != ' ') { switch
-         * (fenString.charAt(index)) { case '-': break; case 'K': WKCastle =
-         * true; break; case 'Q': WQCastle = true; break; case 'k': BKCastle =
-         * true; break; case 'q': BQCastle = true; break; default: break; }
-         * 
-         * index++; }
-         * 
-         * // Handle en passant Move previousMove = Move.getFirstPreviousMove();
-         * if (fenString.charAt(index++) != '-') { int x =
-         * fenString.charAt(index) - 'a'; int y = fenString.charAt(index++);
-         * 
-         * if (y == 3) { previousMove = new Move(PieceType.WP, x, 1, x, 3); }
-         * else if (y == 6) { previousMove = new Move(PieceType.BP, x, 6, x, 4);
-         * } }
-         */
+        // // Handle turn colour
+        // PieceType.Colour turn = fenString.charAt(index++) == 'w' ?
+        // PieceType.Colour.WHITE : PieceType.Colour.BLACK;
+        // index += 2;
+        //
+        // // Handle castling flags
+        // boolean WKCastle = false;
+        // boolean WQCastle = false;
+        // boolean BKCastle = false;
+        // boolean BQCastle = false;
+        //
+        // while (fenString.charAt(index) != ' ') {
+        // switch (fenString.charAt(index)) {
+        // case '-':
+        // break;
+        // case 'K':
+        // WKCastle = true;
+        // break;
+        // case 'Q':
+        // WQCastle = true;
+        // break;
+        // case 'k':
+        // BKCastle = true;
+        // break;
+        // case 'q':
+        // BQCastle = true;
+        // break;
+        // default:
+        // break;
+        // }
+        //
+        // index++;
+        // }
+        //
+        // // Handle en passant
+        // Move previousMove = Move.getFirstPreviousMove();
+        // if (fenString.charAt(index++) != '-') {
+        // int x = fenString.charAt(index) - 'a';
+        // int y = fenString.charAt(index++);
+        //
+        // if (y == 3) {
+        // previousMove = new Move(PieceType.WP, x, 1, x, 3);
+        // } else if (y == 6) {
+        // previousMove = new Move(PieceType.BP, x, 6, x, 4);
+        // }
+        // }
 
         return new Board(bitBoards);
     }
