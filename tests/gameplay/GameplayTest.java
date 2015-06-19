@@ -84,10 +84,10 @@ public class GameplayTest {
         Assert.assertEquals(board, fenGame.getBoard());
         Assert.assertEquals(PieceType.Colour.BLACK, fenGame.getTurn());
 
-        Assert.assertEquals(fenGame.isWKCastle(), true);
-        Assert.assertEquals(fenGame.isWQCastle(), false);
-        Assert.assertEquals(fenGame.isBKCastle(), false);
-        Assert.assertEquals(fenGame.isBQCastle(), true);
+        Assert.assertTrue(fenGame.getMovement().isWKCastle());
+        Assert.assertFalse(fenGame.getMovement().isWQCastle());
+        Assert.assertFalse(fenGame.getMovement().isBKCastle());
+        Assert.assertTrue(fenGame.getMovement().isBQCastle());
 
         Assert.assertEquals(fenGame.getPreviousMoves().get(0), new Move(PieceType.WP, 4, 1, 4, 3));
     }

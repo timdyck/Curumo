@@ -21,12 +21,6 @@ public final class Gameplay {
     private Movement movement;
     private PieceType.Colour turn;
 
-    // Castling flags
-    private boolean wKCastle = true;
-    private boolean wQCastle = true;
-    private boolean bKCastle = true;
-    private boolean bQCastle = true;
-
     public Gameplay() {
         this.board = Board.StandardBoard();
         this.movement = new Movement(board);
@@ -198,38 +192,6 @@ public final class Gameplay {
 
     public PieceType.Colour getTurn() {
         return turn;
-    }
-
-    public boolean isWKCastle() {
-        return wKCastle;
-    }
-
-    public void noWKCastle() {
-        wKCastle = false;
-    }
-
-    public boolean isWQCastle() {
-        return wQCastle;
-    }
-
-    public void noWQCastle() {
-        wQCastle = false;
-    }
-
-    public boolean isBKCastle() {
-        return bKCastle;
-    }
-
-    public void noBKCastle() {
-        bKCastle = false;
-    }
-
-    public boolean isBQCastle() {
-        return bQCastle;
-    }
-
-    public void noBQCastle() {
-        bQCastle = false;
     }
 
 }

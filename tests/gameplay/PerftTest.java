@@ -17,14 +17,7 @@ public class PerftTest {
 
     @Test
     public void ChessProgramming1() {
-        Gameplay fenGame = FEN.fromFenString("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -");
-        Board board = fenGame.getBoard();
-        BoardUtils.printBoard(board);
-        Gameplay game = new Gameplay(board, PieceType.Colour.WHITE);
-        BoardUtils.printBoard(board);
-
-        int nodes = Perft.countLeafNodes(game, 5);
-        Assert.assertEquals(nodes, 193690690);
+        runPerft("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -", 5, 193690690);
     }
 
     @Test
@@ -127,10 +120,10 @@ public class PerftTest {
     }
 
     @Test
-    public void PerftFiveDeep() {
+    public void PerftSixDeep() {
         Gameplay game = new Gameplay();
 
-        int maxDepth = 5;
+        int maxDepth = 6;
         long startTime = System.currentTimeMillis();
         int leafNodes = Perft.countLeafNodes(game, maxDepth);
         long endTime = System.currentTimeMillis();

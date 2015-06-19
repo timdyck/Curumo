@@ -160,16 +160,16 @@ public class FEN {
         Gameplay game = new Gameplay(board, previousMove, turn);
 
         if (!WKCastle) {
-            game.noWKCastle();
+            game.getMovement().noWKCastle();
         }
         if (!WQCastle) {
-            game.noWQCastle();
+            game.getMovement().noWQCastle();
         }
         if (!BKCastle) {
-            game.noBKCastle();
+            game.getMovement().noBKCastle();
         }
         if (!BQCastle) {
-            game.noBQCastle();
+            game.getMovement().noBQCastle();
         }
 
         return game;
