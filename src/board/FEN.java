@@ -5,6 +5,7 @@ import gameplay.Gameplay;
 import java.util.HashMap;
 import java.util.Map;
 
+import board.movement.CastleFlags;
 import board.movement.Move;
 
 /**
@@ -115,26 +116,26 @@ public class FEN {
         index += 2;
 
         // Handle castling flags
-        boolean WKCastle = false;
-        boolean WQCastle = false;
-        boolean BKCastle = false;
-        boolean BQCastle = false;
+        boolean wKCastle = false;
+        boolean wQCastle = false;
+        boolean bKCastle = false;
+        boolean bQCastle = false;
 
         while (fenString.charAt(index) != ' ') {
             switch (fenString.charAt(index)) {
             case '-':
                 break;
             case 'K':
-                WKCastle = true;
+                wKCastle = true;
                 break;
             case 'Q':
-                WQCastle = true;
+                wQCastle = true;
                 break;
             case 'k':
-                BKCastle = true;
+                bKCastle = true;
                 break;
             case 'q':
-                BQCastle = true;
+                bQCastle = true;
                 break;
             default:
                 break;
@@ -144,8 +145,9 @@ public class FEN {
         }
 
         // Handle en passant
+        index++;
         Move previousMove = Move.getFirstPreviousMove();
-        if (fenString.charAt(index++) != '-') {
+        if (fenString.charAt(index) != '-') {
             int x = fenString.charAt(index) - 'a';
             int y = Integer.parseInt(fenString.substring(++index, index + 1));
 
@@ -157,20 +159,8 @@ public class FEN {
         }
 
         Board board = new Board(bitBoards);
-        Gameplay game = new Gameplay(board, previousMove, turn);
-
-        if (!WKCastle) {
-            game.getMovement().noWKCastle();
-        }
-        if (!WQCastle) {
-            game.getMovement().noWQCastle();
-        }
-        if (!BKCastle) {
-            game.getMovement().noBKCastle();
-        }
-        if (!BQCastle) {
-            game.getMovement().noBQCastle();
-        }
+        CastleFlags flags = new CastleFlags(wKCastle, wQCastle, bKCastle, bQCastle);
+        Gameplay game = new Gameplay(board, previousMove, turn, flags);
 
         return game;
     }

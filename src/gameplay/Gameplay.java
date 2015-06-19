@@ -8,6 +8,7 @@ import java.util.Map;
 import board.Board;
 import board.BoardUtils;
 import board.PieceType;
+import board.movement.CastleFlags;
 import board.movement.Move;
 import board.movement.Movement;
 
@@ -52,6 +53,13 @@ public final class Gameplay {
         this.turn = turn;
     }
 
+    public Gameplay(Board board, Move previousMove, PieceType.Colour turn, CastleFlags flags) {
+        this.board = board;
+        this.previousMoves.add(previousMove);
+        this.movement = new Movement(board, previousMoves, flags);
+        this.turn = turn;
+    }
+
     /**
      * Copy constructor
      * 
@@ -61,7 +69,7 @@ public final class Gameplay {
         this.board = new Board(game.getBoard());
         this.previousMoves = new ArrayList<Move>();
         this.previousMoves.addAll(game.getPreviousMoves());
-        this.movement = new Movement(game.getBoard());
+        this.movement = new Movement(game.getBoard(), game.getPreviousMoves(), game.getMovement().getKingMovement().getFlags());
         this.turn = game.turn;
     }
 
@@ -71,6 +79,10 @@ public final class Gameplay {
      * @param move
      */
     public void executeMove(Move move) {
+        // if (!movement.getAllMoves(turn).contains(move)) {
+        // throw new IllegalStateException("Move " + move + " is illegal!");
+        // }
+
         // Check if right color is moving
         if (!turn.equals(move.getPiece().getColour())) {
             throw new IllegalArgumentException(move + " is not a legal move, as it is " + turn.name() + "'s turn!");
@@ -79,7 +91,7 @@ public final class Gameplay {
         // Update board and compute new movement options
         board.updateBoardAfterMove(move);
         previousMoves.add(move);
-        movement.initializeMovement(board, previousMoves);
+        movement.initializeMovement(board, previousMoves, movement.getKingMovement().getFlags());
 
         turn = turn.getOppositeColour();
     }
@@ -99,7 +111,7 @@ public final class Gameplay {
 
         board.updateBoardAfterMoveUndo(previousMove);
         previousMoves.add(previousMove);
-        movement.initializeMovement(board, previousMoves);
+        movement.initializeMovement(board, previousMoves, movement.getKingMovement().getFlags());
 
         turn = turn.getOppositeColour();
     }

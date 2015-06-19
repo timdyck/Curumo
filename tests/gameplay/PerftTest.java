@@ -5,10 +5,8 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import perft.Perft;
-import board.Board;
 import board.BoardUtils;
 import board.FEN;
-import board.PieceType;
 
 public class PerftTest {
 
@@ -32,6 +30,14 @@ public class PerftTest {
 
     @Test
     public void IllegalEnPassant1() {
+        // Gameplay game =
+        // FEN.fromFenString("3k4/3p4/8/K1P4r/8/8/8/8 b - - 0 1");
+        // game.executeMove(new Move(PieceType.BR, 7, 4, 7, 7));
+        // game.executeMove(new Move(PieceType.WK, 0, 4, 0, 5));
+        // game.executeMove(new Move(PieceType.BK, 3, 7, 4, 7));
+        // game.executeMove(new Move(PieceType.WK, 0, 5, 0, 6));
+        // BoardUtils.printBoard(game.getBoard());
+        // System.out.println(Perft.countLeafNodes(game, 5));
         runPerft("3k4/3p4/8/K1P4r/8/8/8/8 b - - 0 1", 6, 1134888);
     }
 
@@ -101,10 +107,8 @@ public class PerftTest {
     }
 
     private void runPerft(String fenString, int maxDepth, long expectedNodes) {
-        Gameplay fenGame = FEN.fromFenString(fenString);
-        Board board = fenGame.getBoard();
-        BoardUtils.printBoard(board);
-        Gameplay game = new Gameplay(board, PieceType.Colour.WHITE);
+        Gameplay game = FEN.fromFenString(fenString);
+        BoardUtils.printBoard(game.getBoard());
 
         long startTime = System.currentTimeMillis();
         int nodes = Perft.countLeafNodes(game, maxDepth);
@@ -116,7 +120,7 @@ public class PerftTest {
         if (time != 0) {
             System.out.println("Nodes per second: " + nodes / time);
         }
-        Assert.assertEquals(nodes, expectedNodes);
+        Assert.assertEquals(expectedNodes, nodes);
     }
 
     @Test
