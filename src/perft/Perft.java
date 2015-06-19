@@ -6,6 +6,9 @@ import java.util.List;
 
 import board.movement.Move;
 
+/**
+ * Algorithm to perform Performance Test, Move Path Enumeration
+ */
 public class Perft {
 
     public static int countLeafNodes(Gameplay game, int maxDepth) {

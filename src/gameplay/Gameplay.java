@@ -11,33 +11,36 @@ import board.PieceType;
 import board.movement.Move;
 import board.movement.Movement;
 
-public class Gameplay {
+/**
+ * Encapsulates all information necessary to play a game of chess.
+ */
+public final class Gameplay {
 
     private Board board;
-    private List<Move> previousMoves;
+    private List<Move> previousMoves = new ArrayList<Move>();
     private Movement movement;
-
     private PieceType.Colour turn;
+
+    // Castling flags
+    private boolean wKCastle = true;
+    private boolean wQCastle = true;
+    private boolean bKCastle = true;
+    private boolean bQCastle = true;
 
     public Gameplay() {
         this.board = Board.StandardBoard();
-        this.previousMoves = new ArrayList<Move>();
         this.movement = new Movement(board);
-
         this.turn = PieceType.Colour.WHITE;
     }
 
     public Gameplay(Board board, PieceType.Colour turn) {
         this.board = board;
-        this.previousMoves = new ArrayList<Move>();
         this.movement = new Movement(board, this.previousMoves);
-
         this.turn = turn;
     }
 
     public Gameplay(Board board, Move previousMove) {
         this.board = board;
-        this.previousMoves = new ArrayList<Move>();
         this.previousMoves.add(previousMove);
         this.movement = new Movement(board, previousMoves);
 
@@ -46,6 +49,13 @@ public class Gameplay {
         } else {
             this.turn = PieceType.Colour.WHITE;
         }
+    }
+
+    public Gameplay(Board board, Move previousMove, PieceType.Colour turn) {
+        this.board = board;
+        this.previousMoves.add(previousMove);
+        this.movement = new Movement(board, previousMoves);
+        this.turn = turn;
     }
 
     /**
@@ -170,6 +180,10 @@ public class Gameplay {
         return movesMap;
     }
 
+    /**********************
+     * Getters and Setters
+     **********************/
+
     public Board getBoard() {
         return board;
     }
@@ -184,6 +198,38 @@ public class Gameplay {
 
     public PieceType.Colour getTurn() {
         return turn;
+    }
+
+    public boolean isWKCastle() {
+        return wKCastle;
+    }
+
+    public void noWKCastle() {
+        wKCastle = false;
+    }
+
+    public boolean isWQCastle() {
+        return wQCastle;
+    }
+
+    public void noWQCastle() {
+        wQCastle = false;
+    }
+
+    public boolean isBKCastle() {
+        return bKCastle;
+    }
+
+    public void noBKCastle() {
+        bKCastle = false;
+    }
+
+    public boolean isBQCastle() {
+        return bQCastle;
+    }
+
+    public void noBQCastle() {
+        bQCastle = false;
     }
 
 }

@@ -10,7 +10,6 @@ import java.util.Scanner;
 
 import board.BoardUtils;
 import board.FEN;
-import board.PieceType;
 import board.movement.Move;
 
 /**
@@ -75,8 +74,7 @@ public class UCI {
         if (input.contains("startpos") && game == null) {
             game = new Gameplay();
         } else if (input.contains("fen")) {
-            // TODO: Need to make FEN method return a game!
-            game = new Gameplay(FEN.fromFenString(input), PieceType.Colour.WHITE);
+            game = FEN.fromFenString(input);
         }
 
         if (input.contains("moves")) {

@@ -2,6 +2,9 @@ package board.movement;
 
 import board.PieceType;
 
+/**
+ * Encapsulates a single move of a chess piece
+ */
 public class Move {
     private PieceType piece;
 

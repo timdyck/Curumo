@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import board.Board;
 import board.BoardUtils;
+import board.FEN;
 import board.PieceType;
 import board.movement.Move;
 import board.movement.MoveType;
@@ -62,6 +63,33 @@ public class GameplayTest {
         impossibleMoves.add(new Move(PieceType.WP, 4, 3, 5, 4, MoveType.CAPTURE, PieceType.BP));
 
         Assert.assertTrue(impossibleMoveList(moves, impossibleMoves));
+    }
+
+    @Test
+    public void fromFenString() {
+        /* @formatter:off */
+        String[][] boardMatrix = {{"BR", "  ", "BB", "BQ", "BK", "BB", "BN", "BR"},
+                                  {"BP", "BP", "BP", "BP", "  ", "BP", "BP", "BP"},
+                                  {"  ", "  ", "BN", "  ", "  ", "  ", "  ", "  "},
+                                  {"  ", "WB", "  ", "  ", "BP", "  ", "  ", "  "},
+                                  {"  ", "  ", "  ", "  ", "WP", "  ", "  ", "  "},
+                                  {"  ", "  ", "  ", "  ", "  ", "WN", "  ", "  "},
+                                  {"WP", "WP", "WP", "WP", "  ", "WP", "WP", "WP"},
+                                  {"WR", "WN", "WB", "WQ", "WK", "  ", "  ", "WR"}};
+        /* @formatter:on */
+
+        Board board = BoardUtils.arrayToBoard(boardMatrix);
+        Gameplay fenGame = FEN.fromFenString("r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b Kq e3 0 1");
+
+        Assert.assertEquals(board, fenGame.getBoard());
+        Assert.assertEquals(PieceType.Colour.BLACK, fenGame.getTurn());
+
+        Assert.assertEquals(fenGame.isWKCastle(), true);
+        Assert.assertEquals(fenGame.isWQCastle(), false);
+        Assert.assertEquals(fenGame.isBKCastle(), false);
+        Assert.assertEquals(fenGame.isBQCastle(), true);
+
+        Assert.assertEquals(fenGame.getPreviousMoves().get(0), new Move(PieceType.WP, 4, 1, 4, 3));
     }
 
     private boolean impossibleMoveList(List<Move> moves, List<Move> impossibleMoves) {

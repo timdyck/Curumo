@@ -1,8 +1,16 @@
 package board;
 
+import gameplay.Gameplay;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import board.movement.Move;
+
+/**
+ * Utility class to convert a Forsyth-Edwards Notation string into a
+ * {@link Gameplay}
+ */
 public class FEN {
 
     /**
@@ -11,7 +19,7 @@ public class FEN {
      * @param fenString
      * @return board from fen string
      */
-    public static Board fromFenString(String fenString) {
+    public static Gameplay fromFenString(String fenString) {
 
         // Handle board block
         Map<PieceType, Long> bitBoards = new HashMap<PieceType, Long>();
@@ -102,53 +110,68 @@ public class FEN {
             index++;
         }
 
-        // // Handle turn colour
-        // PieceType.Colour turn = fenString.charAt(index++) == 'w' ?
-        // PieceType.Colour.WHITE : PieceType.Colour.BLACK;
-        // index += 2;
-        //
-        // // Handle castling flags
-        // boolean WKCastle = false;
-        // boolean WQCastle = false;
-        // boolean BKCastle = false;
-        // boolean BQCastle = false;
-        //
-        // while (fenString.charAt(index) != ' ') {
-        // switch (fenString.charAt(index)) {
-        // case '-':
-        // break;
-        // case 'K':
-        // WKCastle = true;
-        // break;
-        // case 'Q':
-        // WQCastle = true;
-        // break;
-        // case 'k':
-        // BKCastle = true;
-        // break;
-        // case 'q':
-        // BQCastle = true;
-        // break;
-        // default:
-        // break;
-        // }
-        //
-        // index++;
-        // }
-        //
-        // // Handle en passant
-        // Move previousMove = Move.getFirstPreviousMove();
-        // if (fenString.charAt(index++) != '-') {
-        // int x = fenString.charAt(index) - 'a';
-        // int y = fenString.charAt(index++);
-        //
-        // if (y == 3) {
-        // previousMove = new Move(PieceType.WP, x, 1, x, 3);
-        // } else if (y == 6) {
-        // previousMove = new Move(PieceType.BP, x, 6, x, 4);
-        // }
-        // }
+        // Handle turn colour
+        PieceType.Colour turn = fenString.charAt(index++) == 'w' ? PieceType.Colour.WHITE : PieceType.Colour.BLACK;
+        index += 2;
 
-        return new Board(bitBoards);
+        // Handle castling flags
+        boolean WKCastle = false;
+        boolean WQCastle = false;
+        boolean BKCastle = false;
+        boolean BQCastle = false;
+
+        while (fenString.charAt(index) != ' ') {
+            switch (fenString.charAt(index)) {
+            case '-':
+                break;
+            case 'K':
+                WKCastle = true;
+                break;
+            case 'Q':
+                WQCastle = true;
+                break;
+            case 'k':
+                BKCastle = true;
+                break;
+            case 'q':
+                BQCastle = true;
+                break;
+            default:
+                break;
+            }
+
+            index++;
+        }
+
+        // Handle en passant
+        Move previousMove = Move.getFirstPreviousMove();
+        if (fenString.charAt(index++) != '-') {
+            int x = fenString.charAt(index) - 'a';
+            int y = Integer.parseInt(fenString.substring(++index, index + 1));
+
+            if (y == 3) {
+                previousMove = new Move(PieceType.WP, x, 1, x, 3);
+            } else if (y == 6) {
+                previousMove = new Move(PieceType.BP, x, 6, x, 4);
+            }
+        }
+
+        Board board = new Board(bitBoards);
+        Gameplay game = new Gameplay(board, previousMove, turn);
+
+        if (!WKCastle) {
+            game.noWKCastle();
+        }
+        if (!WQCastle) {
+            game.noWQCastle();
+        }
+        if (!BKCastle) {
+            game.noBKCastle();
+        }
+        if (!BQCastle) {
+            game.noBQCastle();
+        }
+
+        return game;
     }
 }

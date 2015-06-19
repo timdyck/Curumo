@@ -17,7 +17,8 @@ public class PerftTest {
 
     @Test
     public void ChessProgramming1() {
-        Board board = FEN.fromFenString("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -");
+        Gameplay fenGame = FEN.fromFenString("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -");
+        Board board = fenGame.getBoard();
         BoardUtils.printBoard(board);
         Gameplay game = new Gameplay(board, PieceType.Colour.WHITE);
         BoardUtils.printBoard(board);
@@ -107,7 +108,8 @@ public class PerftTest {
     }
 
     private void runPerft(String fenString, int maxDepth, long expectedNodes) {
-        Board board = FEN.fromFenString(fenString);
+        Gameplay fenGame = FEN.fromFenString(fenString);
+        Board board = fenGame.getBoard();
         BoardUtils.printBoard(board);
         Gameplay game = new Gameplay(board, PieceType.Colour.WHITE);
 
