@@ -7,6 +7,9 @@ import org.junit.Test;
 import perft.Perft;
 import board.BoardUtils;
 import board.FEN;
+import board.PieceType;
+import board.movement.Move;
+import board.movement.MoveType;
 
 public class PerftTest {
 
@@ -30,14 +33,6 @@ public class PerftTest {
 
     @Test
     public void IllegalEnPassant1() {
-        // Gameplay game =
-        // FEN.fromFenString("3k4/3p4/8/K1P4r/8/8/8/8 b - - 0 1");
-        // game.executeMove(new Move(PieceType.BR, 7, 4, 7, 7));
-        // game.executeMove(new Move(PieceType.WK, 0, 4, 0, 5));
-        // game.executeMove(new Move(PieceType.BK, 3, 7, 4, 7));
-        // game.executeMove(new Move(PieceType.WK, 0, 5, 0, 6));
-        // BoardUtils.printBoard(game.getBoard());
-        // System.out.println(Perft.countLeafNodes(game, 5));
         runPerft("3k4/3p4/8/K1P4r/8/8/8/8 b - - 0 1", 6, 1134888);
     }
 
@@ -63,7 +58,13 @@ public class PerftTest {
 
     @Test
     public void CastleRights() {
-        runPerft("r3k2r/1b4bq/8/8/8/8/7B/R3K2R w KQkq - 0 1", 4, 1274206);
+        Gameplay game = FEN.fromFenString("r3k2r/1b4bq/8/8/8/8/7B/R3K2R w KQkq - 0 1");
+        game.executeMove(new Move(PieceType.WR, 0, 0, 0, 7, MoveType.CAPTURE, PieceType.BR));
+        game.executeMove(new Move(PieceType.BB, 1, 6, 0, 7, MoveType.CAPTURE, PieceType.WR));
+        // game.executeMove(new Move(PieceType.WR, 7, 0, 6, 0));
+        BoardUtils.printBoard(game.getBoard());
+        System.out.println(Perft.countLeafNodes(game, 2));
+        // runPerft("r3k2r/1b4bq/8/8/8/8/7B/R3K2R w KQkq - 0 1", 4, 1274206);
     }
 
     @Test

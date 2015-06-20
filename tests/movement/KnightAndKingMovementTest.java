@@ -1,5 +1,7 @@
 package movement;
 
+import gameplay.Gameplay;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import org.junit.Test;
 
 import board.Board;
 import board.BoardUtils;
+import board.FEN;
 import board.PieceType;
 import board.movement.KingMovement;
 import board.movement.KnightMovement;
@@ -174,6 +177,27 @@ public class KnightAndKingMovementTest {
         expectedMoves.add(new Move(PieceType.BK, 4, 7, 5, 7));
         expectedMoves.add(new Move(PieceType.BK, 4, 7, 6, 7, MoveType.CASTLE));
         expectedMoves.add(new Move(PieceType.BK, 4, 7, 3, 7));
+
+        Assert.assertTrue(equalMoveList(moves, expectedMoves));
+    }
+
+    @Test
+    public void CaptureIntoCheck() {
+        // King causes check
+        Gameplay game = FEN.fromFenString("8/K1kp4/1r4b1/wP5/8/8/8/8 w - - 0 1");
+
+        List<Move> moves = game.getMovement().getKingMovement().getWhiteMoves();
+        List<Move> expectedMoves = new ArrayList<Move>();
+        expectedMoves.add(new Move(PieceType.WK, 0, 6, 0, 7));
+
+        Assert.assertTrue(equalMoveList(moves, expectedMoves));
+
+        // Knight causes check
+        game = FEN.fromFenString("8/K2n4/1r4b1/wP5/8/8/8/8 w - - 0 1");
+
+        moves = game.getMovement().getKingMovement().getWhiteMoves();
+        expectedMoves = new ArrayList<Move>();
+        expectedMoves.add(new Move(PieceType.WK, 0, 6, 0, 7));
 
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
     }

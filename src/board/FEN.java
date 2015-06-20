@@ -112,7 +112,7 @@ public class FEN {
         }
 
         // Handle turn colour
-        PieceType.Colour turn = fenString.charAt(index++) == 'w' ? PieceType.Colour.WHITE : PieceType.Colour.BLACK;
+        PieceType.Colour turn = fenString.charAt(++index) == 'w' ? PieceType.Colour.WHITE : PieceType.Colour.BLACK;
         index += 2;
 
         // Handle castling flags
