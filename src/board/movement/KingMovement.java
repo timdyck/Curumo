@@ -72,10 +72,10 @@ public class KingMovement extends PieceMovement {
         } else if (getX(i) == 0) {
             possibleMoves &= ~FILE_H;
         }
+        long range = possibleMoves;
 
         // Eliminate moves putting king in check
         possibleMoves &= ~unsafeMoves;
-        long range = possibleMoves;
 
         // Eliminate same colour 'captures'
         long sameColorPieces = piece.isWhitePiece() ? whitePieces : blackPieces;

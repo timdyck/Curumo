@@ -7,9 +7,6 @@ import org.junit.Test;
 import perft.Perft;
 import board.BoardUtils;
 import board.FEN;
-import board.PieceType;
-import board.movement.Move;
-import board.movement.MoveType;
 
 public class PerftTest {
 
@@ -58,13 +55,7 @@ public class PerftTest {
 
     @Test
     public void CastleRights() {
-        Gameplay game = FEN.fromFenString("r3k2r/1b4bq/8/8/8/8/7B/R3K2R w KQkq - 0 1");
-        game.executeMove(new Move(PieceType.WR, 0, 0, 0, 7, MoveType.CAPTURE, PieceType.BR));
-        game.executeMove(new Move(PieceType.BB, 1, 6, 0, 7, MoveType.CAPTURE, PieceType.WR));
-        // game.executeMove(new Move(PieceType.WR, 7, 0, 6, 0));
-        BoardUtils.printBoard(game.getBoard());
-        System.out.println(Perft.countLeafNodes(game, 2));
-        // runPerft("r3k2r/1b4bq/8/8/8/8/7B/R3K2R w KQkq - 0 1", 4, 1274206);
+        runPerft("r3k2r/1b4bq/8/8/8/8/7B/R3K2R w KQkq - 0 1", 4, 1274206);
     }
 
     @Test

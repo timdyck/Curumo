@@ -79,9 +79,9 @@ public final class Gameplay {
      * @param move
      */
     public void executeMove(Move move) {
-        // if (!movement.getAllMoves(turn).contains(move)) {
-        // throw new IllegalStateException("Move " + move + " is illegal!");
-        // }
+        if (!movement.getAllMoves(turn).contains(move)) {
+            throw new IllegalStateException("Move " + move + " is illegal!");
+        }
 
         // Check if right color is moving
         if (!turn.equals(move.getPiece().getColour())) {
@@ -91,7 +91,7 @@ public final class Gameplay {
         // Update board and compute new movement options
         board.updateBoardAfterMove(move);
         previousMoves.add(move);
-        movement.initializeMovement(board, previousMoves, movement.getKingMovement().getFlags());
+        movement.initializeMovement(board, previousMoves, new CastleFlags(movement.getKingMovement().getFlags()));
 
         turn = turn.getOppositeColour();
     }
@@ -196,6 +196,10 @@ public final class Gameplay {
 
     public List<Move> getPreviousMoves() {
         return previousMoves;
+    }
+
+    public Move getPreviousMove() {
+        return previousMoves.get(previousMoves.size() - 1);
     }
 
     public Movement getMovement() {

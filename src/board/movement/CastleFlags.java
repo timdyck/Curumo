@@ -23,6 +23,18 @@ public class CastleFlags {
         this.bQCastle = bQCastle;
     }
 
+    /**
+     * Copy constructor
+     * 
+     * @param flags
+     */
+    public CastleFlags(CastleFlags flags) {
+        this.wKCastle = flags.wKCastle;
+        this.wQCastle = flags.wQCastle;
+        this.bKCastle = flags.bKCastle;
+        this.bQCastle = flags.bQCastle;
+    }
+
     public boolean isWKCastle() {
         return wKCastle;
     }
