@@ -4,9 +4,11 @@ import gameplay.Gameplay;
 
 public class Evaluate {
 
-    public static int eval(Gameplay game) {
-        // TODO: Implement this guy
-        return 0;
-    }
+    public static double eval(Gameplay game) {
+        Scoring scoring = new Scoring(game);
 
+        double score = scoring.materialScore() + scoring.positionalScore();
+
+        return score;
+    }
 }

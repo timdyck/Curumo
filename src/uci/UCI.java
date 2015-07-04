@@ -2,12 +2,10 @@ package uci;
 
 import gameplay.Gameplay;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Scanner;
 
+import search.PrincipalVariation;
 import board.BoardUtils;
 import board.FEN;
 import board.movement.Move;
@@ -98,13 +96,16 @@ public class UCI {
     }
 
     private static void go(String substring) {
-        // TODO: Make this not pick a random move!
-        Map<String, Move> movesMap = game.getMovesMap();
-        int randIndex = new Random().nextInt(movesMap.size());
+        // Uncomment for random moves
+        // Map<String, Move> movesMap = game.getMovesMap();
+        // int randIndex = new Random().nextInt(movesMap.size());
+        //
+        // List<String> keys = new ArrayList<String>(movesMap.keySet());
+        // System.out.println("bestmove " + keys.get(randIndex));
 
-        List<String> keys = new ArrayList<String>(movesMap.keySet());
-        System.out.println("bestmove " + keys.get(randIndex));
-
+        PrincipalVariation pv = new PrincipalVariation(4);
+        Move move = pv.search(game);
+        System.out.println("bestmove " + move.toUciForm());
     }
 
     private static void print(String substring) {

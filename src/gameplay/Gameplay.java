@@ -127,7 +127,7 @@ public final class Gameplay {
     /**
      * @return list of moves that won't put the white king in check
      */
-    private List<Move> getSafeWhiteMoves() {
+    public List<Move> getSafeWhiteMoves() {
         List<Move> safeMoves = new ArrayList<Move>();
         List<Move> potentialMoves = movement.getAllMoves(PieceType.Colour.WHITE);
 
@@ -148,7 +148,7 @@ public final class Gameplay {
     /**
      * @return list of moves that won't put the black king in check
      */
-    private List<Move> getSafeBlackMoves() {
+    public List<Move> getSafeBlackMoves() {
         List<Move> safeMoves = new ArrayList<Move>();
         List<Move> potentialMoves = movement.getAllMoves(PieceType.Colour.BLACK);
 
