@@ -32,7 +32,7 @@ public class GameplayTest {
         Gameplay game = new Gameplay(board, PieceType.Colour.BLACK);
 
         // Moves that will put black in check
-        List<Move> moves = game.getSafeBlackMoves();
+        List<Move> moves = game.getSafeMoves();
         List<Move> impossibleMoves = new ArrayList<Move>();
 
         impossibleMoves.add(new Move(PieceType.BP, 3, 6, 3, 5));
@@ -56,7 +56,7 @@ public class GameplayTest {
         game = new Gameplay(board, PieceType.Colour.WHITE);
 
         // Moves that will put white in check
-        moves = game.getSafeWhiteMoves();
+        moves = game.getSafeMoves();
         impossibleMoves = new ArrayList<Move>();
 
         impossibleMoves.add(new Move(PieceType.WP, 4, 3, 3, 4, MoveType.CAPTURE, PieceType.BP));

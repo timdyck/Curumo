@@ -31,7 +31,7 @@ public class UCI {
 
             if (input.equals("uci")) {
                 identifyEngine();
-            } else if (input.equals("isReady")) {
+            } else if (input.equals("isready")) {
                 isReady();
             } else if (input.startsWith("setOption")) {
                 setOption(input.substring(input.indexOf(" ") + 1));
@@ -71,7 +71,7 @@ public class UCI {
     }
 
     private static void setPosition(String input) {
-        if (input.contains("startpos") && game == null) {
+        if (input.contains("startpos")) {
             game = new Gameplay();
         } else if (input.contains("fen")) {
             game = FEN.fromFenString(input);

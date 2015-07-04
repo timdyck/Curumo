@@ -127,7 +127,7 @@ public final class Gameplay {
     /**
      * @return list of moves that won't put the white king in check
      */
-    public List<Move> getSafeWhiteMoves() {
+    private List<Move> getSafeWhiteMoves() {
         List<Move> safeMoves = new ArrayList<Move>();
         List<Move> potentialMoves = movement.getAllMoves(PieceType.Colour.WHITE);
 
@@ -148,7 +148,7 @@ public final class Gameplay {
     /**
      * @return list of moves that won't put the black king in check
      */
-    public List<Move> getSafeBlackMoves() {
+    private List<Move> getSafeBlackMoves() {
         List<Move> safeMoves = new ArrayList<Move>();
         List<Move> potentialMoves = movement.getAllMoves(PieceType.Colour.BLACK);
 
@@ -166,6 +166,9 @@ public final class Gameplay {
         return safeMoves;
     }
 
+    /**
+     * @return list of moves that won't put the king in check
+     */
     public List<Move> getSafeMoves() {
         // TODO: Yuck. So inefficient. Must be a better way. Find it.
         if (turn.equals(PieceType.Colour.WHITE)) {
