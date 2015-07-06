@@ -236,4 +236,86 @@ public class PawnMovement extends PieceMovement {
 
         this.blackMoves = moves;
     }
+
+    /**
+     * @param turn
+     *            {@link PieceType.Colour} representing whose turn it is
+     * @return the number of doubled pawns (1 if 2 pawns on the same file, 2 if
+     *         3 pawns, etc, for all files)
+     */
+    public int countDoubledPawns(PieceType.Colour turn) {
+        long bitBoard = turn.equals(PieceType.Colour.WHITE) ? board.getBitBoard(PieceType.WP) : board.getBitBoard(PieceType.BP);
+        int count = 0;
+
+        for (int i = 0; i < Board.DIMENSION; i++) {
+            long file = bitBoard & FILE_MASKS[i];
+            int numPawnsInFile = Long.bitCount(file);
+
+            if (numPawnsInFile >= 2) {
+                count += numPawnsInFile - 1;
+            }
+        }
+
+        return count;
+    }
+
+    /**
+     * @param turn
+     *            {@link PieceType.Colour} representing whose turn it is
+     * @return the number of isolated pawns, i.e. the number of pawns with no
+     *         same-coloured pawn on an adjacent file
+     */
+    public int countIsolatedPawns(PieceType.Colour turn) {
+        long bitBoard = turn.equals(PieceType.Colour.WHITE) ? board.getBitBoard(PieceType.WP) : board.getBitBoard(PieceType.BP);
+        int count = 0;
+
+        for (int i = initialIndex(bitBoard); i < finalIndex(bitBoard); i++) {
+            if ((((bitBoard) >> i) & 1) == 1) {
+                int x = getX(i);
+                int y = getY(i);
+                long pieceBitBoard = getBitBoard(x, y);
+
+                if (turn.equals(PieceType.Colour.WHITE)) {
+                    if (((pieceBitBoard << 8) & occupied) == pieceBitBoard << 8) {
+                        count += 1;
+                    }
+                } else {
+                    if (((pieceBitBoard >> 8) & occupied) == pieceBitBoard >> 8) {
+                        count += 1;
+                    }
+                }
+            }
+        }
+
+        return count;
+    }
+
+    /**
+     * @param turn
+     *            {@link PieceType.Colour} representing whose turn it is
+     * @return the number of blocked pawns, i.e. the number of pawns that can
+     *         not move directly forward
+     */
+    public int countBlockedPawns(PieceType.Colour turn) {
+        long bitBoard = turn.equals(PieceType.Colour.WHITE) ? board.getBitBoard(PieceType.WP) : board.getBitBoard(PieceType.BP);
+        int count = 0;
+
+        for (int i = 0; i < Board.DIMENSION; i++) {
+            long file = bitBoard & FILE_MASKS[i];
+            int numPawnsInFile = Long.bitCount(file);
+
+            long prevFile = i == 0 ? 0 : bitBoard & FILE_MASKS[i - 1];
+            int numPawnsInPrevFile = Long.bitCount(prevFile);
+
+            long nextFile = i == Board.DIMENSION - 1 ? 0 : bitBoard & FILE_MASKS[i + 1];
+            int numPawnsInNextFile = Long.bitCount(nextFile);
+
+            if (numPawnsInPrevFile == 0 && numPawnsInNextFile == 0) {
+                count += numPawnsInFile;
+            }
+        }
+
+        return count;
+    }
+
 }

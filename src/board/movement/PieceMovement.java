@@ -13,7 +13,7 @@ public class PieceMovement {
                                            0x0808080808080808L, 0x0404040404040404L, 0x0202020202020202L, 0x0101010101010101L };
 
     protected static long RANK_MASKS[] = { 0x00000000000000ffL, 0x000000000000ff00L, 0x0000000000ff0000L, 0x00000000ff000000L,
-                                          0x000000ff00000000L, 0x0000ff0000000000L, 0x00ff000000000000L, 0xff00000000000000L };
+                                           0x000000ff00000000L, 0x0000ff0000000000L, 0x00ff000000000000L, 0xff00000000000000L };
 
     // Top left to bottom right, positive slope
     protected static long DIAGONAL_MASKS[] = { 0x8000000000000000L, 0x4080000000000000L, 0x2040800000000000L, 0x1020408000000000L,
