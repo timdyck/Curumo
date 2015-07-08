@@ -63,7 +63,7 @@ public class KingMovement extends PieceMovement {
     public void initializeMoves(PieceType piece, long unsafeMoves) {
         List<Move> moves = new ArrayList<Move>();
         long currentKing = board.getBitBoard(piece);
-        int i = initialIndex(currentKing);
+        int i = getIndices(currentKing).get(0);
 
         long possibleMoves = i < CENTRE ? KING_RANGE >> (CENTRE - i) : KING_RANGE << (i - CENTRE);
         // Eliminate wrap around

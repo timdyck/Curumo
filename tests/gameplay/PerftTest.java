@@ -119,7 +119,7 @@ public class PerftTest {
     public void PerftSixDeep() {
         Gameplay game = new Gameplay();
 
-        int maxDepth = 6;
+        int maxDepth = 5;
         long startTime = System.currentTimeMillis();
         int leafNodes = Perft.countLeafNodes(game, maxDepth);
         long endTime = System.currentTimeMillis();

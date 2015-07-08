@@ -24,29 +24,27 @@ public class SlidingMovement extends PieceMovement {
         long currentBitBoard = board.getBitBoard(piece);
         long allPossibleMovesBitBoard = 0L;
 
-        for (int i = initialIndex(currentBitBoard); i < finalIndex(currentBitBoard); i++) {
-            if (((currentBitBoard >> i) & 1) == 1) {
-                int x = getX(i);
-                int y = getY(i);
+        for (int i : getIndices(currentBitBoard)) {
+            int x = getX(i);
+            int y = getY(i);
 
-                long possibleMovesBitBoard = 0L;
-                if (piece.equals(PieceType.WR) || piece.equals(PieceType.BR)) {
-                    // Vertical and horizontal for rooks
-                    possibleMovesBitBoard |= getLevelMovesBoard(x, y);
-                } else if (piece.equals(PieceType.WB) || piece.equals(PieceType.BB)) {
-                    // Diagonal and Anti-diagonal for bishops
-                    possibleMovesBitBoard |= getDiagonalMovesBoard(x, y);
-                } else if (piece.equals(PieceType.WQ) || piece.equals(PieceType.BQ)) {
-                    // Both for queen
-                    possibleMovesBitBoard |= getLevelMovesBoard(x, y);
-                    possibleMovesBitBoard |= getDiagonalMovesBoard(x, y);
-                } else {
-                    throw new IllegalStateException(piece.name() + " is not a sliding piece!");
-                }
-
-                moves.addAll(getMoves(possibleMovesBitBoard, piece, x, y));
-                allPossibleMovesBitBoard |= possibleMovesBitBoard;
+            long possibleMovesBitBoard = 0L;
+            if (piece.equals(PieceType.WR) || piece.equals(PieceType.BR)) {
+                // Vertical and horizontal for rooks
+                possibleMovesBitBoard |= getLevelMovesBoard(x, y);
+            } else if (piece.equals(PieceType.WB) || piece.equals(PieceType.BB)) {
+                // Diagonal and Anti-diagonal for bishops
+                possibleMovesBitBoard |= getDiagonalMovesBoard(x, y);
+            } else if (piece.equals(PieceType.WQ) || piece.equals(PieceType.BQ)) {
+                // Both for queen
+                possibleMovesBitBoard |= getLevelMovesBoard(x, y);
+                possibleMovesBitBoard |= getDiagonalMovesBoard(x, y);
+            } else {
+                throw new IllegalStateException(piece.name() + " is not a sliding piece!");
             }
+
+            moves.addAll(getMoves(possibleMovesBitBoard, piece, x, y));
+            allPossibleMovesBitBoard |= possibleMovesBitBoard;
         }
 
         setMoves(piece, moves, allPossibleMovesBitBoard);

@@ -32,7 +32,7 @@ public class PawnMovement extends PieceMovement {
         // Right captures
         long possibleWhiteCaptures = (currentPawns << 7) & ~FILE_A;
         long captureRight = (currentPawns << 7) & blackPieces & ~FILE_A;
-        for (int i = initialIndex(captureRight); i < finalIndex(captureRight); i++) {
+        for (int i : getIndices(captureRight)) {
             int x = getX(i);
             int y = getY(i);
 
@@ -44,7 +44,7 @@ public class PawnMovement extends PieceMovement {
                 moves.add(new Move(type, x - 1, y - 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.WB));
                 moves.add(new Move(type, x - 1, y - 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.WR));
                 moves.add(new Move(type, x - 1, y - 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.WQ));
-            } else if (((captureRight >> i) & 1) == 1) {
+            } else {
                 moves.add(new Move(type, x - 1, y - 1, x, y, MoveType.CAPTURE, capturedPiece));
             }
         }
@@ -52,7 +52,7 @@ public class PawnMovement extends PieceMovement {
         // Left captures
         possibleWhiteCaptures |= (currentPawns << 9) & ~FILE_H;
         long captureLeft = (currentPawns << 9) & blackPieces & ~FILE_H;
-        for (int i = initialIndex(captureLeft); i < finalIndex(captureLeft); i++) {
+        for (int i : getIndices(captureLeft)) {
             int x = getX(i);
             int y = getY(i);
 
@@ -64,7 +64,7 @@ public class PawnMovement extends PieceMovement {
                 moves.add(new Move(type, x + 1, y - 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.WB));
                 moves.add(new Move(type, x + 1, y - 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.WR));
                 moves.add(new Move(type, x + 1, y - 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.WQ));
-            } else if (((captureLeft >> i) & 1) == 1) {
+            } else {
                 moves.add(new Move(type, x + 1, y - 1, x, y, MoveType.CAPTURE, capturedPiece));
             }
         }
@@ -74,7 +74,7 @@ public class PawnMovement extends PieceMovement {
 
         // One forward
         long oneForward = (currentPawns << 8) & empty;
-        for (int i = initialIndex(oneForward); i < finalIndex(oneForward); i++) {
+        for (int i : getIndices(oneForward)) {
             int x = getX(i);
             int y = getY(i);
 
@@ -84,20 +84,17 @@ public class PawnMovement extends PieceMovement {
                 moves.add(new Move(type, x, y - 1, x, y, MoveType.PROMOTION, PieceType.WB));
                 moves.add(new Move(type, x, y - 1, x, y, MoveType.PROMOTION, PieceType.WR));
                 moves.add(new Move(type, x, y - 1, x, y, MoveType.PROMOTION, PieceType.WQ));
-            } else if (((oneForward >> i) & 1) == 1) {
+            } else {
                 moves.add(new Move(type, x, y - 1, x, y));
             }
         }
 
         // Two forward
         long twoForward = (currentPawns << 16) & empty & (empty << 8) & RANK_4;
-        for (int i = initialIndex(twoForward); i < finalIndex(twoForward); i++) {
+        for (int i : getIndices(twoForward)) {
             int x = getX(i);
             int y = getY(i);
-
-            if (((twoForward >> i) & 1) == 1) {
-                moves.add(new Move(type, x, y - 2, x, y));
-            }
+            moves.add(new Move(type, x, y - 2, x, y));
         }
 
         // En passant
@@ -141,7 +138,7 @@ public class PawnMovement extends PieceMovement {
         // Right captures
         long possibleBlackCaptures = (currentPawns >> 7) & ~FILE_H;
         long captureRight = (currentPawns >> 7) & whitePieces & ~FILE_H;
-        for (int i = initialIndex(captureRight); i < finalIndex(captureRight); i++) {
+        for (int i : getIndices(captureRight)) {
             int x = getX(i);
             int y = getY(i);
 
@@ -153,7 +150,7 @@ public class PawnMovement extends PieceMovement {
                 moves.add(new Move(type, x + 1, y + 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.BB));
                 moves.add(new Move(type, x + 1, y + 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.BR));
                 moves.add(new Move(type, x + 1, y + 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.BQ));
-            } else if (((captureRight >> i) & 1) == 1) {
+            } else {
                 moves.add(new Move(type, x + 1, y + 1, x, y, MoveType.CAPTURE, capturedPiece));
             }
         }
@@ -161,7 +158,7 @@ public class PawnMovement extends PieceMovement {
         // Left captures
         possibleBlackCaptures |= (currentPawns >> 9) & ~FILE_A;
         long captureLeft = (currentPawns >> 9) & whitePieces & ~FILE_A;
-        for (int i = initialIndex(captureLeft); i < finalIndex(captureLeft); i++) {
+        for (int i : getIndices(captureLeft)) {
             int x = getX(i);
             int y = getY(i);
 
@@ -173,7 +170,7 @@ public class PawnMovement extends PieceMovement {
                 moves.add(new Move(type, x - 1, y + 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.BB));
                 moves.add(new Move(type, x - 1, y + 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.BR));
                 moves.add(new Move(type, x - 1, y + 1, x, y, MoveType.CAPTURE_AND_PROMOTION, capturedPiece, PieceType.BQ));
-            } else if (((captureLeft >> i) & 1) == 1) {
+            } else {
                 moves.add(new Move(type, x - 1, y + 1, x, y, MoveType.CAPTURE, capturedPiece));
             }
         }
@@ -183,7 +180,7 @@ public class PawnMovement extends PieceMovement {
 
         // One forward
         long oneForward = (currentPawns >> 8) & empty;
-        for (int i = initialIndex(oneForward); i < finalIndex(oneForward); i++) {
+        for (int i : getIndices(oneForward)) {
             int x = getX(i);
             int y = getY(i);
 
@@ -193,20 +190,17 @@ public class PawnMovement extends PieceMovement {
                 moves.add(new Move(type, x, y + 1, x, y, MoveType.PROMOTION, PieceType.BB));
                 moves.add(new Move(type, x, y + 1, x, y, MoveType.PROMOTION, PieceType.BR));
                 moves.add(new Move(type, x, y + 1, x, y, MoveType.PROMOTION, PieceType.BQ));
-            } else if (((oneForward >> i) & 1) == 1) {
+            } else {
                 moves.add(new Move(type, x, y + 1, x, y));
             }
         }
 
         // Two forward
         long twoForward = (currentPawns >> 16) & empty & (empty >> 8) & RANK_5;
-        for (int i = initialIndex(twoForward); i < finalIndex(twoForward); i++) {
+        for (int i : getIndices(twoForward)) {
             int x = getX(i);
             int y = getY(i);
-
-            if (((twoForward >> i) & 1) == 1) {
-                moves.add(new Move(type, x, y + 2, x, y));
-            }
+            moves.add(new Move(type, x, y + 2, x, y));
         }
 
         // En passant
@@ -269,20 +263,18 @@ public class PawnMovement extends PieceMovement {
         long bitBoard = turn.equals(PieceType.Colour.WHITE) ? board.getBitBoard(PieceType.WP) : board.getBitBoard(PieceType.BP);
         int count = 0;
 
-        for (int i = initialIndex(bitBoard); i < finalIndex(bitBoard); i++) {
-            if ((((bitBoard) >> i) & 1) == 1) {
-                int x = getX(i);
-                int y = getY(i);
-                long pieceBitBoard = getBitBoard(x, y);
+        for (int i : getIndices(bitBoard)) {
+            int x = getX(i);
+            int y = getY(i);
+            long pieceBitBoard = getBitBoard(x, y);
 
-                if (turn.equals(PieceType.Colour.WHITE)) {
-                    if (((pieceBitBoard << 8) & occupied) == pieceBitBoard << 8) {
-                        count += 1;
-                    }
-                } else {
-                    if (((pieceBitBoard >> 8) & occupied) == pieceBitBoard >> 8) {
-                        count += 1;
-                    }
+            if (turn.equals(PieceType.Colour.WHITE)) {
+                if (((pieceBitBoard << 8) & occupied) == pieceBitBoard << 8) {
+                    count += 1;
+                }
+            } else {
+                if (((pieceBitBoard >> 8) & occupied) == pieceBitBoard >> 8) {
+                    count += 1;
                 }
             }
         }

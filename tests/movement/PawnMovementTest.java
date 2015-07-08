@@ -51,7 +51,6 @@ public class PawnMovementTest {
         expectedMoves.add(new Move(PieceType.WP, 6, 1, 6, 3));
 
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
-
     }
 
     @Test

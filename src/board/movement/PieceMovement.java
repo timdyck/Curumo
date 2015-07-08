@@ -141,7 +141,7 @@ public class PieceMovement {
         long bitBoardS = getBitBoard(x, y);
         possibleMovesBitBoard &= ~bitBoardS;
 
-        for (int i = initialIndex(possibleMovesBitBoard); i < finalIndex(possibleMovesBitBoard); i++) {
+        for (int i : getIndices(possibleMovesBitBoard)) {
             if (((possibleMovesBitBoard >> i) & 1) == 1) {
                 int moveX = getX(i);
                 int moveY = getY(i);
@@ -162,20 +162,24 @@ public class PieceMovement {
         return moves;
     }
 
-    protected int initialIndex(long num) {
-        return Long.numberOfTrailingZeros(num);
-    }
-
-    protected int finalIndex(long num) {
-        return Board.NUM_SQUARES - Long.numberOfLeadingZeros(num);
-    }
-
     protected int getX(int i) {
         return 7 - (i % 8);
     }
 
     protected int getY(int i) {
         return i / 8;
+    }
+
+    public static List<Integer> getIndices(long bitBoard) {
+        List<Integer> indices = new ArrayList<Integer>();
+
+        while (bitBoard != 0) {
+            int i = Long.numberOfTrailingZeros(bitBoard);
+            indices.add(i);
+            bitBoard &= ~(1L << i);
+        }
+
+        return indices;
     }
 
     /**

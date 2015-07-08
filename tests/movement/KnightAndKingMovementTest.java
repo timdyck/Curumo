@@ -193,7 +193,7 @@ public class KnightAndKingMovementTest {
         Assert.assertTrue(equalMoveList(moves, expectedMoves));
 
         // Knight causes check
-        game = FEN.fromFenString("8/K2n4/1r4b1/wP5/8/8/8/8 w - - 0 1");
+        game = FEN.fromFenString("8/K2n4/1r4b1/wP5/8/8/8/7k w - - 0 1");
 
         moves = game.getMovement().getKingMovement().getWhiteMoves();
         expectedMoves = new ArrayList<Move>();
