@@ -124,6 +124,10 @@ public final class Gameplay {
         }
     }
 
+    public List<Move> getAllMoves() {
+        return movement.getAllMoves(turn);
+    }
+
     /**
      * @return list of moves that won't put the white king in check
      */
@@ -175,6 +179,21 @@ public final class Gameplay {
             return getSafeWhiteMoves();
         } else {
             return getSafeBlackMoves();
+        }
+    }
+
+    public boolean isSafeMove(Move potentialMove) {
+        Board newBoard = new Board(board);
+        newBoard.updateBoardAfterMove(potentialMove);
+        Movement newMovement = new Movement(newBoard, potentialMove);
+
+        long kingBitBoard;
+        if (potentialMove.getPiece().isWhitePiece()) {
+            kingBitBoard = newBoard.getBitBoard(PieceType.WK);
+            return (newMovement.getUnsafeForWhite() & kingBitBoard) != kingBitBoard;
+        } else {
+            kingBitBoard = newBoard.getBitBoard(PieceType.BK);
+            return (newMovement.getUnsafeForBlack() & kingBitBoard) != kingBitBoard;
         }
     }
 

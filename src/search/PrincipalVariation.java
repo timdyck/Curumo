@@ -41,7 +41,7 @@ public class PrincipalVariation {
     }
 
     public double principalVariationSearch(Gameplay game, int currentDepth, double alpha, double beta) {
-        List<Move> moves = game.getSafeMoves();
+        List<Move> moves = game.getAllMoves();
 
         if (currentDepth == 0 || moves.isEmpty()) {
             return Evaluate.eval(game);
@@ -69,17 +69,17 @@ public class PrincipalVariation {
                 firstMove = false;
             }
 
-            // TODO: If score is highest possible (checkmate), return
+            if (game.isLegalMove(move)) {
+                if (currentDepth == this.depth && score > this.bestScore) {
+                    this.bestScore = score;
+                    this.bestMove = move;
+                    System.out.println("NEW SCORE OF " + score);
+                }
 
-            if (currentDepth == this.depth && score > this.bestScore) {
-                this.bestScore = score;
-                this.bestMove = move;
-                System.out.println("NEW SCORE OF " + score);
-            }
-
-            alpha = Math.max(alpha, score);
-            if (alpha >= beta) {
-                break;
+                alpha = Math.max(alpha, score);
+                if (alpha >= beta) {
+                    break;
+                }
             }
         }
 
@@ -87,7 +87,7 @@ public class PrincipalVariation {
     }
 
     private double nullWindowSearch(Gameplay game, int depth, double beta) {
-        List<Move> moves = game.getSafeMoves();
+        List<Move> moves = game.getAllMoves();
 
         if (depth == 0 || moves.isEmpty()) {
             return Evaluate.eval(game);

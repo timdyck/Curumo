@@ -63,6 +63,13 @@ public class KingMovement extends PieceMovement {
     public void initializeMoves(PieceType piece, long unsafeMoves) {
         List<Move> moves = new ArrayList<Move>();
         long currentKing = board.getBitBoard(piece);
+
+        if (currentKing == 0) {
+            // Looking at illegal move (king has been taken). Still a possible
+            // search scenario.
+            setMoves(piece, moves, 0L);
+            return;
+        }
         int i = getIndices(currentKing).get(0);
 
         long possibleMoves = i < CENTRE ? KING_RANGE >> (CENTRE - i) : KING_RANGE << (i - CENTRE);
