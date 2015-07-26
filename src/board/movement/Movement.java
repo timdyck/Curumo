@@ -24,35 +24,25 @@ public final class Movement {
     private KingMovement kingMovement;
 
     public Movement(Board board) {
-        initializeMovement(board, new ArrayList<Move>());
-    }
-
-    public Movement(Board board, List<Move> previousMoves) {
-        initializeMovement(board, previousMoves);
+        initializeMovement(board, Move.getFirstPreviousMove());
     }
 
     public Movement(Board board, Move previousMove) {
-        List<Move> previousMoves = new ArrayList<Move>();
-        previousMoves.add(previousMove);
-        initializeMovement(board, previousMoves);
+        initializeMovement(board, previousMove);
     }
 
-    public Movement(Board board, List<Move> previousMoves, CastleFlags flags) {
-        initializeMovement(board, previousMoves, flags);
+    public Movement(Board board, Move previousMove, CastleFlags flags) {
+        initializeMovement(board, previousMove, flags);
     }
 
-    private void initializeMovement(Board newBoard, List<Move> previousMoves) {
-        initializeMovement(newBoard, previousMoves, new CastleFlags());
+    private void initializeMovement(Board newBoard, Move previousMove) {
+        initializeMovement(newBoard, previousMove, new CastleFlags());
     }
 
-    public void initializeMovement(Board newBoard, List<Move> previousMoves, CastleFlags flags) {
+    public void initializeMovement(Board newBoard, Move previousMove, CastleFlags flags) {
         this.board = newBoard;
 
-        if (previousMoves.isEmpty()) {
-            this.pawnMovement = new PawnMovement(newBoard, Move.getFirstPreviousMove());
-        } else {
-            this.pawnMovement = new PawnMovement(newBoard, previousMoves.get(previousMoves.size() - 1));
-        }
+        this.pawnMovement = new PawnMovement(newBoard, previousMove);
         this.rookMovement = new RookMovement(newBoard);
         this.knightMovement = new KnightMovement(newBoard);
         this.bishopMovement = new BishopMovement(newBoard);

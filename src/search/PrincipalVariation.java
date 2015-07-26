@@ -87,6 +87,7 @@ public class PrincipalVariation {
                     this.bestScore = score;
                     this.bestMove = move;
                     System.out.println("NEW SCORE OF " + score);
+                    System.out.println("MOVE: " + move.toUciForm());
                 }
 
                 alpha = Math.max(alpha, score);

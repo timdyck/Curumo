@@ -30,14 +30,14 @@ public final class Gameplay {
 
     public Gameplay(Board board, PieceType.Colour turn) {
         this.board = board;
-        this.movement = new Movement(board, this.previousMoves);
+        this.movement = new Movement(board, getPreviousMove());
         this.turn = turn;
     }
 
     public Gameplay(Board board, Move previousMove) {
         this.board = board;
         this.previousMoves.add(previousMove);
-        this.movement = new Movement(board, previousMoves);
+        this.movement = new Movement(board, getPreviousMove());
 
         if (previousMove.getPiece().isWhitePiece()) {
             this.turn = PieceType.Colour.BLACK;
@@ -49,14 +49,14 @@ public final class Gameplay {
     public Gameplay(Board board, Move previousMove, PieceType.Colour turn) {
         this.board = board;
         this.previousMoves.add(previousMove);
-        this.movement = new Movement(board, previousMoves);
+        this.movement = new Movement(board, getPreviousMove());
         this.turn = turn;
     }
 
     public Gameplay(Board board, Move previousMove, PieceType.Colour turn, CastleFlags flags) {
         this.board = board;
         this.previousMoves.add(previousMove);
-        this.movement = new Movement(board, previousMoves, flags);
+        this.movement = new Movement(board, getPreviousMove(), flags);
         this.turn = turn;
     }
 
@@ -69,7 +69,7 @@ public final class Gameplay {
         this.board = new Board(game.getBoard());
         this.previousMoves = new ArrayList<Move>();
         this.previousMoves.addAll(game.getPreviousMoves());
-        this.movement = new Movement(game.getBoard(), game.getPreviousMoves(), game.getMovement().getKingMovement().getFlags());
+        this.movement = new Movement(game.getBoard(), game.getPreviousMove(), game.getMovement().getKingMovement().getFlags());
         this.turn = game.turn;
     }
 
@@ -91,7 +91,7 @@ public final class Gameplay {
         // Update board and compute new movement options
         board.updateBoardAfterMove(move);
         previousMoves.add(move);
-        movement.initializeMovement(board, previousMoves, new CastleFlags(movement.getKingMovement().getFlags()));
+        movement.initializeMovement(board, getPreviousMove(), new CastleFlags(movement.getKingMovement().getFlags()));
 
         turn = turn.getOppositeColour();
     }
@@ -111,7 +111,7 @@ public final class Gameplay {
 
         board.updateBoardAfterMoveUndo(previousMove);
         previousMoves.add(previousMove);
-        movement.initializeMovement(board, previousMoves, movement.getKingMovement().getFlags());
+        movement.initializeMovement(board, getPreviousMove(), movement.getKingMovement().getFlags());
 
         turn = turn.getOppositeColour();
     }
@@ -221,7 +221,22 @@ public final class Gameplay {
     }
 
     public Move getPreviousMove() {
-        return previousMoves.get(previousMoves.size() - 1);
+        if (previousMoves.isEmpty()) {
+            return Move.getFirstPreviousMove();
+        } else {
+            return previousMoves.get(previousMoves.size() - 1);
+        }
+    }
+
+    public int getNumberOfMoves() {
+        return previousMoves.size() / 2;
+    }
+
+    /**
+     * @return number of half-moves
+     */
+    public int getNumberOfPlies() {
+        return previousMoves.size();
     }
 
     public Movement getMovement() {
