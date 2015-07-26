@@ -16,16 +16,20 @@ public class PrincipalVariation {
     public static final double BETA = Integer.MAX_VALUE;
     public static final int DEFAULT_DEPTH = 5;
 
-    public int depth;
-    public Move bestMove;
-    public double bestScore;
+    private int depth;
+    private Move bestMove;
+    private double bestScore;
+
+    private TranspositionTable table;
 
     public PrincipalVariation() {
         this.depth = DEFAULT_DEPTH;
+        this.table = new TranspositionTable();
     }
 
     public PrincipalVariation(int depth) {
         this.depth = depth;
+        this.table = new TranspositionTable();
     }
 
     public Move search(Gameplay game) {
@@ -55,20 +59,29 @@ public class PrincipalVariation {
             Gameplay gameAfterMove = new Gameplay(game);
             gameAfterMove.executeMove(move);
 
-            if (!firstMove) {
-                // Not first/best move, so search with null window
-                score = -nullWindowSearch(gameAfterMove, currentDepth - 1, -alpha);
+            // Only evaluate positions that have not been seen
+            if (!table.containsEntry(gameAfterMove)) {
+                if (!firstMove) {
+                    // Not first/best move, so search with null window
+                    score = -nullWindowSearch(gameAfterMove, currentDepth - 1, -alpha);
 
-                if (alpha < score && score < beta) {
-                    // Better move, do full re-search
-                    score = -principalVariationSearch(gameAfterMove, currentDepth - 1, -beta, -score);
+                    if (alpha < score && score < beta) {
+                        // Better move, do full re-search
+                        score = -principalVariationSearch(gameAfterMove, currentDepth - 1, -beta, -score);
+                    }
+                } else {
+                    // First (best?) move, so do full search
+                    score = -principalVariationSearch(gameAfterMove, currentDepth - 1, -beta, -alpha);
+                    firstMove = false;
                 }
+
+                // Add this board position to the transposition table
+                table.addEntry(gameAfterMove, move, this.depth - currentDepth, score);
             } else {
-                // First (best?) move, so do full search
-                score = -principalVariationSearch(gameAfterMove, currentDepth - 1, -beta, -alpha);
-                firstMove = false;
+                score = table.getEntryScore(gameAfterMove);
             }
 
+            // Update potentially best move
             if (game.isLegalMove(move)) {
                 if (currentDepth == this.depth && score > this.bestScore) {
                     this.bestScore = score;
@@ -94,10 +107,17 @@ public class PrincipalVariation {
         }
 
         for (Move move : moves) {
+            double score;
+
             Gameplay gameAfterMove = new Gameplay(game);
             gameAfterMove.executeMove(move);
 
-            double score = -nullWindowSearch(gameAfterMove, depth - 1, 1 - beta);
+            // Only evaluate positions that have not been seen
+            if (!table.containsEntry(gameAfterMove)) {
+                score = -nullWindowSearch(gameAfterMove, depth - 1, 1 - beta);
+            } else {
+                score = table.getEntryScore(gameAfterMove);
+            }
 
             if (score >= beta) {
                 // fail-hard, beta cutoff
