@@ -19,7 +19,7 @@ public class Move {
 
     /**
      * Use this constructor if the move type is {@link MoveType#TYPICAL}
-     * 
+     *
      * @param piece
      * @param x1
      * @param y1
@@ -40,7 +40,7 @@ public class Move {
      * Use this constructor if the move type is NOT {@link MoveType#CAPTURE} or
      * NOT {@link MoveType#PROMOTION} or NOT
      * {@link MoveType#CAPTURE_AND_PROMOTION}
-     * 
+     *
      * @param piece
      * @param x1
      * @param y1
@@ -62,7 +62,7 @@ public class Move {
     /**
      * Use this constructor for move types {@link MoveType#CAPTURE} and
      * {@link MoveType#PROMOTION}
-     * 
+     *
      * @param piece
      * @param x1
      * @param y1
@@ -91,7 +91,7 @@ public class Move {
 
     /**
      * Use this constructor for move type {@link MoveType#CAPTURE_AND_PROMOTION}
-     * 
+     *
      * @param piece
      * @param x1
      * @param y1
@@ -179,6 +179,13 @@ public class Move {
         }
 
         return uciForm;
+    }
+
+    /**
+     * @return move in EPD form, i.e., Ne4 -> Knight to e4;
+     */
+    public String toEpdForm() {
+        return piece.name().substring(1, 2) + String.valueOf((char) (x2 + 'a')) + (y2 + 1);
     }
 
     @Override

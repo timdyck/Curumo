@@ -20,7 +20,7 @@ public class PieceMovement {
                                                0x0810204080000000L, 0x0408102040800000L, 0x0204081020408000L, 0x0102040810204080L,
                                                0x0001020408102040L, 0x0000010204081020L, 0x0000000102040810L, 0x0000000001020408L,
                                                0x0000000000010204L, 0x0000000000000102L, 0x0000000000000001L };
-    
+
     // Bottom left to top right, negative slope
     protected static long ANTIDIAGONAL_MASKS[] = { 0x0000000000000080L, 0x0000000000008040L, 0x0000000000804020L, 0x0000000080402010L,
                                                    0x0000008040201008L, 0x0000804020100804L, 0x0080402010080402L, 0x8040201008040201L,
@@ -57,13 +57,13 @@ public class PieceMovement {
 
         /* @formatter:off */
         whitePieces =  board.getBitBoard(PieceType.WP) |
-                       board.getBitBoard(PieceType.WR) | 
+                       board.getBitBoard(PieceType.WR) |
                        board.getBitBoard(PieceType.WN) |
                        board.getBitBoard(PieceType.WB) |
                        board.getBitBoard(PieceType.WQ) |
                        board.getBitBoard(PieceType.WK);
         blackPieces =  board.getBitBoard(PieceType.BP) |
-                       board.getBitBoard(PieceType.BR) | 
+                       board.getBitBoard(PieceType.BR) |
                        board.getBitBoard(PieceType.BN) |
                        board.getBitBoard(PieceType.BB) |
                        board.getBitBoard(PieceType.BQ) |
@@ -118,7 +118,7 @@ public class PieceMovement {
     }
 
     /**
-     * @param bitBoard
+     * @param possibleMovesBitBoard
      * @param piece
      *            {@link PieceType} of the piece we want to find the moves of
      * @param x
@@ -128,7 +128,7 @@ public class PieceMovement {
      * @return list of all potential moves from the given bit board
      */
     protected List<Move> getMoves(long possibleMovesBitBoard, PieceType piece, int x, int y) {
-        List<Move> moves = new ArrayList<Move>();
+        List<Move> moves = new ArrayList<>();
 
         // Remove moves that are not proper captures
         if (piece.isWhitePiece()) {
@@ -162,21 +162,23 @@ public class PieceMovement {
         return moves;
     }
 
-    protected int getX(int i) {
+    protected static int getX(int i) {
         return 7 - (i % 8);
     }
 
-    protected int getY(int i) {
+    protected static int getY(int i) {
         return i / 8;
     }
 
     public static List<Integer> getIndices(long bitBoard) {
-        List<Integer> indices = new ArrayList<Integer>();
+        int setBits = Long.bitCount(bitBoard);
+        List<Integer> indices = new ArrayList<>(setBits);
 
         while (bitBoard != 0) {
-            int i = Long.numberOfTrailingZeros(bitBoard);
-            indices.add(i);
-            bitBoard &= ~(1L << i);
+            indices.add(Long.numberOfTrailingZeros(bitBoard));
+            long temp = bitBoard  & -bitBoard;
+            bitBoard ^= temp;
+
         }
 
         return indices;
@@ -184,7 +186,7 @@ public class PieceMovement {
 
     /**
      * Bottom left=0, bottom right=7, top left=56, top right= 63
-     * 
+     *
      * @param x
      * @param y
      * @return a bitboard with a 1 at position (x,y)
