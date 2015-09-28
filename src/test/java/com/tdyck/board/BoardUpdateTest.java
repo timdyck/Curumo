@@ -1,12 +1,9 @@
 package com.tdyck.board;
 
-import junit.framework.Assert;
 
+import org.junit.Assert;
 import org.junit.Test;
 
-import com.tdyck.board.Board;
-import com.tdyck.board.BoardUtils;
-import com.tdyck.board.PieceType;
 import com.tdyck.board.movement.Move;
 import com.tdyck.board.movement.MoveType;
 import com.tdyck.gameplay.Gameplay;

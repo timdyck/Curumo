@@ -1,4 +1,4 @@
-Curumo: The Cunning Chess Engine
+Curumo: The Cunning Chess Engine ![Travis CI](https://travis-ci.org/asvoboda/Curumo.svg?branch=master)
 --------------------------------
 
 ###Dependencies

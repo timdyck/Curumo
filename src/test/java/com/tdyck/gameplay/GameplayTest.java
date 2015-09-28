@@ -3,8 +3,7 @@ package com.tdyck.gameplay;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.tdyck.board.Board;
@@ -13,7 +12,6 @@ import com.tdyck.board.FEN;
 import com.tdyck.board.PieceType;
 import com.tdyck.board.movement.Move;
 import com.tdyck.board.movement.MoveType;
-import com.tdyck.gameplay.Gameplay;
 
 public class GameplayTest {
 

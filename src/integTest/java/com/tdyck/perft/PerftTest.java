@@ -1,7 +1,7 @@
-package com.tdyck.gameplay;
+package com.tdyck.perft;
 
-import junit.framework.Assert;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.tdyck.board.BoardUtils;
