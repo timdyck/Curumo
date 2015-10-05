@@ -14,8 +14,7 @@ import com.tdyck.gameplay.Gameplay;
 public class FEN {
 
     /**
-     * Only returns board, nothing with en passant or turn
-     * 
+     * Return board description
      * @param fenString
      * @return board from fen string
      */

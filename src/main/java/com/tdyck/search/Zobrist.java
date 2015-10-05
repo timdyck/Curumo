@@ -1,6 +1,6 @@
 package com.tdyck.search;
 
-import java.util.Random;
+import org.apache.commons.math3.random.MersenneTwister;
 
 import com.tdyck.board.Board;
 import com.tdyck.board.PieceType;
@@ -12,31 +12,30 @@ import com.tdyck.gameplay.Gameplay;
 
 public class Zobrist {
 
+    private static final int DETERMINISTIC_SEED = 11;
+    private static final MersenneTwister RAND = new MersenneTwister(DETERMINISTIC_SEED);
+
     private long pieceKeys[][] = new long[Board.NUM_BOARDS][Board.NUM_SQUARES];
     private long blackMoveKey;
     private long castlingKeys[] = new long[Board.DIMENSION / 2];
     private long enPassantKeys[] = new long[Board.DIMENSION];
 
-    private final int DETERMINISTIC_SEED = 11;
-
     public Zobrist() {
-        Random rand = new Random(DETERMINISTIC_SEED);
-
         // Fill all members with random longs!
         for (PieceType piece : PieceType.values()) {
             for (int i = 0; i < Board.NUM_SQUARES; i++) {
-                pieceKeys[piece.ordinal()][i] = rand.nextLong();
+                pieceKeys[piece.ordinal()][i] = RAND.nextLong();
             }
         }
 
-        blackMoveKey = rand.nextLong();
+        blackMoveKey = RAND.nextLong();
 
         for (int i = 0; i < Board.DIMENSION / 2; i++) {
-            castlingKeys[i] = rand.nextLong();
+            castlingKeys[i] = RAND.nextLong();
         }
 
         for (int i = 0; i < Board.DIMENSION; i++) {
-            enPassantKeys[i] = rand.nextLong();
+            enPassantKeys[i] = RAND.nextLong();
         }
 
     }
@@ -71,7 +70,7 @@ public class Zobrist {
 
     /**
      * In terms of the castling keys array, order is WK, WQ, BK, BQ.
-     * 
+     *
      * @param game
      * @return
      */

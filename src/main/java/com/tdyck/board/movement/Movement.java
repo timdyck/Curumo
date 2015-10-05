@@ -63,13 +63,12 @@ public final class Movement {
 
     private List<Move> getAllWhiteMoves() {
         List<Move> possibleWhiteMoves = new ArrayList<Move>();
-
-        possibleWhiteMoves.addAll(pawnMovement.getWhiteMoves());
-        possibleWhiteMoves.addAll(rookMovement.getWhiteMoves());
         possibleWhiteMoves.addAll(knightMovement.getWhiteMoves());
         possibleWhiteMoves.addAll(bishopMovement.getWhiteMoves());
+        possibleWhiteMoves.addAll(rookMovement.getWhiteMoves());
         possibleWhiteMoves.addAll(queenMovement.getWhiteMoves());
         possibleWhiteMoves.addAll(kingMovement.getWhiteMoves());
+        possibleWhiteMoves.addAll(pawnMovement.getWhiteMoves());
 
         return possibleWhiteMoves;
     }
@@ -77,12 +76,12 @@ public final class Movement {
     private List<Move> getAllBlackMoves() {
         List<Move> possibleBlackMoves = new ArrayList<Move>();
 
-        possibleBlackMoves.addAll(pawnMovement.getBlackMoves());
-        possibleBlackMoves.addAll(rookMovement.getBlackMoves());
         possibleBlackMoves.addAll(knightMovement.getBlackMoves());
         possibleBlackMoves.addAll(bishopMovement.getBlackMoves());
+        possibleBlackMoves.addAll(rookMovement.getBlackMoves());
         possibleBlackMoves.addAll(queenMovement.getBlackMoves());
         possibleBlackMoves.addAll(kingMovement.getBlackMoves());
+        possibleBlackMoves.addAll(pawnMovement.getBlackMoves());
 
         return possibleBlackMoves;
     }
